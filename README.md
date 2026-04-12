@@ -10,6 +10,8 @@
 
 Universal text preparation and line layout for any SkiaSharp-based UI, with grapheme-aware wrapping, locale-aware segmentation, bidi support, and streaming line walking.
 
+PretextSharp is a .NET/C# port of the original [pretext](https://github.com/chenglou/pretext) project by [Cheng Lou](https://github.com/chenglou).
+
 Documentation site: [wieslawsoltes.github.io/PretextSharp](https://wieslawsoltes.github.io/PretextSharp/)
 
 Key documentation:
@@ -188,6 +190,10 @@ samples/
   PretextSamples/
 site/
 ```
+
+## Attribution
+
+The core Pretext implementation in this repository is ported from the original [pretext](https://github.com/chenglou/pretext) project by [Cheng Lou](https://github.com/chenglou). This repository adapts that work to .NET, SkiaSharp, packaging, tests, samples, and companion Uno helpers.
 
 ## License
 
