@@ -1118,10 +1118,9 @@ public static partial class PretextLayout
             return false;
         }
 
-        var last = text.EnumerateRunes().LastOrDefault();
-        return last.Value != 0 &&
-               last.Value <= char.MaxValue &&
-               (KinsokuStartChars.Contains((char)last.Value) || LeftStickyPunctuationChars.Contains((char)last.Value));
+        var lastScalarValue = GetLastScalarValue(text);
+        return lastScalarValue is > 0 and <= char.MaxValue &&
+               (KinsokuStartChars.Contains((char)lastScalarValue) || LeftStickyPunctuationChars.Contains((char)lastScalarValue));
     }
 
     private static bool EndsWithKeepAllGlueText(string text)
@@ -1131,16 +1130,34 @@ public static partial class PretextLayout
             return false;
         }
 
-        var last = text.EnumerateRunes().LastOrDefault();
-        return last.Value != 0 &&
-               last.Value <= char.MaxValue &&
-               KeepAllGlueChars.Contains((char)last.Value);
+        var lastScalarValue = GetLastScalarValue(text);
+        return lastScalarValue is > 0 and <= char.MaxValue &&
+               KeepAllGlueChars.Contains((char)lastScalarValue);
     }
 
     private static bool CanContinueKeepAllTextRun(string previousText)
     {
         return !EndsWithLineStartProhibitedText(previousText) &&
                !EndsWithKeepAllGlueText(previousText);
+    }
+
+    private static int GetLastScalarValue(string text)
+    {
+        var span = text.AsSpan();
+        if (span.Length == 0)
+        {
+            return 0;
+        }
+
+        var index = span.Length - 1;
+        if (index > 0 &&
+            char.IsLowSurrogate(span[index]) &&
+            char.IsHighSurrogate(span[index - 1]))
+        {
+            return char.ConvertToUtf32(span[index - 1], span[index]);
+        }
+
+        return span[index];
     }
 
     private static bool IsForwardStickyClusterSegment(string segment)

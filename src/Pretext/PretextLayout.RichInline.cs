@@ -1,5 +1,5 @@
-using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace Pretext;
 
@@ -35,12 +35,12 @@ public sealed record RichInlineFragmentRange(
     LayoutCursor End);
 
 public sealed record RichInlineLine(
-    IReadOnlyList<RichInlineFragment> Fragments,
+    RichInlineFragment[] Fragments,
     double Width,
     RichInlineCursor End);
 
 public sealed record RichInlineLineRange(
-    IReadOnlyList<RichInlineFragmentRange> Fragments,
+    RichInlineFragmentRange[] Fragments,
     double Width,
     RichInlineCursor End);
 
@@ -59,21 +59,49 @@ public sealed class PreparedRichInline
     internal PreparedRichInlineItem?[] ItemsBySourceItemIndexInternal { get; }
 }
 
-internal sealed record PreparedRichInlineItem(
-    RichInlineBreakMode Break,
-    int EndGraphemeIndex,
-    int EndSegmentIndex,
-    double ExtraWidth,
-    double GapBefore,
-    double NaturalWidth,
-    PreparedTextWithSegments Prepared,
-    int SourceItemIndex);
+internal sealed class PreparedRichInlineItem
+{
+    public PreparedRichInlineItem(
+        RichInlineBreakMode @break,
+        int endGraphemeIndex,
+        int endSegmentIndex,
+        double extraWidth,
+        double gapBefore,
+        double naturalWidth,
+        PreparedTextWithSegments prepared,
+        int sourceItemIndex)
+    {
+        Break = @break;
+        EndGraphemeIndex = endGraphemeIndex;
+        EndSegmentIndex = endSegmentIndex;
+        ExtraWidth = extraWidth;
+        GapBefore = gapBefore;
+        NaturalWidth = naturalWidth;
+        Prepared = prepared;
+        SourceItemIndex = sourceItemIndex;
+    }
+
+    public RichInlineBreakMode Break { get; }
+
+    public int EndGraphemeIndex { get; }
+
+    public int EndSegmentIndex { get; }
+
+    public double ExtraWidth { get; }
+
+    public double GapBefore { get; }
+
+    public double NaturalWidth { get; }
+
+    public PreparedTextWithSegments Prepared { get; }
+
+    public int SourceItemIndex { get; }
+}
 
 public static partial class PretextLayout
 {
-    private static readonly Regex LeadingCollapsibleBoundaryRegex = new("^[ \\t\\n\\f\\r]+", RegexOptions.CultureInvariant | RegexOptions.NonBacktracking);
-    private static readonly Regex TrailingCollapsibleBoundaryRegex = new("[ \\t\\n\\f\\r]+$", RegexOptions.CultureInvariant | RegexOptions.NonBacktracking);
-    private static readonly Regex CollapsibleBoundaryRegex = new("[ \\t\\n\\f\\r]+", RegexOptions.CultureInvariant | RegexOptions.NonBacktracking);
+    private readonly record struct BoundaryTrimResult(string TrimmedText, bool HasLeadingWhitespace, bool HasTrailingWhitespace);
+
     private static readonly LayoutCursor EmptyLayoutCursor = new(0, 0);
     private static readonly RichInlineCursor RichInlineStartCursor = new(0, 0, 0);
 
@@ -89,15 +117,12 @@ public static partial class PretextLayout
         for (var index = 0; index < items.Count; index++)
         {
             var item = items[index];
-            var hasLeadingWhitespace = LeadingCollapsibleBoundaryRegex.IsMatch(item.Text);
-            var hasTrailingWhitespace = TrailingCollapsibleBoundaryRegex.IsMatch(item.Text);
-            var trimmedText = TrailingCollapsibleBoundaryRegex.Replace(
-                LeadingCollapsibleBoundaryRegex.Replace(item.Text, string.Empty),
-                string.Empty);
+            var trimmed = TrimCollapsibleBoundaryText(item.Text);
+            var trimmedText = trimmed.TrimmedText;
 
             if (trimmedText.Length == 0)
             {
-                if (CollapsibleBoundaryRegex.IsMatch(item.Text) && pendingGapWidth == 0)
+                if ((trimmed.HasLeadingWhitespace || trimmed.HasTrailingWhitespace) && pendingGapWidth == 0)
                 {
                     pendingGapWidth = GetCollapsedSpaceWidth(item.Font, collapsedSpaceWidthCache);
                 }
@@ -107,14 +132,14 @@ public static partial class PretextLayout
 
             var gapBefore = pendingGapWidth > 0
                 ? pendingGapWidth
-                : hasLeadingWhitespace
+                : trimmed.HasLeadingWhitespace
                     ? GetCollapsedSpaceWidth(item.Font, collapsedSpaceWidthCache)
                     : 0;
             var prepared = PrepareWithSegments(trimmedText, item.Font);
             var wholeLine = LayoutNextLineRange(prepared, EmptyLayoutCursor, double.PositiveInfinity);
             if (wholeLine is null)
             {
-                pendingGapWidth = hasTrailingWhitespace ? GetCollapsedSpaceWidth(item.Font, collapsedSpaceWidthCache) : 0;
+                pendingGapWidth = trimmed.HasTrailingWhitespace ? GetCollapsedSpaceWidth(item.Font, collapsedSpaceWidthCache) : 0;
                 continue;
             }
 
@@ -130,7 +155,7 @@ public static partial class PretextLayout
             preparedItems.Add(preparedItem);
             itemsBySourceItemIndex[index] = preparedItem;
 
-            pendingGapWidth = hasTrailingWhitespace ? GetCollapsedSpaceWidth(item.Font, collapsedSpaceWidthCache) : 0;
+            pendingGapWidth = trimmed.HasTrailingWhitespace ? GetCollapsedSpaceWidth(item.Font, collapsedSpaceWidthCache) : 0;
         }
 
         return new PreparedRichInline(preparedItems.ToArray(), itemsBySourceItemIndex);
@@ -160,7 +185,7 @@ public static partial class PretextLayout
             return null;
         }
 
-        return new RichInlineLineRange(new ReadOnlyCollection<RichInlineFragmentRange>(fragments), width.Value, end);
+        return new RichInlineLineRange(fragments.ToArray(), width.Value, end);
     }
 
     public static RichInlineLine MaterializeRichInlineLineRange(PreparedRichInline prepared, RichInlineLineRange line)
@@ -169,22 +194,22 @@ public static partial class PretextLayout
         ArgumentNullException.ThrowIfNull(line);
 
         var flow = prepared.ItemsBySourceItemIndexInternal;
-        var fragments = new List<RichInlineFragment>(line.Fragments.Count);
+        var fragments = new RichInlineFragment[line.Fragments.Length];
 
-        for (var index = 0; index < line.Fragments.Count; index++)
+        for (var index = 0; index < line.Fragments.Length; index++)
         {
             var fragment = line.Fragments[index];
             var item = flow[fragment.ItemIndex] ?? throw new InvalidOperationException("Missing rich-inline item for fragment.");
-            fragments.Add(new RichInlineFragment(
+            fragments[index] = new RichInlineFragment(
                 fragment.ItemIndex,
                 BuildLineTextFromRange(item.Prepared, fragment.Start.SegmentIndex, fragment.Start.GraphemeIndex, fragment.End.SegmentIndex, fragment.End.GraphemeIndex),
                 fragment.GapBefore,
                 fragment.OccupiedWidth,
                 fragment.Start,
-                fragment.End));
+                fragment.End);
         }
 
-        return new RichInlineLine(new ReadOnlyCollection<RichInlineFragment>(fragments), line.Width, line.End);
+        return new RichInlineLine(fragments, line.Width, line.End);
     }
 
     public static int WalkRichInlineLineRanges(
@@ -222,7 +247,7 @@ public static partial class PretextLayout
 
         while (true)
         {
-            var lineWidth = StepRichInlineLine(prepared, maxWidth, ref cursor, onFragment: null, state: 0);
+            var lineWidth = StepRichInlineLineStats(prepared, maxWidth, ref cursor);
             if (lineWidth is null)
             {
                 return new RichInlineStats(lineCount, maxLineWidth);
@@ -236,16 +261,19 @@ public static partial class PretextLayout
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsLineStartCursor(LayoutCursor cursor)
     {
         return cursor.SegmentIndex == 0 && cursor.GraphemeIndex == 0;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static LayoutCursor CloneCursor(LayoutCursor cursor)
     {
         return new LayoutCursor(cursor.SegmentIndex, cursor.GraphemeIndex);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool EndsInsideFirstSegment(LayoutCursor end)
     {
         return end.SegmentIndex == 0 && end.GraphemeIndex > 0;
@@ -253,7 +281,8 @@ public static partial class PretextLayout
 
     private static double GetCollapsedSpaceWidth(string font, Dictionary<string, double> cache)
     {
-        if (cache.TryGetValue(font, out var cached))
+        ref var cached = ref CollectionsMarshal.GetValueRefOrAddDefault(cache, font, out var exists);
+        if (exists)
         {
             return cached;
         }
@@ -261,8 +290,169 @@ public static partial class PretextLayout
         var joinedWidth = MeasureNaturalWidth(PrepareWithSegments("A A", font));
         var compactWidth = MeasureNaturalWidth(PrepareWithSegments("AA", font));
         var collapsedWidth = Math.Max(0, joinedWidth - compactWidth);
-        cache[font] = collapsedWidth;
-        return collapsedWidth;
+        cached = collapsedWidth;
+        return cached;
+    }
+
+    private static BoundaryTrimResult TrimCollapsibleBoundaryText(string text)
+    {
+        var span = text.AsSpan();
+        var start = 0;
+        while (start < span.Length && IsCollapsibleBoundaryChar(span[start]))
+        {
+            start++;
+        }
+
+        var end = span.Length - 1;
+        while (end >= start && IsCollapsibleBoundaryChar(span[end]))
+        {
+            end--;
+        }
+
+        var hasLeadingWhitespace = start > 0;
+        var hasTrailingWhitespace = end + 1 < span.Length;
+        var trimmedLength = end - start + 1;
+        if (trimmedLength <= 0)
+        {
+            return new BoundaryTrimResult(string.Empty, hasLeadingWhitespace, hasTrailingWhitespace);
+        }
+
+        return new BoundaryTrimResult(
+            start == 0 && trimmedLength == text.Length
+                ? text
+                : text.Substring(start, trimmedLength),
+            hasLeadingWhitespace,
+            hasTrailingWhitespace);
+    }
+
+    private static bool IsCollapsibleBoundaryChar(char ch)
+    {
+        return ch is ' ' or '\t' or '\n' or '\f' or '\r';
+    }
+
+    private static double? StepRichInlineLineStats(
+        PreparedRichInline prepared,
+        double maxWidth,
+        ref RichInlineCursor cursor)
+    {
+        var items = prepared.ItemsInternal;
+        if (items.Length == 0 || cursor.ItemIndex >= items.Length)
+        {
+            return null;
+        }
+
+        var safeWidth = maxWidth > 1 ? maxWidth : 1;
+        var lineWidth = 0d;
+        var remainingWidth = safeWidth;
+        var itemIndex = cursor.ItemIndex;
+        var textCursor = new LayoutCursor(cursor.SegmentIndex, cursor.GraphemeIndex);
+
+        while (itemIndex < items.Length)
+        {
+            var item = items[itemIndex];
+            if (!IsLineStartCursor(textCursor) &&
+                textCursor.SegmentIndex == item.EndSegmentIndex &&
+                textCursor.GraphemeIndex == item.EndGraphemeIndex)
+            {
+                itemIndex++;
+                textCursor = EmptyLayoutCursor;
+                continue;
+            }
+
+            var gapBefore = lineWidth == 0 ? 0 : item.GapBefore;
+            var atItemStart = IsLineStartCursor(textCursor);
+
+            if (item.Break == RichInlineBreakMode.Never)
+            {
+                if (!atItemStart)
+                {
+                    itemIndex++;
+                    textCursor = EmptyLayoutCursor;
+                    continue;
+                }
+
+                var occupiedWidth = item.NaturalWidth + item.ExtraWidth;
+                var totalWidth = gapBefore + occupiedWidth;
+                if (lineWidth > 0 && totalWidth > remainingWidth)
+                {
+                    break;
+                }
+
+                lineWidth += totalWidth;
+                remainingWidth = Math.Max(0, safeWidth - lineWidth);
+                itemIndex++;
+                textCursor = EmptyLayoutCursor;
+                continue;
+            }
+
+            var reservedWidth = gapBefore + item.ExtraWidth;
+            if (lineWidth > 0 && reservedWidth >= remainingWidth)
+            {
+                break;
+            }
+
+            if (atItemStart)
+            {
+                var totalWidth = reservedWidth + item.NaturalWidth;
+                if (totalWidth <= remainingWidth)
+                {
+                    lineWidth += totalWidth;
+                    remainingWidth = Math.Max(0, safeWidth - lineWidth);
+                    itemIndex++;
+                    textCursor = EmptyLayoutCursor;
+                    continue;
+                }
+            }
+
+            var availableWidth = Math.Max(1, remainingWidth - reservedWidth);
+            var line = LayoutNextLineRange(item.Prepared, textCursor, availableWidth);
+            if (line is null)
+            {
+                itemIndex++;
+                textCursor = EmptyLayoutCursor;
+                continue;
+            }
+
+            if (textCursor == line.End)
+            {
+                itemIndex++;
+                textCursor = EmptyLayoutCursor;
+                continue;
+            }
+
+            if (lineWidth > 0 &&
+                atItemStart &&
+                gapBefore > 0 &&
+                EndsInsideFirstSegment(line.End))
+            {
+                var freshLine = LayoutNextLineRange(item.Prepared, EmptyLayoutCursor, Math.Max(1, safeWidth - item.ExtraWidth));
+                if (freshLine is not null && CursorIsAfter(freshLine.End, line.End))
+                {
+                    break;
+                }
+            }
+
+            lineWidth += gapBefore + line.Width + item.ExtraWidth;
+            remainingWidth = Math.Max(0, safeWidth - lineWidth);
+
+            if (line.End.SegmentIndex == item.EndSegmentIndex && line.End.GraphemeIndex == item.EndGraphemeIndex)
+            {
+                itemIndex++;
+                textCursor = EmptyLayoutCursor;
+                continue;
+            }
+
+            textCursor = line.End;
+            break;
+        }
+
+        if (lineWidth == 0)
+        {
+            return null;
+        }
+
+        cursor = new RichInlineCursor(itemIndex, textCursor.SegmentIndex, textCursor.GraphemeIndex);
+        return lineWidth;
     }
 
     private static double? StepRichInlineLine<TState>(
@@ -278,7 +468,7 @@ public static partial class PretextLayout
             return null;
         }
 
-        var safeWidth = Math.Max(1, maxWidth);
+        var safeWidth = maxWidth > 1 ? maxWidth : 1;
         var lineWidth = 0d;
         var remainingWidth = safeWidth;
         var itemIndex = cursor.ItemIndex;
@@ -413,6 +603,7 @@ public static partial class PretextLayout
         return lineWidth;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool CursorIsAfter(LayoutCursor left, LayoutCursor right)
     {
         return left.SegmentIndex > right.SegmentIndex ||
