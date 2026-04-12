@@ -1341,16 +1341,31 @@ public static partial class PretextLayout
 
     private static string BuildLineText(PreparedTextWithSegments prepared, InternalLine line)
     {
-        if (line.Start == line.End && !line.AppendHyphen)
+        return BuildLineTextFromRange(
+            prepared,
+            line.Start.SegmentIndex,
+            line.Start.GraphemeIndex,
+            line.End.SegmentIndex,
+            line.End.GraphemeIndex,
+            line.AppendHyphen);
+    }
+
+    private static string BuildLineTextFromRange(
+        PreparedTextWithSegments prepared,
+        int startSegmentIndex,
+        int startGraphemeIndex,
+        int endSegmentIndex,
+        int endGraphemeIndex,
+        bool appendHyphen = false)
+    {
+        if (startSegmentIndex == endSegmentIndex && startGraphemeIndex == endGraphemeIndex && !appendHyphen)
         {
             return string.Empty;
         }
 
         var builder = new StringBuilder();
-        var segmentIndex = line.Start.SegmentIndex;
-        var graphemeIndex = line.Start.GraphemeIndex;
-        var endSegmentIndex = line.End.SegmentIndex;
-        var endGraphemeIndex = line.End.GraphemeIndex;
+        var segmentIndex = startSegmentIndex;
+        var graphemeIndex = startGraphemeIndex;
 
         while (segmentIndex < prepared.Segments.Count)
         {
@@ -1374,7 +1389,7 @@ public static partial class PretextLayout
 
             if (segmentIndex == endSegmentIndex)
             {
-                if (line.AppendHyphen)
+                if (appendHyphen)
                 {
                     builder.Append('-');
                 }
@@ -1388,7 +1403,7 @@ public static partial class PretextLayout
             graphemeIndex = 0;
         }
 
-        if (line.AppendHyphen && endGraphemeIndex == 0)
+        if (appendHyphen && endGraphemeIndex == 0)
         {
             builder.Append('-');
         }
