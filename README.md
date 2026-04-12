@@ -21,6 +21,7 @@ Key documentation:
 - [Choosing an API](https://wieslawsoltes.github.io/PretextSharp/articles/getting-started/choosing-an-api/)
 - [Prepared Text Lifecycle](https://wieslawsoltes.github.io/PretextSharp/articles/concepts/prepared-text-lifecycle/)
 - [Public Types and Operations](https://wieslawsoltes.github.io/PretextSharp/articles/reference/public-types-and-operations/)
+- [Rich Inline API](https://wieslawsoltes.github.io/PretextSharp/articles/reference/rich-inline-api/)
 - [Pretext.Uno Helpers](https://wieslawsoltes.github.io/PretextSharp/articles/reference/pretext-uno-helpers/)
 
 ## NuGet Packages
@@ -34,12 +35,16 @@ Key documentation:
 
 - Prepare text once and reuse the result across repeated layout passes with `Prepare` and `PrepareWithSegments`.
 - Compute fast aggregate metrics with `Layout`, or materialize full line data with `LayoutWithLines`.
-- Stream line geometry incrementally with `LayoutNextLine` and `WalkLineRanges` for custom layout engines.
+- Stream line geometry incrementally with `LayoutNextLine`, `LayoutNextLineRange`, and `WalkLineRanges` for custom layout engines.
+- Re-materialize text lazily with `MaterializeLineRange` after cheap geometry-only probing.
+- Measure widest-line geometry without allocating text via `MeasureLineStats` and `MeasureNaturalWidth`.
 - Handle ordinary spaces, preserved spaces, tabs, hard breaks, non-breaking spaces, zero-width breaks, and soft hyphens.
+- Support `WordBreakMode.KeepAll` for CJK-focused no-space wrapping behavior.
+- Build rich inline flows with `PrepareRichInline`, `WalkRichInlineLineRanges`, and `MaterializeRichInlineLineRange`.
 - Support multilingual text with locale-aware segmentation on desktop targets and bidi-aware segment levels.
 - Depend only on `SkiaSharp` in the core library so the package can be used outside Uno as well.
 - Ship with a published `Pretext.Uno` companion library for reusable Uno host controls and obstacle-aware flow helpers.
-- Ship with deterministic parity tests and a Uno sample app that demonstrates bubbles, masonry, editorial, and justification layouts.
+- Ship with deterministic parity tests and a Uno sample app that demonstrates bubbles, masonry, editorial, justification, rich-inline, and virtualized markdown chat layouts.
 
 ## Core API
 
@@ -50,7 +55,15 @@ Key documentation:
 | `Layout` | Return line count and total height for a given width and line height. |
 | `LayoutWithLines` | Return materialized line text and line widths. |
 | `LayoutNextLine` | Stream the next line from a given cursor for custom layout flows. |
+| `LayoutNextLineRange` | Stream geometry-only line ranges without materializing text. |
+| `MaterializeLineRange` | Turn a `LayoutLineRange` back into a materialized `LayoutLine`. |
 | `WalkLineRanges` | Iterate line geometry without allocating full line text. |
+| `MeasureLineStats` | Return line count plus widest line width for a prepared block. |
+| `MeasureNaturalWidth` | Return the widest unwrapped line width for prepared text. |
+| `PrepareRichInline` | Prepare multi-item inline flow with collapsed boundary whitespace and atomic items. |
+| `WalkRichInlineLineRanges` | Stream rich-inline line ranges without materializing fragment text. |
+| `MaterializeRichInlineLineRange` | Materialize one streamed rich-inline line when you actually need fragment text. |
+| `MeasureRichInlineStats` | Measure rich-inline line count and max line width. |
 | `ProfilePrepare` | Measure preparation cost for profiling and diagnostics. |
 | `SetLocale` | Override locale-sensitive segmentation behavior when needed. |
 | `ClearCache` | Reset cached font state and prepared segment text caches. |
@@ -63,6 +76,7 @@ Key documentation:
 | Actual line text and widths | `PrepareWithSegments` + `LayoutWithLines` |
 | One line at a time in a custom loop | `PrepareWithSegments` + `LayoutNextLine` |
 | Geometry only, fewer allocations | `PrepareWithSegments` + `WalkLineRanges` |
+| Rich inline fragments with atomic chips or badges | `PrepareRichInline` + `WalkRichInlineLineRanges` |
 | Preparation cost diagnostics | `ProfilePrepare` |
 
 ## Quick Start
@@ -95,6 +109,8 @@ foreach (var line in lines.Lines)
 }
 ```
 
+If the prepared text is empty after normalization, `Layout` returns `new LayoutResult(0, 0)`. If a container in your UI must still reserve one visual row, clamp with `Math.Max(1, metrics.LineCount)` in the caller instead of expecting `Pretext` to synthesize a blank line.
+
 The core package exposes the `Pretext` namespace and is not tied to Uno. Use it anywhere you use SkiaSharp.
 
 The `font` argument is a CSS-like subset such as `16px Inter`, `italic 16px Georgia`, or `700 18px "IBM Plex Sans"`. Line height is supplied separately to layout calls.
@@ -106,6 +122,32 @@ var prepared = PretextLayout.PrepareWithSegments(
     "foo\tbar\nbaz",
     "16px Inter",
     new PrepareOptions(WhiteSpaceMode.PreWrap));
+```
+
+Use `WordBreakMode.KeepAll` when CJK-heavy text should avoid ordinary intra-run breaks:
+
+```csharp
+var prepared = PretextLayout.PrepareWithSegments(
+    "日本語foo-bar",
+    "16px Inter",
+    new PrepareOptions(WordBreak: WordBreakMode.KeepAll));
+```
+
+Use the rich-inline helper when paragraph text and atomic inline boxes must share one flow:
+
+```csharp
+var flow = PretextLayout.PrepareRichInline(
+[
+    new RichInlineItem("Ship ", "16px Inter"),
+    new RichInlineItem("@maya", "700 12px Inter", RichInlineBreakMode.Never, extraWidth: 18),
+    new RichInlineItem("'s note wraps cleanly.", "16px Inter"),
+]);
+
+PretextLayout.WalkRichInlineLineRanges(flow, 180, line =>
+{
+    var materialized = PretextLayout.MaterializeRichInlineLineRange(flow, line);
+    Console.WriteLine(string.Join("", materialized.Fragments.Select(f => f.Text)));
+});
 ```
 
 ## Uno Companion
@@ -134,6 +176,7 @@ The sample app lives in `samples/PretextSamples` and demonstrates the library in
 - Bubbles
 - Masonry
 - Rich Text
+- Markdown Chat
 - Dynamic Layout
 - Editorial Engine
 - Justification Comparison

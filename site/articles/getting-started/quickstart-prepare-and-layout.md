@@ -25,6 +25,8 @@ foreach (var line in lines.Lines)
 }
 ```
 
+If normalization leaves the prepared text empty, `Layout` returns `new LayoutResult(0, 0)`. When your container sizing wants to reserve at least one visual row, clamp in the caller with `Math.Max(1, metrics.LineCount)` instead of expecting `Pretext` to invent a blank line.
+
 ## What this does
 
 - `PrepareWithSegments` analyzes the text, measures it, and preserves segment metadata.

@@ -4,4 +4,5 @@ docs:
   - {path: using-pretext-in-any-skiasharp-host.md, title: "Using Pretext in Any SkiaSharp Host"}
   - {path: testing-and-diagnostics.md, title: "Testing and Diagnostics"}
   - {path: sample-gallery-tour.md, title: "Sample Gallery Tour"}
+  - {path: markdown-chat-virtualization.md, title: "Markdown Chat Virtualization"}
   - {path: shrinkwrap-and-editorial-layout.md, title: "Shrinkwrap and Editorial Layout"}
