@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "PretextSamples",
+  "display": "standalone",
+  "name": "PretextSamples",
+  "short_name": "PretextSamples",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}

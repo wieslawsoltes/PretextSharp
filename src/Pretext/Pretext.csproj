@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageId>Pretext</PackageId>
+    <Title>Pretext</Title>
+    <Description>Universal text preparation and line layout for any SkiaSharp-based UI, with grapheme-aware wrapping, locale-aware segmentation, bidi support, and streaming line walking.</Description>
+    <PackageTags>skiasharp;text-layout;line-breaking;word-wrap;unicode;bidi;typography;text-measurement;text-rendering</PackageTags>
+    <PackageReleaseNotes>Initial public packaging of the Pretext text preparation and layout engine.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" />
+  </ItemGroup>
+</Project>
