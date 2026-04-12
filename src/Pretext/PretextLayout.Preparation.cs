@@ -55,7 +55,7 @@ public static partial class PretextLayout
 
         foreach (var token in tokens)
         {
-            foreach (var segment in ExpandPreparedSegments(token, fontState, engineProfile))
+            foreach (var segment in ExpandPreparedSegments(token, fontState, engineProfile, options.WordBreak))
             {
                 starts.Add(normalized.Length);
                 normalized.Append(segment.Text);
@@ -129,7 +129,11 @@ public static partial class PretextLayout
         }
     }
 
-    private static IEnumerable<MeasuredSegment> ExpandPreparedSegments(AnalysisToken token, FontState fontState, EngineProfile profile)
+    private static IEnumerable<MeasuredSegment> ExpandPreparedSegments(
+        AnalysisToken token,
+        FontState fontState,
+        EngineProfile profile,
+        WordBreakMode wordBreak)
     {
         switch (token.Kind)
         {
@@ -152,9 +156,18 @@ public static partial class PretextLayout
 
         if (token.Kind == SegmentBreakKind.Text && ContainsCjk(token.Text))
         {
-            foreach (var unit in SplitMeasuredCjkRun(token.Text, profile.CarryCjkAfterClosingQuote))
+            var units = BuildBaseCjkUnits(token.Text, profile.CarryCjkAfterClosingQuote);
+            if (wordBreak == WordBreakMode.KeepAll)
             {
-                yield return fontState.MeasureSegment(unit, token.Kind, isBreakableRun: false);
+                units = MergeKeepAllTextUnits(units);
+            }
+
+            foreach (var unit in units)
+            {
+                yield return fontState.MeasureSegment(
+                    unit,
+                    token.Kind,
+                    isBreakableRun: wordBreak == WordBreakMode.KeepAll || !ContainsCjk(unit));
             }
 
             yield break;

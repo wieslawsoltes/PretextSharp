@@ -31,6 +31,7 @@ public static partial class PretextLayout
     [
         '”', '’', '»', '›', '\u300D', '\u300F', '\u3011', '\u300B', '\u3009', '\u3015', '\uFF09',
     ];
+    private static readonly HashSet<char> KeepAllGlueChars = ['\u00A0', '\u202F', '\u2060', '\uFEFF'];
 
     private readonly record struct EngineProfile(
         double LineFitEpsilon,
@@ -1108,6 +1109,38 @@ public static partial class PretextLayout
         }
 
         return true;
+    }
+
+    private static bool EndsWithLineStartProhibitedText(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return false;
+        }
+
+        var last = text.EnumerateRunes().LastOrDefault();
+        return last.Value != 0 &&
+               last.Value <= char.MaxValue &&
+               (KinsokuStartChars.Contains((char)last.Value) || LeftStickyPunctuationChars.Contains((char)last.Value));
+    }
+
+    private static bool EndsWithKeepAllGlueText(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return false;
+        }
+
+        var last = text.EnumerateRunes().LastOrDefault();
+        return last.Value != 0 &&
+               last.Value <= char.MaxValue &&
+               KeepAllGlueChars.Contains((char)last.Value);
+    }
+
+    private static bool CanContinueKeepAllTextRun(string previousText)
+    {
+        return !EndsWithLineStartProhibitedText(previousText) &&
+               !EndsWithKeepAllGlueText(previousText);
     }
 
     private static bool IsForwardStickyClusterSegment(string segment)

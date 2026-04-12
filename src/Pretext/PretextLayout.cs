@@ -10,6 +10,12 @@ public enum WhiteSpaceMode
     PreWrap,
 }
 
+public enum WordBreakMode
+{
+    Normal,
+    KeepAll,
+}
+
 public enum SegmentBreakKind
 {
     Text,
@@ -22,11 +28,15 @@ public enum SegmentBreakKind
     HardBreak,
 }
 
-public readonly record struct PrepareOptions(WhiteSpaceMode WhiteSpace = WhiteSpaceMode.Normal);
+public readonly record struct PrepareOptions(
+    WhiteSpaceMode WhiteSpace = WhiteSpaceMode.Normal,
+    WordBreakMode WordBreak = WordBreakMode.Normal);
 
 public readonly record struct LayoutCursor(int SegmentIndex, int GraphemeIndex);
 
 public readonly record struct LayoutResult(int LineCount, double Height);
+
+public readonly record struct LineStats(int LineCount, double MaxLineWidth);
 
 public readonly record struct PrepareProfile(
     double AnalysisMs,
@@ -137,6 +147,7 @@ public sealed class PreparedTextWithSegments : PreparedText
         LineEndPaintAdvances = lineEndPaintAdvances;
         Kinds = kinds;
         BreakableWidths = breakableWidths;
+        BreakableFitAdvances = breakableWidths;
         BreakablePrefixWidths = breakablePrefixWidths;
         Chunks = chunks;
         SimpleLineWalkFastPath = simpleLineWalkFastPath;
@@ -154,6 +165,8 @@ public sealed class PreparedTextWithSegments : PreparedText
     public IReadOnlyList<SegmentBreakKind> Kinds { get; }
 
     public IReadOnlyList<double[]?> BreakableWidths { get; }
+
+    public IReadOnlyList<double[]?> BreakableFitAdvances { get; }
 
     public IReadOnlyList<double[]?> BreakablePrefixWidths { get; }
 
@@ -196,7 +209,7 @@ public static partial class PretextLayout
         var preparedSegments = 0;
         foreach (var token in tokens)
         {
-            foreach (var segment in ExpandPreparedSegments(token, fontState, engineProfile))
+            foreach (var segment in ExpandPreparedSegments(token, fontState, engineProfile, effectiveOptions.WordBreak))
             {
                 preparedSegments++;
                 if (segment.IsBreakableRun && segment.BreakableWidths is { Length: > 1 })
@@ -236,11 +249,51 @@ public static partial class PretextLayout
             : null;
     }
 
+    public static LayoutLineRange? LayoutNextLineRange(PreparedTextWithSegments prepared, LayoutCursor start, double maxWidth)
+    {
+        return TryStepLine(prepared, start, maxWidth, out var line)
+            ? new LayoutLineRange(line.Width, line.Start, line.End)
+            : null;
+    }
+
+    public static LayoutLine MaterializeLineRange(PreparedTextWithSegments prepared, LayoutLineRange line)
+    {
+        return MaterializeLine(prepared, new InternalLine(line.Start, line.End, line.End, line.Width, AppendHyphen: false));
+    }
+
     public static int WalkLineRanges(PreparedTextWithSegments prepared, double maxWidth, Action<LayoutLineRange> onLine)
     {
         ArgumentNullException.ThrowIfNull(onLine);
 
         return WalkPreparedLines(prepared, maxWidth, line => onLine(new LayoutLineRange(line.Width, line.Start, line.End)));
+    }
+
+    public static LineStats MeasureLineStats(PreparedTextWithSegments prepared, double maxWidth)
+    {
+        var maxLineWidth = 0d;
+        var lineCount = WalkPreparedLines(prepared, maxWidth, line =>
+        {
+            if (line.Width > maxLineWidth)
+            {
+                maxLineWidth = line.Width;
+            }
+        });
+
+        return new LineStats(lineCount, maxLineWidth);
+    }
+
+    public static double MeasureNaturalWidth(PreparedTextWithSegments prepared)
+    {
+        var maxLineWidth = 0d;
+        WalkPreparedLines(prepared, double.PositiveInfinity, line =>
+        {
+            if (line.Width > maxLineWidth)
+            {
+                maxLineWidth = line.Width;
+            }
+        });
+
+        return maxLineWidth;
     }
 
     public static void ClearCache()
