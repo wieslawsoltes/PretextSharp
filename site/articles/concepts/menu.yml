@@ -1,0 +1,8 @@
+docs:
+  - {path: readme.md, title: "Overview", self: true}
+  - {path: architecture-and-packages.md, title: "Architecture and Packages"}
+  - {path: prepared-text-lifecycle.md, title: "Prepared Text Lifecycle"}
+  - {path: whitespace-and-break-kinds.md, title: "Whitespace and Break Kinds"}
+  - {path: font-strings-and-measurement.md, title: "Font Strings and Measurement"}
+  - {path: locale-segmentation-and-bidi.md, title: "Locale Segmentation and Bidi"}
+  - {path: incremental-layout-apis.md, title: "Incremental Layout APIs"}

@@ -1,0 +1,7 @@
+docs:
+  - {path: readme.md, title: "Overview", self: true}
+  - {path: integrating-in-uno.md, title: "Integrating in Uno"}
+  - {path: using-pretext-in-any-skiasharp-host.md, title: "Using Pretext in Any SkiaSharp Host"}
+  - {path: testing-and-diagnostics.md, title: "Testing and Diagnostics"}
+  - {path: sample-gallery-tour.md, title: "Sample Gallery Tour"}
+  - {path: shrinkwrap-and-editorial-layout.md, title: "Shrinkwrap and Editorial Layout"}

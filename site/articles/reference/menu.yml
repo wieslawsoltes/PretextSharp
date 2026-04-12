@@ -1,0 +1,9 @@
+docs:
+  - {path: readme.md, title: "Overview", self: true}
+  - {path: packages-and-assemblies.md, title: "Packages and Namespace"}
+  - {path: public-types-and-operations.md, title: "Public Types and Operations"}
+  - {path: prepared-text-types.md, title: "Prepared Text Types"}
+  - {path: pretext-uno-helpers.md, title: "Pretext.Uno Helpers"}
+  - {path: scope-and-limitations.md, title: "Scope and Limitations"}
+  - {path: lunet-docs-pipeline.md, title: "Lunet Docs Pipeline"}
+  - {path: license.md, title: "License"}

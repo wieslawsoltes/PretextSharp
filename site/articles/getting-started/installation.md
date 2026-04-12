@@ -1,0 +1,87 @@
+---
+title: "Installation"
+---
+
+# Installation
+
+Install the package that matches the layer you need.
+
+## Core engine
+
+```bash
+dotnet add package Pretext
+```
+
+Then import the core namespace:
+
+```csharp
+using Pretext;
+```
+
+The core package is enough when you want to:
+
+- prepare text once and reuse it across many width probes
+- compute line counts or line strings in a custom control
+- drive your own SkiaSharp drawing code
+- use the engine outside Uno entirely
+
+## Uno companion
+
+```bash
+dotnet add package Pretext.Uno
+```
+
+`Pretext.Uno` depends on `Pretext`, so the core engine is brought in transitively. Import the core namespace and whichever companion namespaces you want:
+
+```csharp
+using Pretext;
+using Pretext.Uno.Controls;
+using Pretext.Uno.Layout;
+```
+
+Use the companion package when you want the reusable Uno-side helpers from this repository:
+
+- `StretchScrollHost`
+- `UiRenderScheduler`
+- `PreparedTextMetrics`
+- `ColumnFlowLayout`
+- `ObstacleLayoutHelper`
+
+## Font string format
+
+Every preparation entry point accepts a `font` string. `Pretext` parses a CSS-like subset:
+
+- a size in `px`, for example `16px`
+- an optional weight, for example `700 16px Inter`
+- optional `italic` or `oblique`
+- a family list, where only the first family is used
+
+Examples:
+
+```csharp
+"16px Inter"
+"italic 16px Georgia"
+"700 18px \"IBM Plex Sans\""
+"600 15px system-ui"
+```
+
+Line height is **not** read from the font string. Pass it separately to `Layout` or `LayoutWithLines`.
+
+## Build the repo
+
+```bash
+dotnet build PretextSamples.slnx
+dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
+dotnet pack src/Pretext/Pretext.csproj -c Release
+dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release
+```
+
+## Sample app
+
+The interactive demos live in `samples/PretextSamples`. Use that app when you want to see how the library behaves in real layouts before integrating it into your own UI.
+
+## Read next
+
+- [Quickstart: Prepare and Layout](quickstart-prepare-and-layout)
+- [Choosing an API](choosing-an-api)
+- [Font Strings and Measurement](../concepts/font-strings-and-measurement)
