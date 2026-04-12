@@ -147,7 +147,6 @@ public sealed class PreparedTextWithSegments : PreparedText
         LineEndPaintAdvances = lineEndPaintAdvances;
         Kinds = kinds;
         BreakableWidths = breakableWidths;
-        BreakableFitAdvances = breakableWidths;
         BreakablePrefixWidths = breakablePrefixWidths;
         Chunks = chunks;
         SimpleLineWalkFastPath = simpleLineWalkFastPath;
@@ -165,8 +164,6 @@ public sealed class PreparedTextWithSegments : PreparedText
     public IReadOnlyList<SegmentBreakKind> Kinds { get; }
 
     public IReadOnlyList<double[]?> BreakableWidths { get; }
-
-    public IReadOnlyList<double[]?> BreakableFitAdvances { get; }
 
     public IReadOnlyList<double[]?> BreakablePrefixWidths { get; }
 
@@ -200,7 +197,7 @@ public static partial class PretextLayout
     {
         var effectiveOptions = options ?? new PrepareOptions();
         var stopwatch = Stopwatch.StartNew();
-        var tokens = AnalyzeTokens(text ?? string.Empty, effectiveOptions.WhiteSpace);
+        var tokens = AnalyzeTokens(text ?? string.Empty, effectiveOptions.WhiteSpace, effectiveOptions.WordBreak);
         var analysisMs = stopwatch.Elapsed.TotalMilliseconds;
 
         var fontState = GetFontState(font);
@@ -265,7 +262,20 @@ public static partial class PretextLayout
     {
         ArgumentNullException.ThrowIfNull(onLine);
 
-        return WalkPreparedLines(prepared, maxWidth, line => onLine(new LayoutLineRange(line.Width, line.Start, line.End)));
+        var cursor = new LayoutCursor(0, 0);
+        var lineCount = 0;
+        while (true)
+        {
+            var line = LayoutNextLineRange(prepared, cursor, maxWidth);
+            if (line is null)
+            {
+                return lineCount;
+            }
+
+            onLine(line);
+            lineCount++;
+            cursor = line.End;
+        }
     }
 
     public static LineStats MeasureLineStats(PreparedTextWithSegments prepared, double maxWidth)

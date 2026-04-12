@@ -7,7 +7,7 @@ public static partial class PretextLayout
     private static PreparedText PrepareCore(string text, string font, PrepareOptions options, bool includeSegments)
     {
         var fontState = GetFontState(font);
-        var tokens = AnalyzeTokens(text ?? string.Empty, options.WhiteSpace);
+        var tokens = AnalyzeTokens(text ?? string.Empty, options.WhiteSpace, options.WordBreak);
         if (tokens.Count == 0)
         {
             return includeSegments

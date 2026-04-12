@@ -61,7 +61,7 @@ public static partial class PretextLayout
             : new WhiteSpaceProfile(whiteSpace, PreserveOrdinarySpaces: false, PreserveHardBreaks: false);
     }
 
-    private static List<AnalysisToken> AnalyzeTokens(string text, WhiteSpaceMode whiteSpace)
+    private static List<AnalysisToken> AnalyzeTokens(string text, WhiteSpaceMode whiteSpace, WordBreakMode wordBreak)
     {
         var whiteSpaceProfile = GetWhiteSpaceProfile(whiteSpace);
         var normalized = whiteSpaceProfile.Mode == WhiteSpaceMode.PreWrap
@@ -74,7 +74,10 @@ public static partial class PretextLayout
         }
 
         var initial = BuildInitialTokens(normalized, whiteSpaceProfile);
-        return BuildMergedTokens(initial, GetEngineProfile(), whiteSpaceProfile);
+        var merged = BuildMergedTokens(initial, GetEngineProfile(), whiteSpaceProfile);
+        return wordBreak == WordBreakMode.KeepAll
+            ? MergeKeepAllTextSegments(merged)
+            : merged;
     }
 
     private static string NormalizeWhitespaceNormal(string text)
@@ -413,6 +416,62 @@ public static partial class PretextLayout
         }
 
         return compacted;
+    }
+
+    private static List<AnalysisToken> MergeKeepAllTextSegments(List<AnalysisToken> tokens)
+    {
+        if (tokens.Count <= 1)
+        {
+            return tokens;
+        }
+
+        var merged = new List<AnalysisToken>(tokens.Count);
+        string? pendingText = null;
+        var pendingWordLike = false;
+        var pendingContainsCjk = false;
+        var pendingCanContinue = false;
+
+        void FlushPending()
+        {
+            if (pendingText is null)
+            {
+                return;
+            }
+
+            merged.Add(new AnalysisToken(pendingText, SegmentBreakKind.Text, pendingWordLike));
+            pendingText = null;
+        }
+
+        foreach (var token in tokens)
+        {
+            if (token.Kind == SegmentBreakKind.Text)
+            {
+                var textContainsCjk = ContainsCjk(token.Text);
+                var textCanContinue = CanContinueKeepAllTextRun(token.Text);
+
+                if (pendingText is not null && pendingContainsCjk && pendingCanContinue)
+                {
+                    pendingText += token.Text;
+                    pendingWordLike |= token.IsWordLike;
+                    pendingContainsCjk |= textContainsCjk;
+                    pendingCanContinue = textCanContinue;
+                    continue;
+                }
+
+                FlushPending();
+                pendingText = token.Text;
+                pendingWordLike = token.IsWordLike;
+                pendingContainsCjk = textContainsCjk;
+                pendingCanContinue = textCanContinue;
+                continue;
+            }
+
+            FlushPending();
+            merged.Add(token);
+        }
+
+        FlushPending();
+        return merged;
     }
 
     private static List<AnalysisToken> MergeGlueConnectedTextRuns(List<AnalysisToken> tokens)
