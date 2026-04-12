@@ -447,14 +447,13 @@ public static partial class PretextLayout
             if (token.Kind == SegmentBreakKind.Text)
             {
                 var textContainsCjk = ContainsCjk(token.Text);
-                var textCanContinue = CanContinueKeepAllTextRun(token.Text);
 
                 if (pendingText is not null && pendingContainsCjk && pendingCanContinue)
                 {
                     pendingText += token.Text;
                     pendingWordLike |= token.IsWordLike;
                     pendingContainsCjk |= textContainsCjk;
-                    pendingCanContinue = textCanContinue;
+                    pendingCanContinue = CanContinueKeepAllTextRun(pendingText);
                     continue;
                 }
 
@@ -462,7 +461,7 @@ public static partial class PretextLayout
                 pendingText = token.Text;
                 pendingWordLike = token.IsWordLike;
                 pendingContainsCjk = textContainsCjk;
-                pendingCanContinue = textCanContinue;
+                pendingCanContinue = CanContinueKeepAllTextRun(pendingText);
                 continue;
             }
 
@@ -1196,8 +1195,50 @@ public static partial class PretextLayout
 
     private static bool CanContinueKeepAllTextRun(string previousText)
     {
-        return !EndsWithLineStartProhibitedText(previousText) &&
-               !EndsWithKeepAllGlueText(previousText);
+        if (string.IsNullOrEmpty(previousText) || EndsWithKeepAllGlueText(previousText))
+        {
+            return false;
+        }
+
+        return !EndsWithLineStartProhibitedText(previousText) ||
+               EndsWithMixedScriptKeepAllContinuation(previousText);
+    }
+
+    private static bool EndsWithMixedScriptKeepAllContinuation(string text)
+    {
+        var lastScalarValue = GetLastScalarValue(text);
+        if (lastScalarValue is <= 0 or > char.MaxValue ||
+            !IsMixedScriptKeepAllContinuationPunctuation((char)lastScalarValue))
+        {
+            return false;
+        }
+
+        var sawCjk = false;
+        var sawNonCjkWord = false;
+
+        foreach (var rune in text.EnumerateRunes())
+        {
+            if (IsCjkCodePoint(rune.Value))
+            {
+                sawCjk = true;
+            }
+            else if (IsWordLikeRune(rune))
+            {
+                sawNonCjkWord = true;
+            }
+
+            if (sawCjk && sawNonCjkWord)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsMixedScriptKeepAllContinuationPunctuation(char ch)
+    {
+        return ch is '.' or ',' or ':' or ';' or '!' or '?' or ')' or ']' or '}' or '%' or '"' or '\'';
     }
 
     private static int GetLastScalarValue(string text)
@@ -1217,6 +1258,46 @@ public static partial class PretextLayout
         }
 
         return span[index];
+    }
+
+    private static bool IsWordLikeRune(Rune rune)
+    {
+        var category = Rune.GetUnicodeCategory(rune);
+        return category is UnicodeCategory.UppercaseLetter or
+               UnicodeCategory.LowercaseLetter or
+               UnicodeCategory.TitlecaseLetter or
+               UnicodeCategory.ModifierLetter or
+               UnicodeCategory.OtherLetter or
+               UnicodeCategory.DecimalDigitNumber or
+               UnicodeCategory.LetterNumber or
+               UnicodeCategory.OtherNumber or
+               UnicodeCategory.NonSpacingMark or
+               UnicodeCategory.SpacingCombiningMark or
+               UnicodeCategory.EnclosingMark or
+               UnicodeCategory.ConnectorPunctuation ||
+               rune.Value == '_';
+    }
+
+    private static bool IsCjkCodePoint(int code)
+    {
+        return (code >= 0x4E00 && code <= 0x9FFF) ||
+               (code >= 0x3400 && code <= 0x4DBF) ||
+               (code >= 0x20000 && code <= 0x2A6DF) ||
+               (code >= 0x2A700 && code <= 0x2B73F) ||
+               (code >= 0x2B740 && code <= 0x2B81F) ||
+               (code >= 0x2B820 && code <= 0x2CEAF) ||
+               (code >= 0x2CEB0 && code <= 0x2EBEF) ||
+               (code >= 0x2EBF0 && code <= 0x2EE5D) ||
+               (code >= 0x30000 && code <= 0x3134F) ||
+               (code >= 0x31350 && code <= 0x323AF) ||
+               (code >= 0x323B0 && code <= 0x33479) ||
+               (code >= 0xF900 && code <= 0xFAFF) ||
+               (code >= 0x2F800 && code <= 0x2FA1F) ||
+               (code >= 0x3000 && code <= 0x303F) ||
+               (code >= 0x3040 && code <= 0x309F) ||
+               (code >= 0x30A0 && code <= 0x30FF) ||
+               (code >= 0xAC00 && code <= 0xD7AF) ||
+               (code >= 0xFF00 && code <= 0xFFEF);
     }
 
     private static bool IsForwardStickyClusterSegment(string segment)
