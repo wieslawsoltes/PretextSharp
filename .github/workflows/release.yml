@@ -1,0 +1,120 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  test:
+    name: Validate (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
+
+      - name: Build library and tests
+        run: dotnet build tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj -c Release --no-restore
+
+      - name: Test
+        run: dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj -c Release --no-build --logger "trx;LogFileName=pretext-tests.trx" --results-directory ./artifacts/test-results
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-test-results-${{ matrix.os }}
+          path: artifacts/test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  pack-and-publish:
+    name: Pack & Publish
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            version="${GITHUB_REF_NAME#v}"
+          else
+            version="0.1.0-preview.${GITHUB_RUN_NUMBER}"
+          fi
+          echo "value=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Restore
+        run: |
+          dotnet restore src/Pretext/Pretext.csproj
+          dotnet restore src/Pretext.Uno/Pretext.Uno.csproj
+
+      - name: Pack Pretext
+        run: dotnet pack src/Pretext/Pretext.csproj -c Release --no-restore -o ./artifacts/packages /p:Version=${{ steps.version.outputs.value }}
+
+      - name: Pack Pretext.Uno
+        run: dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release --no-restore -o ./artifacts/packages /p:Version=${{ steps.version.outputs.value }}
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages-${{ steps.version.outputs.value }}
+          path: artifacts/packages/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish to NuGet
+        if: ${{ github.ref_type == 'tag' }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        shell: bash
+        run: |
+          if [ -z "${NUGET_API_KEY}" ]; then
+            echo "::error::NUGET_API_KEY is not configured for tag release publishing."
+            exit 1
+          fi
+          shopt -s nullglob
+          for package in artifacts/packages/*.nupkg artifacts/packages/*.snupkg; do
+            dotnet nuget push "${package}" --api-key "${NUGET_API_KEY}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          done
+
+      - name: Create GitHub release
+        if: ${{ github.ref_type == 'tag' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/packages/*.nupkg
+            artifacts/packages/*.snupkg
+          generate_release_notes: true
