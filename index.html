@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html data-lunet-theme-mode="system" data-lunet-theme-storage-key="lunet-theme" data-lunet-css-prefix="lunet" lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 1.0.10.0">
+    <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
+    <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
+    <title>Pretext | Pretext</title>
+    <link rel="stylesheet" href="/PretextSharp/css/lite.css">
+    <script src="/PretextSharp/js/lite-defer.js" defer></script>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@wieslawsoltes">
+<meta name="twitter:title" content="Pretext | Pretext">
+<meta name="twitter:description" content="Pretext Pretext is a deterministic text preparation and line-layout engine for any SkiaSharp-based UI. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow. Start Here API Reference Sample Tour Repository What This Library Does Prepare once, reuse often `Prepare` and `PrepareWithSegments` precompute widths, break opportunities, and whitespace behavior so repeated layout passes stay...">
+<meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
+<meta name="twitter:image:alt" content="Pretext | Pretext">
+<meta property="og:title" content="Pretext | Pretext">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
+<meta property="og:description" content="Pretext Pretext is a deterministic text preparation and line-layout engine for any SkiaSharp-based UI. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow. Start Here API Reference Sample Tour Repository What This Library Does Prepare once, reuse often `Prepare` and `PrepareWithSegments` precompute widths, break opportunities, and whitespace behavior so repeated layout passes stay...">
+<meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
+<meta property="og:image:alt" content="Pretext | Pretext">
+  </head>
+  <body>
+
+    <div id="lunet" class="container">
+      <nav class="navbar navbar-expand-md ">
+        <a class="navbar-brand" href="/PretextSharp/">
+          <img class="lunet-logo" src="/PretextSharp/images/logo.svg" alt="Pretext" width="96" height="96">
+          <span class="visually-hidden">Home</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0 show '>
+  <li id='nav-item-home-1' class='nav-item  active'>
+    <span class='nav-item-row'><a href='/PretextSharp/' class='nav-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a></span>  </li>
+  <li id='nav-item-home-2' class='nav-item '>
+    <span class='nav-item-row'><a href='/PretextSharp/articles/' class='nav-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a></span>  </li>
+</ol>
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="lunet-search dropdown w-100">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input id="search-input" type="search" class="form-control" placeholder="Search... (Alt+s)" aria-label="Search" aria-controls="search-results" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-search-empty-message="Enter words to search..." data-search-no-results-message="No results found.">
+                    <ul id="search-results" class="dropdown-menu w-100 p-0" style="max-height: 50vh;" role="listbox" aria-labelledby="search-input"></ul>
+                  </div>
+                </div>
+            </li>
+          </ol>
+          <div class="d-flex align-items-center gap-2 flex-shrink-0 navbar-right">
+            <div class="dropdown">
+              <button
+                id="theme-mode-toggle"
+                class="btn btn-outline-secondary btn-sm lunet-theme-toggle dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                aria-label="Theme">
+                <i class="bi bi-circle-half" data-lunet-theme-toggle-icon aria-hidden="true"></i>
+                <span
+                  data-lunet-theme-toggle-label
+                  data-theme-system-label="System"
+                  data-theme-light-label="Light"
+                  data-theme-dark-label="Dark">Theme</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="theme-mode-toggle">
+                <li><button class="dropdown-item" type="button" data-lunet-theme-choice="system"><i class="bi bi-circle-half me-2"></i>System</button></li>
+                <li><button class="dropdown-item" type="button" data-lunet-theme-choice="light"><i class="bi bi-sun-fill me-2"></i>Light</button></li>
+                <li><button class="dropdown-item" type="button" data-lunet-theme-choice="dark"><i class="bi bi-moon-stars-fill me-2"></i>Dark</button></li>
+              </ul>
+            </div>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0 show flex-shrink-0'>
+  <li id='nav-item-home2-1' class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
+  <li id='nav-item-home2-2' class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+</ol>
+          </div>
+        </div>
+      </nav>
+      <div class="lunet lunet-home">
+        <section data-prismjs-copy="" data-prismjs-copy-success="" data-prismjs-copy-timeout="1200" data-copy-tooltip="Copy to Clipboard." data-copy-tooltip-success="Copied!" data-copy-tooltip-error="Failed to copy!">
+
+<div class="container">
+<!-- lunet:summarize -->
+<h1 id="pretext">Pretext</h1>
+<p><code>Pretext</code> is a deterministic text preparation and line-layout engine for any SkiaSharp-based UI. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow.</p>
+<div class="d-flex flex-wrap gap-3 mt-4 mb-4">
+  <a class="btn btn-primary btn-lg" href="articles/getting-started/overview"><i class="bi bi-rocket-takeoff" aria-hidden="true"></i> Start Here</a>
+  <a class="btn btn-outline-secondary btn-lg" href="articles/reference/public-types-and-operations"><i class="bi bi-journal-code" aria-hidden="true"></i> API Reference</a>
+  <a class="btn btn-outline-secondary btn-lg" href="articles/guides/sample-gallery-tour"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i> Sample Tour</a>
+  <a class="btn btn-outline-secondary btn-lg" href="https://github.com/wieslawsoltes/PretextSharp"><i class="bi bi-github" aria-hidden="true"></i> Repository</a>
+</div>
+<h2 id="what-this-library-does">What This Library Does</h2>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+  <div class="col"><div class="card h-100"><div class="card-body"><h3 class="h5">Prepare once, reuse often</h3><p class="mb-0">`Prepare` and `PrepareWithSegments` precompute widths, break opportunities, and whitespace behavior so repeated layout passes stay cheap.</p></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h3 class="h5">Batch and streaming layout</h3><p class="mb-0">Use `Layout` for quick metrics, `LayoutWithLines` for materialized lines, or `LayoutNextLine` and `WalkLineRanges` for incremental custom layout engines.</p></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h3 class="h5">Real text behavior</h3><p class="mb-0">The engine handles grapheme-aware breaks, discretionary hyphens, tabs, preserved whitespace, bidi text, and locale-aware segmentation on desktop targets.</p></div></div></div>
+</div>
+<h2 id="scope">Scope</h2>
+<p><code>Pretext</code> is a layout engine, not a text renderer. It answers questions such as:</p>
+<ul>
+<li>how many lines fit in a given width</li>
+<li>what text ends up on each line</li>
+<li>where the next line should start for a custom flow algorithm</li>
+<li>which whitespace, punctuation, and discretionary break opportunities should stay visible</li>
+</ul>
+<p>You still own:</p>
+<ul>
+<li>drawing the text in your host UI</li>
+<li>choosing the line height and baseline policy</li>
+<li>arranging lines into columns, cards, obstacles, or custom panels</li>
+<li>invalidating or repainting your UI when layout inputs change</li>
+</ul>
+<h2 id="documentation-map">Documentation Map</h2>
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Getting Started</h2><p>Install the packages, learn the font string contract, and build the first useful `Prepare` + `Layout` flow.</p><a href="articles/getting-started" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Concepts</h2><p>Understand the prepared-text lifecycle, whitespace modes, break kinds, locale-aware segmentation, bidi, and line fitting.</p><a href="articles/concepts" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Guides</h2><p>Integrate `Pretext` into Uno or any SkiaSharp-based host, and reuse the sample app patterns for shrinkwrap, editorial, and obstacle-aware layouts.</p><a href="articles/guides" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Reference</h2><p>Browse every public type and operation, the `Pretext.Uno` companion helpers, platform notes, and repository structure.</p><a href="articles/reference" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+</div>
+<h2 id="repository-layout">Repository Layout</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Pretext</code></td>
+<td>The packable library project containing <code>PretextLayout</code> and the text preparation/layout pipeline.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.Uno</code></td>
+<td>The source for the <code>Pretext.Uno</code> package, with Uno-specific reusable controls and layout helpers.</td>
+</tr>
+<tr>
+<td><code>tests/Pretext.Uno.Tests</code></td>
+<td>Deterministic parity tests for whitespace handling, break behavior, bidi text, and line walking.</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples</code></td>
+<td>A Uno sample app with layout demos including bubbles, masonry, editorial, and justification views.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="published-packages">Published Packages</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Package</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Pretext</code></td>
+<td>Core SkiaSharp-based text preparation and layout engine.</td>
+</tr>
+<tr>
+<td><code>Pretext.Uno</code></td>
+<td>Uno-specific controls and helpers layered on top of <code>Pretext</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="start-with-these-pages">Start With These Pages</h2>
+<ul>
+<li><a href="/PretextSharp/articles/getting-started/overview">Getting Started Overview</a></li>
+<li><a href="/PretextSharp/articles/getting-started/installation">Install Packages</a></li>
+<li><a href="/PretextSharp/articles/getting-started/quickstart-prepare-and-layout">Quickstart: Prepare and Layout</a></li>
+<li><a href="/PretextSharp/articles/getting-started/choosing-an-api">Choosing an API</a></li>
+<li><a href="/PretextSharp/articles/concepts/prepared-text-lifecycle">Prepared Text Lifecycle</a></li>
+<li><a href="/PretextSharp/articles/concepts/font-strings-and-measurement">Font Strings and Measurement</a></li>
+<li><a href="/PretextSharp/articles/reference/public-types-and-operations">Reference: Public Types and Operations</a></li>
+<li><a href="/PretextSharp/articles/reference/prepared-text-types">Reference: Prepared Text Types</a></li>
+<li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
+<li><a href="/PretextSharp/articles/concepts/whitespace-and-break-kinds">Whitespace and Break Kinds</a></li>
+<li><a href="/PretextSharp/articles/concepts/locale-segmentation-and-bidi">Locale Segmentation and Bidi</a></li>
+</ul>
+<h2 id="repository">Repository</h2>
+<ul>
+<li>Source code and issues: <a href="https://github.com/wieslawsoltes/PretextSharp">github.com/wieslawsoltes/PretextSharp</a></li>
+<li>Sample app: <a href="https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples">samples/PretextSamples</a></li>
+</ul>
+
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2026, Wieslaw Soltes aka <a href="https://github.com/wieslawsoltes">wieslawsoltes</a> - Content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+
+  </body>
+</html>

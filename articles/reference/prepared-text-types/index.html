@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html data-lunet-theme-mode="system" data-lunet-theme-storage-key="lunet-theme" data-lunet-css-prefix="lunet" lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 1.0.10.0">
+    <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
+    <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
+    <title>Prepared Text Types | Pretext</title>
+    <link rel="stylesheet" href="/PretextSharp/css/lite.css">
+    <script src="/PretextSharp/js/lite-defer.js" defer></script>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@wieslawsoltes">
+<meta name="twitter:title" content="Prepared Text Types | Pretext">
+<meta name="twitter:description" content="Prepared Text Types Prepared data is the main value produced by the core engine. These types describe what was measured and how later line walking can reuse it. PreparedText Use PreparedText when you created it with Prepare and only need aggregate layout operations. Member Meaning Font The font string used for measurement. WhiteSpace The white-space mode used during preparation. DiscretionaryHyphenWidth Width of the inserted hyphen when a soft hyphen break...">
+<meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
+<meta name="twitter:image:alt" content="Prepared Text Types | Pretext">
+<meta property="og:title" content="Prepared Text Types | Pretext">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
+<meta property="og:description" content="Prepared Text Types Prepared data is the main value produced by the core engine. These types describe what was measured and how later line walking can reuse it. PreparedText Use PreparedText when you created it with Prepare and only need aggregate layout operations. Member Meaning Font The font string used for measurement. WhiteSpace The white-space mode used during preparation. DiscretionaryHyphenWidth Width of the inserted hyphen when a soft hyphen break...">
+<meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
+<meta property="og:image:alt" content="Prepared Text Types | Pretext">
+  </head>
+  <body>
+
+    <div id="lunet" class="container">
+      <nav class="navbar navbar-expand-md sticky-top">
+        <a class="navbar-brand" href="/PretextSharp/">
+          <img class="lunet-logo" src="/PretextSharp/images/logo.svg" alt="Pretext" width="96" height="96">
+          <span class="visually-hidden">Home</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0 show '>
+  <li id='nav-item-home-1' class='nav-item '>
+    <span class='nav-item-row'><a href='/PretextSharp/' class='nav-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a></span>  </li>
+  <li id='nav-item-home-2' class='nav-item  active'>
+    <span class='nav-item-row'><a href='/PretextSharp/articles/' class='nav-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a></span>  </li>
+</ol>
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="lunet-search dropdown w-100">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input id="search-input" type="search" class="form-control" placeholder="Search... (Alt+s)" aria-label="Search" aria-controls="search-results" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-search-empty-message="Enter words to search..." data-search-no-results-message="No results found.">
+                    <ul id="search-results" class="dropdown-menu w-100 p-0" style="max-height: 50vh;" role="listbox" aria-labelledby="search-input"></ul>
+                  </div>
+                </div>
+            </li>
+          </ol>
+          <div class="d-flex align-items-center gap-2 flex-shrink-0 navbar-right">
+            <div class="dropdown">
+              <button
+                id="theme-mode-toggle"
+                class="btn btn-outline-secondary btn-sm lunet-theme-toggle dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                aria-label="Theme">
+                <i class="bi bi-circle-half" data-lunet-theme-toggle-icon aria-hidden="true"></i>
+                <span
+                  data-lunet-theme-toggle-label
+                  data-theme-system-label="System"
+                  data-theme-light-label="Light"
+                  data-theme-dark-label="Dark">Theme</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="theme-mode-toggle">
+                <li><button class="dropdown-item" type="button" data-lunet-theme-choice="system"><i class="bi bi-circle-half me-2"></i>System</button></li>
+                <li><button class="dropdown-item" type="button" data-lunet-theme-choice="light"><i class="bi bi-sun-fill me-2"></i>Light</button></li>
+                <li><button class="dropdown-item" type="button" data-lunet-theme-choice="dark"><i class="bi bi-moon-stars-fill me-2"></i>Dark</button></li>
+              </ul>
+            </div>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0 show flex-shrink-0'>
+  <li id='nav-item-home2-1' class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
+  <li id='nav-item-home2-2' class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+</ol>
+          </div>
+        </div>
+      </nav>
+      <div class="lunet lunet-articles">
+        <section data-prismjs-copy="" data-prismjs-copy-success="" data-prismjs-copy-timeout="1200" data-copy-tooltip="Copy to Clipboard." data-copy-tooltip-success="Copied!" data-copy-tooltip-error="Failed to copy!">
+
+<div class="container-xxl">
+  <div class="row">
+      <!-- Left sidebar - responsive offcanvas (offcanvas on mobile, visible sidebar on md+) -->
+      <nav id="docs-sidebar-menu" class="col-md-3 col-lg-3 col-xl-3 col-xxl-2 offcanvas-md offcanvas-start sticky-md-top menu-sidebar align-self-start order-1 order-md-0" tabindex="-1" aria-labelledby="docs-sidebar-menu-label" aria-expanded="true">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="docs-sidebar-menu-label">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
+            <li id='menu-item-docs-1' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/' class='menu-link  '>Overview</a></span>  </li>
+            <li id='menu-item-docs-2' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/packages-and-assemblies/' class='menu-link  '>Packages and Namespace</a></span>  </li>
+            <li id='menu-item-docs-3' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/public-types-and-operations/' class='menu-link  '>Public Types and Operations</a></span>  </li>
+            <li id='menu-item-docs-4' class='menu-item  active'>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/prepared-text-types/' class='menu-link  '>Prepared Text Types</a></span>  </li>
+            <li id='menu-item-docs-5' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/pretext-uno-helpers/' class='menu-link  '>Pretext.Uno Helpers</a></span>  </li>
+            <li id='menu-item-docs-6' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/scope-and-limitations/' class='menu-link  '>Scope and Limitations</a></span>  </li>
+            <li id='menu-item-docs-7' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/lunet-docs-pipeline/' class='menu-link  '>Lunet Docs Pipeline</a></span>  </li>
+            <li id='menu-item-docs-8' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/license/' class='menu-link  '>License</a></span>  </li>
+          </ol>
+
+        </div>
+      </nav>
+      <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
+      <aside id="docs-sidebar-toc" class="col-12 col-xxl-2 sticky-xxl-top menu-sidebar align-self-start order-0 order-xxl-2 collapse d-xxl-block" aria-expanded="true">
+        <h3 class="toc-title">On this page</h3>
+        <nav class="js-toc"></nav>
+      </aside>
+      <!-- Main content column -->
+      <div class="col-12 col-md-9 col-lg-9 col-xl-9 col-xxl-8 order-2 order-md-1 js-toc-content">
+        <ol class='breadcrumb'>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/' class='breadcrumb-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
+          <li class='breadcrumb-item  active'>
+            Prepared Text Types  </li>
+        </ol>
+
+        <p id="lunet-results"></p>
+        <!-- Toggle buttons visible only on small screens -->
+        <div class="d-md-none mb-3">
+          <button
+            class="btn btn-outline-secondary btn-sm me-2"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#docs-sidebar-menu"
+            aria-controls="docs-sidebar-menu"
+            aria-label="Toggle docs menu">
+            Menu
+          </button>
+          <button
+            class="btn btn-outline-secondary btn-sm d-xxl-none"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#docs-sidebar-toc"
+            aria-controls="docs-sidebar-toc"
+            aria-expanded="false"
+            aria-label="Toggle Table Of Contents">
+            On this page
+          </button>
+        </div>
+<!-- lunet:summarize -->
+<h1 id="prepared-text-types">Prepared Text Types</h1>
+<p>Prepared data is the main value produced by the core engine. These types describe what was measured and how later line walking can reuse it.</p>
+<h2 id="preparedtext"><code>PreparedText</code></h2>
+<p>Use <code>PreparedText</code> when you created it with <code>Prepare</code> and only need aggregate layout operations.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Member</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Font</code></td>
+<td>The font string used for measurement.</td>
+</tr>
+<tr>
+<td><code>WhiteSpace</code></td>
+<td>The white-space mode used during preparation.</td>
+</tr>
+<tr>
+<td><code>DiscretionaryHyphenWidth</code></td>
+<td>Width of the inserted hyphen when a soft hyphen break is taken.</td>
+</tr>
+<tr>
+<td><code>TabStopAdvance</code></td>
+<td>Width of one tab stop, derived from eight measured spaces.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="preparedtextwithsegments"><code>PreparedTextWithSegments</code></h2>
+<p>Use <code>PreparedTextWithSegments</code> when you created it with <code>PrepareWithSegments</code> and need richer output.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Member</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Segments</code></td>
+<td>Segment text after analysis and normalization.</td>
+</tr>
+<tr>
+<td><code>Widths</code></td>
+<td>Measured width of each segment.</td>
+</tr>
+<tr>
+<td><code>LineEndFitAdvances</code></td>
+<td>Width contribution used when deciding whether a segment still fits at line end.</td>
+</tr>
+<tr>
+<td><code>LineEndPaintAdvances</code></td>
+<td>Width contribution used when reporting painted width at line end.</td>
+</tr>
+<tr>
+<td><code>Kinds</code></td>
+<td><code>SegmentBreakKind</code> for each segment.</td>
+</tr>
+<tr>
+<td><code>BreakableWidths</code></td>
+<td>Per-grapheme widths for breakable runs that can wrap internally.</td>
+</tr>
+<tr>
+<td><code>BreakablePrefixWidths</code></td>
+<td>Prefix widths for the same breakable runs.</td>
+</tr>
+<tr>
+<td><code>Chunks</code></td>
+<td>Hard-break chunk boundaries.</td>
+</tr>
+<tr>
+<td><code>SimpleLineWalkFastPath</code></td>
+<td>Indicates whether the simplified line walker can be used internally.</td>
+</tr>
+<tr>
+<td><code>SegmentLevels</code></td>
+<td>Optional bidi level per segment for mixed-direction text.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="preparedlinechunk"><code>PreparedLineChunk</code></h2>
+<p><code>PreparedLineChunk</code> is an advanced type that reflects hard-break chunk boundaries:</p>
+<table class="table">
+<thead>
+<tr>
+<th>Member</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StartSegmentIndex</code></td>
+<td>First segment in the chunk</td>
+</tr>
+<tr>
+<td><code>EndSegmentIndex</code></td>
+<td>End of the chunk before the hard break</td>
+</tr>
+<tr>
+<td><code>ConsumedEndSegmentIndex</code></td>
+<td>The cursor position after the break is consumed</td>
+</tr>
+</tbody>
+</table>
+<p>Most callers do not need <code>Chunks</code> directly, but they are useful when reasoning about forced line boundaries and diagnostics.</p>
+<h2 id="results-and-cursors">Results and cursors</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LayoutCursor</code></td>
+<td>Segment + grapheme position for streaming layout</td>
+</tr>
+<tr>
+<td><code>LayoutResult</code></td>
+<td>Aggregate line count and height</td>
+</tr>
+<tr>
+<td><code>LayoutLine</code></td>
+<td>Materialized text, width, start cursor, and end cursor for one line</td>
+</tr>
+<tr>
+<td><code>LayoutLineRange</code></td>
+<td>Width and cursor range for one line without materialized text</td>
+</tr>
+<tr>
+<td><code>LayoutLinesResult</code></td>
+<td>Aggregate result plus a line collection</td>
+</tr>
+<tr>
+<td><code>PrepareProfile</code></td>
+<td>Coarse timing split for analysis and measurement</td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+  </div>
+</div>
+
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2026, Wieslaw Soltes aka <a href="https://github.com/wieslawsoltes">wieslawsoltes</a> - Content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+
+  </body>
+</html>
