@@ -381,13 +381,25 @@ public sealed partial class PretextLayoutParityTests
         Assert.Equal(new LayoutResult(1, LineHeight), PretextLayout.Layout(latin, 200, LineHeight));
     }
 
-    [Fact(DisplayName = "thai locale uses locale-aware word segmentation")]
-    public void Prepare_ThaiLocaleUsesLocaleAwareWordSegmentation()
+    [Fact(DisplayName = "thai locale prepareWithSegments preserves text and uses locale-aware word segmentation when available")]
+    public void Prepare_ThaiLocalePreservesTextAndUsesLocaleAwareWordSegmentationWhenAvailable()
     {
+        const string text = "ภาษาไทยภาษาไทย";
+
         PretextLayout.SetLocale("th");
-        var prepared = PretextLayout.PrepareWithSegments("ภาษาไทยภาษาไทย", Font);
-        Assert.True(
-            prepared.Segments.Count > 1,
-            $"segments={string.Join("|", prepared.Segments)}");
+        var prepared = PretextLayout.PrepareWithSegments(text, Font);
+
+        Assert.NotEmpty(prepared.Segments);
+        Assert.All(prepared.Segments, static segment => Assert.False(string.IsNullOrEmpty(segment)));
+        Assert.Equal(text, string.Concat(prepared.Segments));
+
+        if (prepared.Segments.Count > 1)
+        {
+            Assert.Contains(prepared.Segments, segment => segment.Length < text.Length);
+        }
+        else
+        {
+            Assert.Equal(text, prepared.Segments[0]);
+        }
     }
 }

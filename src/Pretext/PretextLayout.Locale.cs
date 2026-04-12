@@ -171,18 +171,12 @@ public static partial class PretextLayout
             }
             else if (OperatingSystem.IsLinux())
             {
-                if (!TryLoad("icuuc", assembly, NativeLibrarySearchDirectories, out _icuLibrary))
-                {
-                    for (var version = MaxSupportedIcuVersion; version >= MinSupportedIcuVersion; version--)
-                    {
-                        if (NativeLibrary.TryLoad($"libicuuc.so.{version}", out _icuLibrary))
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if (_icuLibrary == IntPtr.Zero)
+                if (!TryLoad("icui18n", assembly, NativeLibrarySearchDirectories, out _icuLibrary) &&
+                    !TryLoad("libicui18n", assembly, NativeLibrarySearchDirectories, out _icuLibrary) &&
+                    !TryLoadVersionedLinuxLibrary("libicui18n.so.", out _icuLibrary) &&
+                    !TryLoad("icuuc", assembly, NativeLibrarySearchDirectories, out _icuLibrary) &&
+                    !TryLoad("libicuuc", assembly, NativeLibrarySearchDirectories, out _icuLibrary) &&
+                    !TryLoadVersionedLinuxLibrary("libicuuc.so.", out _icuLibrary))
                 {
                     throw new DllNotFoundException("Failed to load ICU word-break library.");
                 }
@@ -224,6 +218,21 @@ public static partial class PretextLayout
             {
                 return false;
             }
+        }
+
+        private static bool TryLoadVersionedLinuxLibrary(string libraryNamePrefix, out IntPtr handle)
+        {
+            handle = IntPtr.Zero;
+
+            for (var version = MaxSupportedIcuVersion; version >= MinSupportedIcuVersion; version--)
+            {
+                if (NativeLibrary.TryLoad($"{libraryNamePrefix}{version}", out handle))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static bool TryLoadUnoPackLibrary(string packageId, string relativePath, out IntPtr handle)
