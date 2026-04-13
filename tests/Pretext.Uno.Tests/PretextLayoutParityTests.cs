@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using Pretext;
 using Xunit;
 
@@ -65,7 +66,10 @@ public sealed partial class PretextLayoutParityTests : IDisposable
             (code >= 0x2B740 && code <= 0x2B81F) ||
             (code >= 0x2B820 && code <= 0x2CEAF) ||
             (code >= 0x2CEB0 && code <= 0x2EBEF) ||
+            (code >= 0x2EBF0 && code <= 0x2EE5D) ||
             (code >= 0x30000 && code <= 0x3134F) ||
+            (code >= 0x31350 && code <= 0x323AF) ||
+            (code >= 0x323B0 && code <= 0x33479) ||
             (code >= 0x3000 && code <= 0x303F) ||
             (code >= 0x3040 && code <= 0x309F) ||
             (code >= 0x30A0 && code <= 0x30FF) ||
@@ -91,6 +95,7 @@ public sealed partial class PretextLayoutParityTests : IDisposable
     {
         var fontSize = ParseFontSize(font);
         var width = 0d;
+        var previousWasDecimalDigit = false;
 
         foreach (var rune in text.EnumerateRunes())
         {
@@ -98,26 +103,37 @@ public sealed partial class PretextLayoutParityTests : IDisposable
             if (ch == " ")
             {
                 width += fontSize * 0.33;
+                previousWasDecimalDigit = false;
             }
             else if (ch == "\t")
             {
                 width += fontSize * 1.32;
+                previousWasDecimalDigit = false;
             }
             else if (IsEmojiPresentation(ch) || ch == "\uFE0F")
             {
                 width += fontSize;
+                previousWasDecimalDigit = false;
+            }
+            else if (IsDecimalDigit(ch))
+            {
+                width += fontSize * (previousWasDecimalDigit ? 0.48 : 0.52);
+                previousWasDecimalDigit = true;
             }
             else if (IsWideCharacter(ch))
             {
                 width += fontSize;
+                previousWasDecimalDigit = false;
             }
             else if (IsPunctuation(ch))
             {
                 width += fontSize * 0.4;
+                previousWasDecimalDigit = false;
             }
             else
             {
                 width += fontSize * 0.6;
+                previousWasDecimalDigit = false;
             }
         }
 
@@ -129,5 +145,184 @@ public sealed partial class PretextLayoutParityTests : IDisposable
         var tabStopAdvance = spaceWidth * tabSize;
         var remainder = lineWidth % tabStopAdvance;
         return Math.Abs(remainder) <= 1e-12 ? tabStopAdvance : tabStopAdvance - remainder;
+    }
+
+    private static bool IsDecimalDigit(string ch)
+    {
+        var enumerator = ch.EnumerateRunes();
+        return enumerator.MoveNext() && Rune.IsDigit(enumerator.Current);
+    }
+
+    private static string[] GetSegmentGraphemes(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return [];
+        }
+
+        var graphemes = new List<string>();
+        var enumerator = StringInfo.GetTextElementEnumerator(text);
+        while (enumerator.MoveNext())
+        {
+            graphemes.Add(Assert.IsType<string>(enumerator.GetTextElement()));
+        }
+
+        return graphemes.ToArray();
+    }
+
+    private static string SlicePreparedText(PreparedTextWithSegments prepared, LayoutCursor start, LayoutCursor end)
+    {
+        if (start.SegmentIndex == end.SegmentIndex)
+        {
+            var segment = start.SegmentIndex < prepared.Segments.Count
+                ? prepared.Segments[start.SegmentIndex]
+                : null;
+            if (segment is null)
+            {
+                return string.Empty;
+            }
+
+            var graphemes = GetSegmentGraphemes(segment);
+            return string.Concat(graphemes.Skip(start.GraphemeIndex).Take(end.GraphemeIndex - start.GraphemeIndex));
+        }
+
+        var builder = new StringBuilder();
+        for (var segmentIndex = start.SegmentIndex; segmentIndex < end.SegmentIndex; segmentIndex++)
+        {
+            if (segmentIndex >= prepared.Segments.Count)
+            {
+                break;
+            }
+
+            var segment = prepared.Segments[segmentIndex];
+            if (segmentIndex == start.SegmentIndex && start.GraphemeIndex > 0)
+            {
+                var graphemes = GetSegmentGraphemes(segment);
+                for (var graphemeIndex = start.GraphemeIndex; graphemeIndex < graphemes.Length; graphemeIndex++)
+                {
+                    builder.Append(graphemes[graphemeIndex]);
+                }
+            }
+            else
+            {
+                builder.Append(segment);
+            }
+        }
+
+        if (end.GraphemeIndex > 0 && end.SegmentIndex < prepared.Segments.Count)
+        {
+            var segment = prepared.Segments[end.SegmentIndex];
+            var graphemes = GetSegmentGraphemes(segment);
+            for (var graphemeIndex = 0; graphemeIndex < end.GraphemeIndex; graphemeIndex++)
+            {
+                builder.Append(graphemes[graphemeIndex]);
+            }
+        }
+
+        return builder.ToString();
+    }
+
+    private static string ReconstructFromLineBoundaries(PreparedTextWithSegments prepared, IReadOnlyList<LayoutLine> lines)
+    {
+        var builder = new StringBuilder();
+        foreach (var line in lines)
+        {
+            builder.Append(SlicePreparedText(prepared, line.Start, line.End));
+        }
+
+        return builder.ToString();
+    }
+
+    private static List<LayoutLine> CollectStreamedLines(
+        PreparedTextWithSegments prepared,
+        double width,
+        LayoutCursor? start = null)
+    {
+        var lines = new List<LayoutLine>();
+        var cursor = start ?? new LayoutCursor(0, 0);
+
+        while (true)
+        {
+            var line = PretextLayout.LayoutNextLine(prepared, cursor, width);
+            if (line is null)
+            {
+                break;
+            }
+
+            lines.Add(line);
+            cursor = line.End;
+        }
+
+        return lines;
+    }
+
+    private static List<LayoutLine> CollectStreamedLinesWithWidths(
+        PreparedTextWithSegments prepared,
+        IReadOnlyList<double> widths,
+        LayoutCursor? start = null)
+    {
+        var lines = new List<LayoutLine>();
+        var cursor = start ?? new LayoutCursor(0, 0);
+        var widthIndex = 0;
+
+        while (true)
+        {
+            Assert.True(widthIndex < widths.Count, "CollectStreamedLinesWithWidths requires enough widths to finish the paragraph.");
+            var line = PretextLayout.LayoutNextLine(prepared, cursor, widths[widthIndex]);
+            if (line is null)
+            {
+                break;
+            }
+
+            lines.Add(line);
+            cursor = line.End;
+            widthIndex++;
+        }
+
+        return lines;
+    }
+
+    private static string ReconstructFromWalkedRanges(PreparedTextWithSegments prepared, double width)
+    {
+        var builder = new StringBuilder();
+        PretextLayout.WalkLineRanges(prepared, width, line =>
+        {
+            builder.Append(SlicePreparedText(prepared, line.Start, line.End));
+        });
+
+        return builder.ToString();
+    }
+
+    private static int CompareCursors(LayoutCursor left, LayoutCursor right)
+    {
+        if (left.SegmentIndex != right.SegmentIndex)
+        {
+            return left.SegmentIndex - right.SegmentIndex;
+        }
+
+        return left.GraphemeIndex - right.GraphemeIndex;
+    }
+
+    private static LayoutCursor TerminalCursor(PreparedTextWithSegments prepared)
+    {
+        return new LayoutCursor(prepared.Segments.Count, 0);
+    }
+
+    private static IReadOnlyList<(string Text, sbyte Level)> GetNonSpaceSegmentLevels(PreparedTextWithSegments prepared)
+    {
+        var levels = Assert.IsAssignableFrom<IReadOnlyList<sbyte>>(prepared.SegmentLevels);
+        var result = new List<(string Text, sbyte Level)>();
+
+        for (var index = 0; index < prepared.Segments.Count; index++)
+        {
+            if (prepared.Kinds[index] == SegmentBreakKind.Space)
+            {
+                continue;
+            }
+
+            result.Add((prepared.Segments[index], levels[index]));
+        }
+
+        return result;
     }
 }

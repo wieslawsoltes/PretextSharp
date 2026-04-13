@@ -252,6 +252,14 @@ public sealed partial class PretextLayoutParityTests
         Assert.Equal(new[] { "say", " ", "\\\"hello\\\"", " ", "there" }, prepared.Segments);
     }
 
+    [Fact(DisplayName = "keeps escaped quote clusters attached through preceding opening punctuation")]
+    public void Prepare_KeepsEscapedQuoteClustersAttachedThroughOpeningPunctuation()
+    {
+        const string text = "((\\\"\\\"word";
+        var prepared = PretextLayout.PrepareWithSegments(text, Font);
+        Assert.Equal(new[] { text }, prepared.Segments);
+    }
+
     [Fact(DisplayName = "keeps URL-like runs together as one breakable segment")]
     public void Prepare_KeepsUrlLikeRunsTogether()
     {
@@ -343,6 +351,21 @@ public sealed partial class PretextLayoutParityTests
         Assert.Equal(new[] { "===", " ", "heading", " ", "===" }, prepared.Segments);
     }
 
+    [Fact(DisplayName = "keeps long repeated punctuation runs coalesced")]
+    public void Prepare_KeepsLongRepeatedPunctuationRunsCoalesced()
+    {
+        var text = new string('(', 256);
+        var prepared = PretextLayout.PrepareWithSegments(text, Font);
+        Assert.Equal(new[] { text }, prepared.Segments);
+    }
+
+    [Fact(DisplayName = "keeps repeated punctuation runs attachable to trailing closing punctuation")]
+    public void Prepare_KeepsRepeatedPunctuationRunsAttachableToTrailingClosingPunctuation()
+    {
+        var prepared = PretextLayout.PrepareWithSegments("((()", Font);
+        Assert.Equal(new[] { "((()" }, prepared.Segments);
+    }
+
     [Fact(DisplayName = "applies CJK and Hangul punctuation attachment rules")]
     public void Prepare_AppliesCjkAndHangulPunctuationAttachmentRules()
     {
@@ -350,11 +373,40 @@ public sealed partial class PretextLayoutParityTests
         Assert.Equal("다.", PretextLayout.PrepareWithSegments("테스트입니다.", Font).Segments[^1]);
     }
 
+    [Fact(DisplayName = "keeps non-CJK glue-connected runs intact before CJK text")]
+    public void Prepare_KeepsNonCjkGlueConnectedRunsIntactBeforeCjkText()
+    {
+        var prepared = PretextLayout.PrepareWithSegments("foo\u00A0世界", Font);
+        Assert.Equal(new[] { "foo\u00A0", "世", "界" }, prepared.Segments);
+    }
+
+    [Fact(DisplayName = "keep-all keeps CJK-leading no-space runs cohesive without swallowing preceding latin runs")]
+    public void Prepare_KeepAllKeepsCjkLeadingNoSpaceRunsCohesive()
+    {
+        Assert.Equal(new[] { "中文，", "测试。" }, PretextLayout.PrepareWithSegments("中文，测试。", Font, new PrepareOptions(WordBreak: WordBreakMode.KeepAll)).Segments);
+        Assert.Equal(new[] { "한국어테스트" }, PretextLayout.PrepareWithSegments("한국어테스트", Font, new PrepareOptions(WordBreak: WordBreakMode.KeepAll)).Segments);
+        Assert.Equal(new[] { new string('漢', 256) }, PretextLayout.PrepareWithSegments(new string('漢', 256), Font, new PrepareOptions(WordBreak: WordBreakMode.KeepAll)).Segments);
+
+        foreach (var text in new[] { "日本語foo-bar", "日本語foo.bar", "日本語foo—bar" })
+        {
+            Assert.Equal(new[] { text }, PretextLayout.PrepareWithSegments(text, Font, new PrepareOptions(WordBreak: WordBreakMode.KeepAll)).Segments);
+        }
+
+        Assert.Equal(new[] { "foo-", "bar", "日本語" }, PretextLayout.PrepareWithSegments("foo-bar日本語", Font, new PrepareOptions(WordBreak: WordBreakMode.KeepAll)).Segments);
+        Assert.Equal(new[] { "foo\u00A0", "世界" }, PretextLayout.PrepareWithSegments("foo\u00A0世界", Font, new PrepareOptions(WordBreak: WordBreakMode.KeepAll)).Segments);
+    }
+
     [Fact(DisplayName = "treats astral CJK ideographs as CJK break units")]
     public void Prepare_TreatsAstralCjkIdeographsAsBreakUnits()
     {
         Assert.Equal(new[] { "𠀀", "𠀁" }, PretextLayout.PrepareWithSegments("𠀀𠀁", Font).Segments);
         Assert.Equal(new[] { "𠀀。" }, PretextLayout.PrepareWithSegments("𠀀。", Font).Segments);
+
+        foreach (var sample in new[] { "𠀀", "\U0002EBF0", "\U00031350", "\U000323B0" })
+        {
+            Assert.Equal(new[] { sample, sample }, PretextLayout.PrepareWithSegments($"{sample}{sample}", Font).Segments);
+            Assert.Equal(new[] { $"{sample}。" }, PretextLayout.PrepareWithSegments($"{sample}。", Font).Segments);
+        }
     }
 
     [Fact(DisplayName = "prepare and prepareWithSegments agree on layout behavior")]
@@ -401,5 +453,48 @@ public sealed partial class PretextLayoutParityTests
         {
             Assert.Equal(text, prepared.Segments[0]);
         }
+    }
+
+    [Fact(DisplayName = "pure LTR text skips rich bidi metadata")]
+    public void Prepare_PureLtrTextSkipsRichBidiMetadata()
+    {
+        Assert.Null(PretextLayout.PrepareWithSegments("hello world", Font).SegmentLevels);
+    }
+
+    [Fact(DisplayName = "rich bidi metadata uses the first strong character for paragraph direction")]
+    public void Prepare_RichBidiMetadataUsesFirstStrongCharacterForParagraphDirection()
+    {
+        var ltrFirst = PretextLayout.PrepareWithSegments("one اثنان three", Font);
+        Assert.NotNull(ltrFirst.SegmentLevels);
+        Assert.Equal(ltrFirst.Segments.Count, ltrFirst.SegmentLevels!.Count);
+        Assert.Equal(
+            new (string Text, sbyte Level)[]
+            {
+                ("one", 0),
+                ("اثنان", 1),
+                ("three", 0),
+            },
+            GetNonSpaceSegmentLevels(ltrFirst));
+
+        var rtlFirst = PretextLayout.PrepareWithSegments("123 واحد three", Font);
+        Assert.NotNull(rtlFirst.SegmentLevels);
+        Assert.Equal(
+            new (string Text, sbyte Level)[]
+            {
+                ("123", 2),
+                ("واحد", 1),
+                ("three", 2),
+            },
+            GetNonSpaceSegmentLevels(rtlFirst));
+
+        var astralRtlFirst = PretextLayout.PrepareWithSegments("𞤀𞤁 abc", Font);
+        Assert.NotNull(astralRtlFirst.SegmentLevels);
+        Assert.Equal(
+            new (string Text, sbyte Level)[]
+            {
+                ("𞤀𞤁", 1),
+                ("abc", 2),
+            },
+            GetNonSpaceSegmentLevels(astralRtlFirst));
     }
 }

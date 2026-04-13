@@ -1,54 +1,23 @@
+using Pretext.Generated;
+
 namespace Pretext;
 
 internal static class BidiHelper
 {
-    private static readonly sbyte[] BaseTypes =
-    {
-        10,10,10,10,10,10,10,10,10,11,10,11,12,
-        10,10,10,10,10,10,10,10,10,10,10,10,10,
-        10,10,10,10,10,11,12,9,9,7,7,7,9,
-        9,9,9,9,9,8,9,8,9,4,4,4,
-        4,4,4,4,4,4,4,9,9,9,9,9,
-        9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,
-        9,9,9,9,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,9,9,9,9,10,10,10,10,10,10,10,10,
-        10,10,10,10,10,10,10,10,10,10,10,10,
-        10,10,10,10,10,10,10,10,10,10,10,10,
-        10,8,9,7,7,7,7,9,9,9,9,0,9,
-        9,9,9,9,7,7,4,4,9,0,9,9,9,
-        4,0,9,9,9,9,9,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,9,0,0,0,0,0,0,0,0
-    };
-
-    private static readonly sbyte[] ArabicTypes =
-    {
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        8,2,9,9,13,13,13,13,13,13,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,13,13,13,13,13,13,13,
-        13,13,13,13,13,13,13,2,2,2,2,
-        2,2,2,5,5,5,5,5,5,5,5,5,
-        5,7,5,5,2,2,2,13,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2,2,2,2,
-        2,13,13,13,13,13,13,13,13,13,13,
-        13,13,13,13,13,13,13,13,13,9,13,
-        13,13,13,2,2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,2
-    };
+    private const sbyte L = 0;
+    private const sbyte R = 1;
+    private const sbyte AL = 2;
+    private const sbyte WS = 3;
+    private const sbyte EN = 4;
+    private const sbyte AN = 5;
+    private const sbyte ES = 6;
+    private const sbyte ET = 7;
+    private const sbyte CS = 8;
+    private const sbyte ON = 9;
+    private const sbyte BN = 10;
+    private const sbyte B = 11;
+    private const sbyte S = 12;
+    private const sbyte NSM = 13;
 
     public static sbyte[]? ComputeSegmentLevels(string text, IReadOnlyList<int> starts)
     {
@@ -75,32 +44,75 @@ internal static class BidiHelper
         }
 
         var types = new sbyte[text.Length];
-        var bidiCount = 0;
-        for (var i = 0; i < text.Length; i++)
+        var sawBidi = false;
+
+        // Keep bidi classes aligned to UTF-16 offsets because prepared segments
+        // index back into the normalized string by code-unit position.
+        for (var i = 0; i < text.Length;)
         {
-            var type = Classify(text[i]);
-            if (type is 1 or 2 or 5)
+            var first = text[i];
+            var codePoint = (int)first;
+            var codeUnitLength = 1;
+
+            if (char.IsHighSurrogate(first) &&
+                i + 1 < text.Length &&
+                char.IsLowSurrogate(text[i + 1]))
             {
-                bidiCount++;
+                codePoint = char.ConvertToUtf32(first, text[i + 1]);
+                codeUnitLength = 2;
             }
 
-            types[i] = type;
+            var type = ClassifyCodePoint(codePoint);
+            if (type is R or AL or AN)
+            {
+                sawBidi = true;
+            }
+
+            for (var j = 0; j < codeUnitLength; j++)
+            {
+                types[i + j] = type;
+            }
+
+            i += codeUnitLength;
         }
 
-        if (bidiCount == 0)
+        if (!sawBidi)
         {
             return null;
         }
 
-        var startLevel = (text.Length / (double)bidiCount) < 0.3 ? 0 : 1;
-        var levels = Enumerable.Repeat((sbyte)startLevel, text.Length).ToArray();
-        var embedding = (sbyte)(startLevel % 2 == 1 ? 1 : 0);
-        var sor = embedding == 1 ? (sbyte)1 : (sbyte)0;
+        // Use the first strong character to approximate paragraph direction.
+        var startLevel = 0;
+        for (var i = 0; i < types.Length; i++)
+        {
+            var type = types[i];
+            if (type == L)
+            {
+                startLevel = 0;
+                break;
+            }
 
+            if (type is R or AL)
+            {
+                startLevel = 1;
+                break;
+            }
+        }
+
+        var levels = new sbyte[text.Length];
+        for (var i = 0; i < levels.Length; i++)
+        {
+            levels[i] = (sbyte)startLevel;
+        }
+
+        var embedding = (sbyte)((startLevel & 1) == 1 ? R : L);
+        var sor = embedding;
+
+        // W1-W7
         var lastType = sor;
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] == 13)
+            if (types[i] == NSM)
             {
                 types[i] = lastType;
             }
@@ -113,11 +125,11 @@ internal static class BidiHelper
         lastType = sor;
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] == 4)
+            if (types[i] == EN)
             {
-                types[i] = lastType == 2 ? (sbyte)5 : (sbyte)4;
+                types[i] = lastType == AL ? AN : EN;
             }
-            else if (types[i] is 0 or 1 or 2)
+            else if (types[i] is R or L or AL)
             {
                 lastType = types[i];
             }
@@ -125,20 +137,22 @@ internal static class BidiHelper
 
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] == 2)
+            if (types[i] == AL)
             {
-                types[i] = 1;
+                types[i] = R;
             }
         }
 
         for (var i = 1; i < types.Length - 1; i++)
         {
-            if (types[i] == 6 && types[i - 1] == 4 && types[i + 1] == 4)
+            if (types[i] == ES && types[i - 1] == EN && types[i + 1] == EN)
             {
-                types[i] = 4;
+                types[i] = EN;
             }
 
-            if (types[i] == 8 && (types[i - 1] == 4 || types[i - 1] == 5) && types[i + 1] == types[i - 1])
+            if (types[i] == CS &&
+                (types[i - 1] == EN || types[i - 1] == AN) &&
+                types[i + 1] == types[i - 1])
             {
                 types[i] = types[i - 1];
             }
@@ -146,60 +160,61 @@ internal static class BidiHelper
 
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] != 4)
+            if (types[i] != EN)
             {
                 continue;
             }
 
-            for (var j = i - 1; j >= 0 && types[j] == 7; j--)
+            for (var j = i - 1; j >= 0 && types[j] == ET; j--)
             {
-                types[j] = 4;
+                types[j] = EN;
             }
 
-            for (var j = i + 1; j < types.Length && types[j] == 7; j++)
+            for (var j = i + 1; j < types.Length && types[j] == ET; j++)
             {
-                types[j] = 4;
+                types[j] = EN;
             }
         }
 
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] is 12 or 6 or 7 or 8)
+            if (types[i] is WS or ES or ET or CS)
             {
-                types[i] = 9;
+                types[i] = ON;
             }
         }
 
         lastType = sor;
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] == 4)
+            if (types[i] == EN)
             {
-                types[i] = lastType == 0 ? (sbyte)0 : (sbyte)4;
+                types[i] = lastType == L ? L : EN;
             }
-            else if (types[i] is 1 or 0)
+            else if (types[i] is R or L)
             {
                 lastType = types[i];
             }
         }
 
+        // N1-N2
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] != 9)
+            if (types[i] != ON)
             {
                 continue;
             }
 
             var end = i + 1;
-            while (end < types.Length && types[end] == 9)
+            while (end < types.Length && types[end] == ON)
             {
                 end++;
             }
 
             var before = i > 0 ? types[i - 1] : sor;
             var after = end < types.Length ? types[end] : sor;
-            var beforeDir = before != 0 ? (sbyte)1 : (sbyte)0;
-            var afterDir = after != 0 ? (sbyte)1 : (sbyte)0;
+            var beforeDir = before != L ? R : L;
+            var afterDir = after != L ? R : L;
             if (beforeDir == afterDir)
             {
                 for (var j = i; j < end; j++)
@@ -213,26 +228,27 @@ internal static class BidiHelper
 
         for (var i = 0; i < types.Length; i++)
         {
-            if (types[i] == 9)
+            if (types[i] == ON)
             {
-                types[i] = embedding == 1 ? (sbyte)1 : (sbyte)0;
+                types[i] = embedding;
             }
         }
 
+        // I1-I2
         for (var i = 0; i < types.Length; i++)
         {
             if ((levels[i] & 1) == 0)
             {
-                if (types[i] == 1)
+                if (types[i] == R)
                 {
                     levels[i]++;
                 }
-                else if (types[i] is 5 or 4)
+                else if (types[i] is AN or EN)
                 {
                     levels[i] += 2;
                 }
             }
-            else if (types[i] is 0 or 5 or 4)
+            else if (types[i] is L or AN or EN)
             {
                 levels[i]++;
             }
@@ -241,29 +257,35 @@ internal static class BidiHelper
         return levels;
     }
 
-    private static sbyte Classify(char ch)
+    private static sbyte ClassifyCodePoint(int codePoint)
     {
-        var code = (int)ch;
-        if (code <= 0x00FF)
+        if (codePoint <= 0x00FF)
         {
-            return BaseTypes[code];
+            return PretextBidiData.Latin1BidiTypes[codePoint];
         }
 
-        if (code is >= 0x0590 and <= 0x05F4)
+        var ranges = PretextBidiData.NonLatin1BidiRanges;
+        var lo = 0;
+        var hi = ranges.Length - 1;
+        while (lo <= hi)
         {
-            return 1;
+            var mid = (lo + hi) >> 1;
+            var range = ranges[mid];
+            if (codePoint < range.Start)
+            {
+                hi = mid - 1;
+                continue;
+            }
+
+            if (codePoint > range.End)
+            {
+                lo = mid + 1;
+                continue;
+            }
+
+            return range.Type;
         }
 
-        if (code is >= 0x0600 and <= 0x06FF)
-        {
-            return ArabicTypes[code & 0xFF];
-        }
-
-        if (code is >= 0x0700 and <= 0x08AC)
-        {
-            return 2;
-        }
-
-        return 0;
+        return L;
     }
 }

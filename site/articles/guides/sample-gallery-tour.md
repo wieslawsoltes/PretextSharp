@@ -24,7 +24,11 @@ Uses repeated aggregate layout to size many independent cards cheaply without ma
 
 ## Rich Text
 
-Uses `LayoutNextLine` as a streamed source inside a richer inline composition model.
+Uses the core rich-inline helper so code spans, links, and atomic chips share one wrapping flow.
+
+## Markdown Chat
+
+Uses markdown parsing, `PrepareRichInline`, `MeasureRichInlineStats`, and exact-height-first virtualization to render only the visible window of a 10k-message chat surface.
 
 ## Dynamic Layout
 
@@ -60,12 +64,14 @@ The sample app is intentionally diverse. It demonstrates that the same core APIs
 - `Bubbles`: compute exact bubble widths without DOM-style shrinkwrap
 - `Masonry`: pack cards after probing text height
 - `Dynamic Layout`: react to width changes without reparsing text
+- `Markdown Chat`: virtualize a rich block surface from exact predicted heights
 
 ## Typography-focused samples
 
 - `Justification Comparison`: compare strategies on the same prepared paragraphs
 - `Editorial Engine`: place pull quotes and body copy around constraints
 - `Variable ASCII`: show width-sensitive fitting with different glyph runs
+- `Rich Text`: keep atomic badges and splittable text in one inline flow
 
 ## Where to read next
 

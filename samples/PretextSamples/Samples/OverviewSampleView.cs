@@ -15,6 +15,7 @@ public sealed class OverviewSampleView : UserControl
         cards.Children.Add(BuildFeatureCard("Bubbles", "Binary-search shrinkwrap produces tighter multiline chat bubbles than width-to-widest-line sizing."));
         cards.Children.Add(BuildFeatureCard("Masonry", "Card heights come from the layout engine, so the grid can place content before the UI tree measures it."));
         cards.Children.Add(BuildFeatureCard("Rich Text", "Inline text, code spans, and atomic chips share one flow while only the text fragments split across lines."));
+        cards.Children.Add(BuildFeatureCard("Markdown Chat", "A 10k-message markdown conversation uses exact-height prediction and a manually virtualized visible window instead of DOM or UI-tree measurement."));
         cards.Children.Add(BuildFeatureCard("Dynamic Layout", "A fixed-height editorial spread with obstacle-aware title routing and continuous flow."));
         cards.Children.Add(BuildFeatureCard("Editorial Engine", "Animated orbs, live text reflow, pull quotes, and multi-column flow with zero UI-tree measurements."));
         cards.Children.Add(BuildFeatureCard("Justification Comparison", "Greedy, hyphenated, and optimal paragraph breaking appear side by side so rivers and spacing variance are easy to compare."));

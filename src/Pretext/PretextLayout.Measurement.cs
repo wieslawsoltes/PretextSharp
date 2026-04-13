@@ -30,7 +30,7 @@ public static partial class PretextLayout
         return _cachedEngineProfile.Value;
     }
 
-    private static IReadOnlyList<string> SplitMeasuredCjkRun(string text, bool carryCjkAfterClosingQuote)
+    private static IReadOnlyList<string> BuildBaseCjkUnits(string text, bool carryCjkAfterClosingQuote)
     {
         var elements = GetTextElements(text);
         if (elements.Length <= 1)
@@ -39,25 +39,93 @@ public static partial class PretextLayout
         }
 
         var units = new List<string>();
-        var current = elements[0];
+        var currentParts = new List<string> { elements[0] };
+        var currentContainsCjk = ContainsCjk(elements[0]);
+        var currentEndsWithClosingQuote = EndsWithClosingQuote(elements[0]);
+        var currentIsSingleKinsokuEnd = elements[0].Length == 1 && KinsokuEndChars.Contains(elements[0][0]);
+
+        static string JoinParts(List<string> parts)
+            => parts.Count == 1 ? parts[0] : string.Concat(parts);
+
+        void PushCurrent()
+        {
+            if (currentParts.Count == 0)
+            {
+                return;
+            }
+
+            units.Add(JoinParts(currentParts));
+        }
+
         for (var index = 1; index < elements.Length; index++)
         {
             var grapheme = elements[index];
-            if (IsForwardStickyCluster(current) ||
+            var graphemeContainsCjk = ContainsCjk(grapheme);
+
+            if (currentIsSingleKinsokuEnd ||
                 IsCjkLineStartProhibited(grapheme) ||
                 IsLeftStickyCluster(grapheme) ||
-                (carryCjkAfterClosingQuote && ContainsCjk(grapheme) && EndsWithClosingQuote(current)))
+                (carryCjkAfterClosingQuote && graphemeContainsCjk && currentEndsWithClosingQuote))
             {
-                current += grapheme;
+                currentParts.Add(grapheme);
+                currentContainsCjk |= graphemeContainsCjk;
+                currentEndsWithClosingQuote = currentEndsWithClosingQuote || EndsWithClosingQuote(grapheme);
+                currentIsSingleKinsokuEnd = false;
                 continue;
             }
 
-            units.Add(current);
-            current = grapheme;
+            if (!currentContainsCjk && !graphemeContainsCjk)
+            {
+                currentParts.Add(grapheme);
+                currentEndsWithClosingQuote = EndsWithClosingQuote(grapheme);
+                currentIsSingleKinsokuEnd = false;
+                continue;
+            }
+
+            PushCurrent();
+            currentParts = [grapheme];
+            currentContainsCjk = graphemeContainsCjk;
+            currentEndsWithClosingQuote = EndsWithClosingQuote(grapheme);
+            currentIsSingleKinsokuEnd = grapheme.Length == 1 && KinsokuEndChars.Contains(grapheme[0]);
         }
 
-        units.Add(current);
+        PushCurrent();
         return units;
+    }
+
+    private static IReadOnlyList<string> MergeKeepAllTextUnits(IReadOnlyList<string> units)
+    {
+        if (units.Count <= 1)
+        {
+            return units;
+        }
+
+        var merged = new List<string>();
+        var currentText = units[0];
+        var currentContainsCjk = ContainsCjk(currentText);
+        var currentCanContinue = CanContinueKeepAllTextRun(currentText);
+
+        for (var index = 1; index < units.Count; index++)
+        {
+            var next = units[index];
+            var nextContainsCjk = ContainsCjk(next);
+
+            if (currentContainsCjk && currentCanContinue)
+            {
+                currentText += next;
+                currentContainsCjk |= nextContainsCjk;
+                currentCanContinue = CanContinueKeepAllTextRun(currentText);
+                continue;
+            }
+
+            merged.Add(currentText);
+            currentText = next;
+            currentContainsCjk = nextContainsCjk;
+            currentCanContinue = CanContinueKeepAllTextRun(currentText);
+        }
+
+        merged.Add(currentText);
+        return merged;
     }
 
     private static bool IsLeftStickyCluster(string text)
@@ -137,22 +205,7 @@ public static partial class PretextLayout
     {
         foreach (var rune in text.EnumerateRunes())
         {
-            var code = rune.Value;
-            if ((code >= 0x4E00 && code <= 0x9FFF) ||
-                (code >= 0x3400 && code <= 0x4DBF) ||
-                (code >= 0x20000 && code <= 0x2A6DF) ||
-                (code >= 0x2A700 && code <= 0x2B73F) ||
-                (code >= 0x2B740 && code <= 0x2B81F) ||
-                (code >= 0x2B820 && code <= 0x2CEAF) ||
-                (code >= 0x2CEB0 && code <= 0x2EBEF) ||
-                (code >= 0x30000 && code <= 0x3134F) ||
-                (code >= 0xF900 && code <= 0xFAFF) ||
-                (code >= 0x2F800 && code <= 0x2FA1F) ||
-                (code >= 0x3000 && code <= 0x303F) ||
-                (code >= 0x3040 && code <= 0x309F) ||
-                (code >= 0x30A0 && code <= 0x30FF) ||
-                (code >= 0xAC00 && code <= 0xD7AF) ||
-                (code >= 0xFF00 && code <= 0xFFEF))
+            if (IsCjkCodePoint(rune.Value))
             {
                 return true;
             }

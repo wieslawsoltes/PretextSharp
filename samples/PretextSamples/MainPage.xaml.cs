@@ -12,6 +12,7 @@ public sealed partial class MainPage : Page
         ["bubbles"] = static () => new BubblesSampleView(),
         ["masonry"] = static () => new MasonrySampleView(),
         ["rich"] = static () => new RichNoteSampleView(),
+        ["markdown-chat"] = static () => new MarkdownChatSampleView(),
         ["dynamic"] = static () => new DynamicLayoutSampleView(),
         ["editorial"] = static () => new EditorialEngineSampleView(),
         ["justification"] = static () => new JustificationComparisonSampleView(),

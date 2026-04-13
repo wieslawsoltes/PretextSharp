@@ -17,6 +17,7 @@
         <NavigationViewItem Content="Bubbles" Tag="bubbles" Icon="Comment" />
         <NavigationViewItem Content="Masonry" Tag="masonry" Icon="Library" />
         <NavigationViewItem Content="Rich Text" Tag="rich" Icon="Document" />
+        <NavigationViewItem Content="Markdown Chat" Tag="markdown-chat" Icon="Comment" />
         <NavigationViewItem Content="Dynamic Layout" Tag="dynamic" Icon="Pictures" />
         <NavigationViewItem Content="Editorial Engine" Tag="editorial" Icon="Play" />
         <NavigationViewItem Content="Justification Comparison" Tag="justification" Icon="Document" />

@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Pretext;
 
 public static partial class PretextLayout
@@ -18,92 +16,7 @@ public static partial class PretextLayout
 
     private static int CountPreparedLinesSimple(PreparedText prepared, double maxWidth)
     {
-        var widths = prepared.WidthsInternal;
-        if (widths.Length == 0)
-        {
-            return 0;
-        }
-
-        var kinds = prepared.KindsInternal;
-        var breakableWidths = prepared.BreakableWidthsInternal;
-        var breakablePrefixWidths = prepared.BreakablePrefixWidthsInternal;
-        var engineProfile = GetEngineProfile();
-        var epsilon = engineProfile.LineFitEpsilon;
-
-        var lineCount = 0;
-        var lineWidth = 0d;
-        var hasContent = false;
-
-        void PlaceOnFreshLine(int segmentIndex)
-        {
-            var width = widths[segmentIndex];
-            var graphemeWidths = breakableWidths[segmentIndex];
-            if (width > maxWidth + epsilon && graphemeWidths is not null)
-            {
-                var prefixWidths = breakablePrefixWidths[segmentIndex];
-                lineWidth = 0;
-                for (var graphemeIndex = 0; graphemeIndex < graphemeWidths.Length; graphemeIndex++)
-                {
-                    var graphemeWidth = GetBreakableAdvance(
-                        graphemeWidths,
-                        prefixWidths,
-                        graphemeIndex,
-                        engineProfile.PreferPrefixWidthsForBreakableRuns);
-
-                    if (lineWidth > 0 && lineWidth + graphemeWidth > maxWidth + epsilon)
-                    {
-                        lineCount++;
-                        lineWidth = graphemeWidth;
-                    }
-                    else
-                    {
-                        if (lineWidth == 0)
-                        {
-                            lineCount++;
-                        }
-
-                        lineWidth += graphemeWidth;
-                    }
-                }
-            }
-            else
-            {
-                lineWidth = width;
-                lineCount++;
-            }
-
-            hasContent = true;
-        }
-
-        for (var segmentIndex = 0; segmentIndex < widths.Length; segmentIndex++)
-        {
-            var width = widths[segmentIndex];
-            var kind = kinds[segmentIndex];
-
-            if (!hasContent)
-            {
-                PlaceOnFreshLine(segmentIndex);
-                continue;
-            }
-
-            var newWidth = lineWidth + width;
-            if (newWidth > maxWidth + epsilon)
-            {
-                if (IsSimpleCollapsibleSpace(kind))
-                {
-                    continue;
-                }
-
-                lineWidth = 0;
-                hasContent = false;
-                PlaceOnFreshLine(segmentIndex);
-                continue;
-            }
-
-            lineWidth = newWidth;
-        }
-
-        return hasContent ? lineCount : lineCount + 1;
+        return WalkPreparedLinesSimple(prepared, maxWidth, onLine: null);
     }
 
     private static int WalkPreparedLinesSimple(PreparedText prepared, double maxWidth, Action<InternalLine>? onLine)
@@ -243,6 +156,19 @@ public static partial class PretextLayout
         var segmentIndex = 0;
         while (segmentIndex < widths.Length)
         {
+            if (!hasContent)
+            {
+                while (segmentIndex < widths.Length && IsSkippableAtLineStart(kinds[segmentIndex]))
+                {
+                    segmentIndex++;
+                }
+
+                if (segmentIndex >= widths.Length)
+                {
+                    break;
+                }
+            }
+
             var width = widths[segmentIndex];
             var kind = kinds[segmentIndex];
 
@@ -275,6 +201,13 @@ public static partial class PretextLayout
 
                 if (pendingBreakSegmentIndex >= 0)
                 {
+                    if (lineEndSegmentIndex > pendingBreakSegmentIndex ||
+                        (lineEndSegmentIndex == pendingBreakSegmentIndex && lineEndGraphemeIndex > 0))
+                    {
+                        EmitCurrentLine();
+                        continue;
+                    }
+
                     EmitCurrentLine(pendingBreakSegmentIndex, 0, pendingBreakPaintWidth);
                     continue;
                 }
@@ -559,6 +492,21 @@ public static partial class PretextLayout
 
                 if (!hasContent)
                 {
+                    while (segmentIndex < chunk.EndSegmentIndex && IsSkippableAtLineStart(kinds[segmentIndex]))
+                    {
+                        segmentIndex++;
+                    }
+
+                    if (segmentIndex >= chunk.EndSegmentIndex)
+                    {
+                        break;
+                    }
+
+                    kind = kinds[segmentIndex];
+                    width = kind == SegmentBreakKind.Tab
+                        ? GetTabAdvance(lineWidth, tabStopAdvance)
+                        : widths[segmentIndex];
+
                     if (width > maxWidth + epsilon && breakableWidths[segmentIndex] is not null)
                     {
                         AppendBreakableSegmentFrom(segmentIndex, 0);
@@ -603,6 +551,13 @@ public static partial class PretextLayout
 
                     if (pendingBreakSegmentIndex >= 0 && pendingBreakFitWidth <= maxWidth + epsilon)
                     {
+                        if (lineEndSegmentIndex > pendingBreakSegmentIndex ||
+                            (lineEndSegmentIndex == pendingBreakSegmentIndex && lineEndGraphemeIndex > 0))
+                        {
+                            EmitCurrentLine();
+                            continue;
+                        }
+
                         EmitCurrentLine(
                             pendingBreakSegmentIndex,
                             0,
@@ -822,6 +777,13 @@ public static partial class PretextLayout
 
                 if (pendingBreakSegmentIndex >= 0)
                 {
+                    if (lineEndSegmentIndex > pendingBreakSegmentIndex ||
+                        (lineEndSegmentIndex == pendingBreakSegmentIndex && lineEndGraphemeIndex > 0))
+                    {
+                        line = FinishLine()!.Value;
+                        return true;
+                    }
+
                     line = FinishLine(pendingBreakSegmentIndex, 0, pendingBreakPaintWidth)!.Value;
                     return true;
                 }
@@ -1151,6 +1113,13 @@ public static partial class PretextLayout
 
                 if (pendingBreakSegmentIndex >= 0 && pendingBreakFitWidth <= maxWidth + epsilon)
                 {
+                    if (lineEndSegmentIndex > pendingBreakSegmentIndex ||
+                        (lineEndSegmentIndex == pendingBreakSegmentIndex && lineEndGraphemeIndex > 0))
+                    {
+                        line = FinishLine()!.Value;
+                        return true;
+                    }
+
                     line = FinishLine(
                         pendingBreakSegmentIndex,
                         0,
@@ -1270,6 +1239,11 @@ public static partial class PretextLayout
         return new LayoutCursor(chunk.ConsumedEndSegmentIndex, 0);
     }
 
+    private static bool IsSkippableAtLineStart(SegmentBreakKind kind)
+    {
+        return kind is SegmentBreakKind.Space or SegmentBreakKind.ZeroWidthBreak or SegmentBreakKind.SoftHyphen;
+    }
+
     private static double GetBreakableAdvance(
         double[] graphemeWidths,
         double[]? graphemePrefixWidths,
@@ -1331,101 +1305,6 @@ public static partial class PretextLayout
     private static bool IsSimpleCollapsibleSpace(SegmentBreakKind kind)
     {
         return kind == SegmentBreakKind.Space;
-    }
-
-    private static LayoutLine MaterializeLine(PreparedTextWithSegments prepared, InternalLine line)
-    {
-        var text = BuildLineText(prepared, line);
-        return new LayoutLine(text, line.Width, line.Start, line.End);
-    }
-
-    private static string BuildLineText(PreparedTextWithSegments prepared, InternalLine line)
-    {
-        if (line.Start == line.End && !line.AppendHyphen)
-        {
-            return string.Empty;
-        }
-
-        var builder = new StringBuilder();
-        var segmentIndex = line.Start.SegmentIndex;
-        var graphemeIndex = line.Start.GraphemeIndex;
-        var endSegmentIndex = line.End.SegmentIndex;
-        var endGraphemeIndex = line.End.GraphemeIndex;
-
-        while (segmentIndex < prepared.Segments.Count)
-        {
-            if (segmentIndex > endSegmentIndex)
-            {
-                break;
-            }
-
-            if (segmentIndex == endSegmentIndex && graphemeIndex == endGraphemeIndex)
-            {
-                break;
-            }
-
-            var kind = prepared.KindsInternal[segmentIndex];
-            if (kind is SegmentBreakKind.ZeroWidthBreak or SegmentBreakKind.SoftHyphen or SegmentBreakKind.HardBreak)
-            {
-                segmentIndex++;
-                graphemeIndex = 0;
-                continue;
-            }
-
-            if (segmentIndex == endSegmentIndex)
-            {
-                if (line.AppendHyphen)
-                {
-                    builder.Append('-');
-                }
-
-                builder.Append(GetSegmentSlice(prepared, segmentIndex, graphemeIndex, endGraphemeIndex));
-                break;
-            }
-
-            builder.Append(GetSegmentSlice(prepared, segmentIndex, graphemeIndex, null));
-            segmentIndex++;
-            graphemeIndex = 0;
-        }
-
-        if (line.AppendHyphen && endGraphemeIndex == 0)
-        {
-            builder.Append('-');
-        }
-
-        return builder.ToString();
-    }
-
-    private static string GetSegmentSlice(PreparedTextWithSegments prepared, int segmentIndex, int startGraphemeIndex, int? endGraphemeIndexExclusive)
-    {
-        var segmentText = prepared.Segments[segmentIndex];
-        var graphemes = GetSegmentGraphemes(prepared, segmentIndex);
-        var end = endGraphemeIndexExclusive ?? graphemes.Length;
-
-        if (startGraphemeIndex <= 0 && end >= graphemes.Length)
-        {
-            return segmentText;
-        }
-
-        if (startGraphemeIndex >= end)
-        {
-            return string.Empty;
-        }
-
-        return string.Concat(graphemes.Skip(startGraphemeIndex).Take(end - startGraphemeIndex));
-    }
-
-    private static string[] GetSegmentGraphemes(PreparedTextWithSegments prepared, int segmentIndex)
-    {
-        var cache = _segmentTextCaches.GetValue(prepared, static _ => new SegmentTextCache());
-        if (cache.GraphemesBySegmentIndex.TryGetValue(segmentIndex, out var graphemes))
-        {
-            return graphemes;
-        }
-
-        graphemes = GetTextElements(prepared.Segments[segmentIndex]);
-        cache.GraphemesBySegmentIndex[segmentIndex] = graphemes;
-        return graphemes;
     }
 
     private static double GetTabAdvance(double lineWidth, double tabStopAdvance)
