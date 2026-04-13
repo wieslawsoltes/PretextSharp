@@ -108,12 +108,14 @@
             <li id='menu-item-docs-4' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/reference/prepared-text-types/' class='menu-link  '>Prepared Text Types</a></span>  </li>
             <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/pretext-uno-helpers/' class='menu-link  '>Pretext.Uno Helpers</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/rich-inline-api/' class='menu-link  '>Rich Inline API</a></span>  </li>
             <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/scope-and-limitations/' class='menu-link  '>Scope and Limitations</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/pretext-uno-helpers/' class='menu-link  '>Pretext.Uno Helpers</a></span>  </li>
             <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/lunet-docs-pipeline/' class='menu-link  '>Lunet Docs Pipeline</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/scope-and-limitations/' class='menu-link  '>Scope and Limitations</a></span>  </li>
             <li id='menu-item-docs-8' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/lunet-docs-pipeline/' class='menu-link  '>Lunet Docs Pipeline</a></span>  </li>
+            <li id='menu-item-docs-9' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/reference/license/' class='menu-link  '>License</a></span>  </li>
           </ol>
 
@@ -216,9 +218,66 @@
 <td>You are flowing one line at a time through a custom loop.</td>
 </tr>
 <tr>
+<td><code>LayoutNextLineRange(PreparedTextWithSegments prepared, LayoutCursor start, double maxWidth)</code></td>
+<td><code>LayoutLineRange?</code></td>
+<td>You want streamed geometry without line-text allocation.</td>
+</tr>
+<tr>
+<td><code>MaterializeLineRange(PreparedTextWithSegments prepared, LayoutLineRange line)</code></td>
+<td><code>LayoutLine</code></td>
+<td>You first walked geometry and only now need text for one line.</td>
+</tr>
+<tr>
 <td><code>WalkLineRanges(PreparedTextWithSegments prepared, double maxWidth, Action&lt;LayoutLineRange&gt; onLine)</code></td>
 <td><code>int</code></td>
 <td>You need line geometry without allocating line strings.</td>
+</tr>
+<tr>
+<td><code>MeasureLineStats(PreparedTextWithSegments prepared, double maxWidth)</code></td>
+<td><code>LineStats</code></td>
+<td>You need line count plus the widest wrapped line.</td>
+</tr>
+<tr>
+<td><code>MeasureNaturalWidth(PreparedTextWithSegments prepared)</code></td>
+<td><code>double</code></td>
+<td>You need the widest unwrapped line width.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rich-inline-entry-points">Rich inline entry points</h2>
+<table class="table">
+<thead>
+<tr>
+<th>API</th>
+<th>Returns</th>
+<th>Use it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PrepareRichInline(IReadOnlyList&lt;RichInlineItem&gt; items)</code></td>
+<td><code>PreparedRichInline</code></td>
+<td>You want paragraph text and atomic inline items in one flow.</td>
+</tr>
+<tr>
+<td><code>LayoutNextRichInlineLineRange(PreparedRichInline prepared, double maxWidth, RichInlineCursor? start = null)</code></td>
+<td><code>RichInlineLineRange?</code></td>
+<td>You want one streamed rich-inline line at a time.</td>
+</tr>
+<tr>
+<td><code>MaterializeRichInlineLineRange(PreparedRichInline prepared, RichInlineLineRange line)</code></td>
+<td><code>RichInlineLine</code></td>
+<td>You want fragment text only after a geometry pass.</td>
+</tr>
+<tr>
+<td><code>WalkRichInlineLineRanges(PreparedRichInline prepared, double maxWidth, Action&lt;RichInlineLineRange&gt; onLine)</code></td>
+<td><code>int</code></td>
+<td>You want to stream all rich-inline lines without per-line text churn.</td>
+</tr>
+<tr>
+<td><code>MeasureRichInlineStats(PreparedRichInline prepared, double maxWidth)</code></td>
+<td><code>RichInlineStats</code></td>
+<td>You need rich-inline line count plus the widest line.</td>
 </tr>
 </tbody>
 </table>
@@ -245,6 +304,7 @@
 <h3 id="enums-and-options">Enums and options</h3>
 <ul>
 <li><code>WhiteSpaceMode</code></li>
+<li><code>WordBreakMode</code></li>
 <li><code>SegmentBreakKind</code></li>
 <li><code>PrepareOptions</code></li>
 </ul>
@@ -258,14 +318,28 @@
 <ul>
 <li><code>LayoutCursor</code></li>
 <li><code>LayoutResult</code></li>
+<li><code>LineStats</code></li>
 <li><code>LayoutLine</code></li>
 <li><code>LayoutLineRange</code></li>
 <li><code>LayoutLinesResult</code></li>
 <li><code>PrepareProfile</code></li>
 </ul>
+<h3 id="rich-inline-types">Rich inline types</h3>
+<ul>
+<li><code>RichInlineBreakMode</code></li>
+<li><code>RichInlineItem</code></li>
+<li><code>PreparedRichInline</code></li>
+<li><code>RichInlineCursor</code></li>
+<li><code>RichInlineFragment</code></li>
+<li><code>RichInlineFragmentRange</code></li>
+<li><code>RichInlineLine</code></li>
+<li><code>RichInlineLineRange</code></li>
+<li><code>RichInlineStats</code></li>
+</ul>
 <h2 id="read-next">Read next</h2>
 <ul>
 <li><a href="/PretextSharp/articles/reference/prepared-text-types">Prepared Text Types</a></li>
+<li><a href="/PretextSharp/articles/reference/rich-inline-api">Rich Inline API</a></li>
 <li><a href="/PretextSharp/articles/reference/pretext-uno-helpers">Pretext.Uno Helpers</a></li>
 <li><a href="/PretextSharp/articles/reference/scope-and-limitations">Scope and Limitations</a></li>
 </ul>

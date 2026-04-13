@@ -110,6 +110,8 @@
             <li id='menu-item-docs-5' class='menu-item  active'>
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/sample-gallery-tour/' class='menu-link  '>Sample Gallery Tour</a></span>  </li>
             <li id='menu-item-docs-6' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/markdown-chat-virtualization/' class='menu-link  '>Markdown Chat Virtualization</a></span>  </li>
+            <li id='menu-item-docs-7' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout/' class='menu-link  '>Shrinkwrap and Editorial Layout</a></span>  </li>
           </ol>
 
@@ -168,7 +170,9 @@
 <h2 id="masonry">Masonry</h2>
 <p>Uses repeated aggregate layout to size many independent cards cheaply without materializing every line string.</p>
 <h2 id="rich-text">Rich Text</h2>
-<p>Uses <code>LayoutNextLine</code> as a streamed source inside a richer inline composition model.</p>
+<p>Uses the core rich-inline helper so code spans, links, and atomic chips share one wrapping flow.</p>
+<h2 id="markdown-chat">Markdown Chat</h2>
+<p>Uses markdown parsing, <code>PrepareRichInline</code>, <code>MeasureRichInlineStats</code>, and exact-height-first virtualization to render only the visible window of a 10k-message chat surface.</p>
 <h2 id="dynamic-layout">Dynamic Layout</h2>
 <p>Shows why prepared text exists: the same prepared object is reused while widths and placements change.</p>
 <h2 id="editorial-engine">Editorial Engine</h2>
@@ -193,12 +197,14 @@ The sample app is intentionally diverse. It demonstrates that the same core APIs
 <li><code>Bubbles</code>: compute exact bubble widths without DOM-style shrinkwrap</li>
 <li><code>Masonry</code>: pack cards after probing text height</li>
 <li><code>Dynamic Layout</code>: react to width changes without reparsing text</li>
+<li><code>Markdown Chat</code>: virtualize a rich block surface from exact predicted heights</li>
 </ul>
 <h2 id="typography-focused-samples">Typography-focused samples</h2>
 <ul>
 <li><code>Justification Comparison</code>: compare strategies on the same prepared paragraphs</li>
 <li><code>Editorial Engine</code>: place pull quotes and body copy around constraints</li>
 <li><code>Variable ASCII</code>: show width-sensitive fitting with different glyph runs</li>
+<li><code>Rich Text</code>: keep atomic badges and splittable text in one inline flow</li>
 </ul>
 <h2 id="where-to-read-next">Where to read next</h2>
 <p>Start with <code>samples/PretextSamples/MainPage.xaml.cs</code>, then move into <code>Samples/SampleInfrastructure.cs</code> and the individual sample views.</p>

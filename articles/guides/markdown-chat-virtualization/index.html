@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Testing and Diagnostics | Pretext</title>
+    <title>Markdown Chat Virtualization | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Testing and Diagnostics | Pretext">
-<meta name="twitter:description" content="Testing and Diagnostics The test project shows the best patterns for keeping behavior deterministic. Useful tools in the library ProfilePrepare for coarse timing of preparation work SetLocale to stabilize locale-sensitive segmentation ClearCache to reset cached font state between tests Useful patterns in the repo Override measurement in tests so widths are deterministic Assert both Layout and LayoutWithLines Compare streamed LayoutNextLine output with batched line materialization Cover multilingual strings, preserved whitespace,...">
+<meta name="twitter:title" content="Markdown Chat Virtualization | Pretext">
+<meta name="twitter:description" content="Markdown Chat Virtualization The Markdown Chat sample shows one of the highest-leverage patterns in this repository: exact-height-first virtualization. Instead of measuring a live UI tree, the sample: parses markdown once into reusable templates prepares inline and code blocks with Pretext builds a deterministic ConversationFrame computes the visible range from scroll offset and occlusion chrome materializes only the visible message window into Uno elements Why this matters Traditional rich chat UIs...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Testing and Diagnostics | Pretext">
-<meta property="og:title" content="Testing and Diagnostics | Pretext">
+<meta name="twitter:image:alt" content="Markdown Chat Virtualization | Pretext">
+<meta property="og:title" content="Markdown Chat Virtualization | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Testing and Diagnostics The test project shows the best patterns for keeping behavior deterministic. Useful tools in the library ProfilePrepare for coarse timing of preparation work SetLocale to stabilize locale-sensitive segmentation ClearCache to reset cached font state between tests Useful patterns in the repo Override measurement in tests so widths are deterministic Assert both Layout and LayoutWithLines Compare streamed LayoutNextLine output with batched line materialization Cover multilingual strings, preserved whitespace,...">
+<meta property="og:description" content="Markdown Chat Virtualization The Markdown Chat sample shows one of the highest-leverage patterns in this repository: exact-height-first virtualization. Instead of measuring a live UI tree, the sample: parses markdown once into reusable templates prepares inline and code blocks with Pretext builds a deterministic ConversationFrame computes the visible range from scroll offset and occlusion chrome materializes only the visible message window into Uno elements Why this matters Traditional rich chat UIs...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Testing and Diagnostics | Pretext">
+<meta property="og:image:alt" content="Markdown Chat Virtualization | Pretext">
   </head>
   <body>
 
@@ -105,11 +105,11 @@
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/integrating-in-uno/' class='menu-link  '>Integrating in Uno</a></span>  </li>
             <li id='menu-item-docs-3' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host/' class='menu-link  '>Using Pretext in Any SkiaSharp Host</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item  active'>
+            <li id='menu-item-docs-4' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/testing-and-diagnostics/' class='menu-link  '>Testing and Diagnostics</a></span>  </li>
             <li id='menu-item-docs-5' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/sample-gallery-tour/' class='menu-link  '>Sample Gallery Tour</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item '>
+            <li id='menu-item-docs-6' class='menu-item  active'>
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/markdown-chat-virtualization/' class='menu-link  '>Markdown Chat Virtualization</a></span>  </li>
             <li id='menu-item-docs-7' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout/' class='menu-link  '>Shrinkwrap and Editorial Layout</a></span>  </li>
@@ -132,7 +132,7 @@
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/guides/' class='breadcrumb-link  '>Guides</a>  </li>
           <li class='breadcrumb-item  active'>
-            Testing and Diagnostics  </li>
+            Markdown Chat Virtualization  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -159,43 +159,76 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="testing-and-diagnostics">Testing and Diagnostics</h1>
-<p>The test project shows the best patterns for keeping behavior deterministic.</p>
-<h2 id="useful-tools-in-the-library">Useful tools in the library</h2>
+<h1 id="markdown-chat-virtualization">Markdown Chat Virtualization</h1>
+<p>The <code>Markdown Chat</code> sample shows one of the highest-leverage patterns in this repository: exact-height-first virtualization.</p>
+<p>Instead of measuring a live UI tree, the sample:</p>
+<ol>
+<li>parses markdown once into reusable templates</li>
+<li>prepares inline and code blocks with <code>Pretext</code></li>
+<li>builds a deterministic <code>ConversationFrame</code></li>
+<li>computes the visible range from scroll offset and occlusion chrome</li>
+<li>materializes only the visible message window into Uno elements</li>
+</ol>
+<h2 id="why-this-matters">Why this matters</h2>
+<p>Traditional rich chat UIs often depend on UI-tree or DOM measurement after layout. That makes virtualization harder because height is discovered late.</p>
+<p>The sample reverses that:</p>
 <ul>
-<li><code>ProfilePrepare</code> for coarse timing of preparation work</li>
-<li><code>SetLocale</code> to stabilize locale-sensitive segmentation</li>
-<li><code>ClearCache</code> to reset cached font state between tests</li>
+<li>message height is known before rendering</li>
+<li>total scroll extent is known before rendering</li>
+<li>scroll-window virtualization becomes a pure geometry problem</li>
 </ul>
-<h2 id="useful-patterns-in-the-repo">Useful patterns in the repo</h2>
+<h2 id="core-apis-involved">Core APIs involved</h2>
+<table class="table">
+<thead>
+<tr>
+<th>API</th>
+<th>Role in the sample</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PrepareRichInline</code></td>
+<td>Prepared paragraph-like inline content for markdown text runs.</td>
+</tr>
+<tr>
+<td><code>MeasureRichInlineStats</code></td>
+<td>Predicted inline block height from line count and widest line.</td>
+</tr>
+<tr>
+<td><code>WalkRichInlineLineRanges</code></td>
+<td>Streamed visible inline lines during materialization.</td>
+</tr>
+<tr>
+<td><code>PrepareWithSegments(..., new PrepareOptions(WhiteSpaceMode.PreWrap))</code></td>
+<td>Prepared fenced code blocks.</td>
+</tr>
+<tr>
+<td><code>MeasureLineStats</code></td>
+<td>Predicted code-block line count and width.</td>
+</tr>
+<tr>
+<td><code>LayoutWithLines</code></td>
+<td>Materialized code-block lines once a visible message is being rendered.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="block-model">Block model</h2>
+<p>The sample treats a chat message as a block container with a few leaf types:</p>
 <ul>
-<li>Override measurement in tests so widths are deterministic</li>
-<li>Assert both <code>Layout</code> and <code>LayoutWithLines</code></li>
-<li>Compare streamed <code>LayoutNextLine</code> output with batched line materialization</li>
-<li>Cover multilingual strings, preserved whitespace, tabs, soft hyphens, and zero-width breaks</li>
+<li>inline markdown paragraphs and headings</li>
+<li>fenced code blocks</li>
+<li>horizontal rules</li>
+<li>list and quote wrappers that shift content geometry and add markers or rails</li>
 </ul>
-<h2 id="what-the-parity-suite-covers">What the parity suite covers</h2>
-<p>The current parity tests are a useful support matrix for product code and docs:</p>
+<p>This is the important architectural point: <code>Pretext</code> stays the paragraph leaf, while the sample owns the higher-level block layout rules.</p>
+<h2 id="files-to-read">Files to read</h2>
 <ul>
-<li>collapsed whitespace in <code>Normal</code></li>
-<li>preserved spaces, tabs, and hard breaks in <code>PreWrap</code></li>
-<li>hanging trailing whitespace</li>
-<li>discretionary soft hyphens</li>
-<li>zero-width break opportunities</li>
-<li>URL-like and punctuation-chain tokenization</li>
-<li>Arabic, Devanagari, Myanmar, CJK, and Hangul punctuation attachment</li>
-<li>mixed-direction text</li>
-<li>locale-aware Thai segmentation</li>
-<li>alignment between <code>Layout</code>, <code>LayoutWithLines</code>, <code>LayoutNextLine</code>, and <code>WalkLineRanges</code></li>
+<li><code>samples/PretextSamples/Samples/MarkdownChatData.cs</code></li>
+<li><code>samples/PretextSamples/Samples/MarkdownChatModel.cs</code></li>
+<li><code>samples/PretextSamples/Samples/MarkdownChatSampleView.cs</code></li>
 </ul>
-<h2 id="profiling-advice">Profiling advice</h2>
-<p>Use <code>ProfilePrepare</code> when you are investigating:</p>
-<ul>
-<li>how much of your cost is in analysis versus measurement</li>
-<li>whether a text source should be prepared once and cached</li>
-<li>whether a host is reparsing or remeasuring too often</li>
-</ul>
-<p>If you change tokenization or break behavior, the parity tests are the first place to verify regressions.</p>
+<h2 id="takeaway">Takeaway</h2>
+<p>If your application can convert rich content into deterministic block and inline templates, <code>Pretext</code> gives you the measurement pieces needed to virtualize large scroll surfaces without waiting for a live layout pass.</p>
 
       </div>
   </div>

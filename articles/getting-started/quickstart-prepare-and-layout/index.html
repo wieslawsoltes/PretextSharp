@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Quickstart: Prepare and Layout | Pretext">
-<meta name="twitter:description" content="Quickstart: Prepare and Layout The smallest useful flow is: using Pretext; const string text = &quot;Hello soft\u00ADwrapped world&quot;; const string font = &quot;16px Inter&quot;; const double lineHeight = 20; var prepared = PretextLayout.PrepareWithSegments(text, font); var metrics = PretextLayout.Layout(prepared, maxWidth: 160, lineHeight); var lines = PretextLayout.LayoutWithLines(prepared, maxWidth: 160, lineHeight); Console.WriteLine(metrics.LineCount); Console.WriteLine(metrics.Height); foreach (var line in lines.Lines) { Console.WriteLine($&quot;{line.Text} ({line.Width})&quot;); } What this does...">
+<meta name="twitter:description" content="Quickstart: Prepare and Layout The smallest useful flow is: using Pretext; const string text = &quot;Hello soft\u00ADwrapped world&quot;; const string font = &quot;16px Inter&quot;; const double lineHeight = 20; var prepared = PretextLayout.PrepareWithSegments(text, font); var metrics = PretextLayout.Layout(prepared, maxWidth: 160, lineHeight); var lines = PretextLayout.LayoutWithLines(prepared, maxWidth: 160, lineHeight); Console.WriteLine(metrics.LineCount); Console.WriteLine(metrics.Height); foreach (var line in lines.Lines) { Console.WriteLine($&quot;{line.Text} ({line.Width})&quot;); } If normalization leaves the prepared text empty,...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Quickstart: Prepare and Layout | Pretext">
 <meta property="og:title" content="Quickstart: Prepare and Layout | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Quickstart: Prepare and Layout The smallest useful flow is: using Pretext; const string text = &quot;Hello soft\u00ADwrapped world&quot;; const string font = &quot;16px Inter&quot;; const double lineHeight = 20; var prepared = PretextLayout.PrepareWithSegments(text, font); var metrics = PretextLayout.Layout(prepared, maxWidth: 160, lineHeight); var lines = PretextLayout.LayoutWithLines(prepared, maxWidth: 160, lineHeight); Console.WriteLine(metrics.LineCount); Console.WriteLine(metrics.Height); foreach (var line in lines.Lines) { Console.WriteLine($&quot;{line.Text} ({line.Width})&quot;); } What this does...">
+<meta property="og:description" content="Quickstart: Prepare and Layout The smallest useful flow is: using Pretext; const string text = &quot;Hello soft\u00ADwrapped world&quot;; const string font = &quot;16px Inter&quot;; const double lineHeight = 20; var prepared = PretextLayout.PrepareWithSegments(text, font); var metrics = PretextLayout.Layout(prepared, maxWidth: 160, lineHeight); var lines = PretextLayout.LayoutWithLines(prepared, maxWidth: 160, lineHeight); Console.WriteLine(metrics.LineCount); Console.WriteLine(metrics.Height); foreach (var line in lines.Lines) { Console.WriteLine($&quot;{line.Text} ({line.Width})&quot;); } If normalization leaves the prepared text empty,...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Quickstart: Prepare and Layout | Pretext">
   </head>
@@ -176,6 +176,7 @@ foreach (var line in lines.Lines)
     Console.WriteLine($&quot;{line.Text} ({line.Width})&quot;);
 }
 </code></pre>
+<p>If normalization leaves the prepared text empty, <code>Layout</code> returns <code>new LayoutResult(0, 0)</code>. When your container sizing wants to reserve at least one visual row, clamp in the caller with <code>Math.Max(1, metrics.LineCount)</code> instead of expecting <code>Pretext</code> to invent a blank line.</p>
 <h2 id="what-this-does">What this does</h2>
 <ul>
 <li><code>PrepareWithSegments</code> analyzes the text, measures it, and preserves segment metadata.</li>

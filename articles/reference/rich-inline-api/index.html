@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Testing and Diagnostics | Pretext</title>
+    <title>Rich Inline API | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Testing and Diagnostics | Pretext">
-<meta name="twitter:description" content="Testing and Diagnostics The test project shows the best patterns for keeping behavior deterministic. Useful tools in the library ProfilePrepare for coarse timing of preparation work SetLocale to stabilize locale-sensitive segmentation ClearCache to reset cached font state between tests Useful patterns in the repo Override measurement in tests so widths are deterministic Assert both Layout and LayoutWithLines Compare streamed LayoutNextLine output with batched line materialization Cover multilingual strings, preserved whitespace,...">
+<meta name="twitter:title" content="Rich Inline API | Pretext">
+<meta name="twitter:description" content="Rich Inline API Pretext keeps the core paragraph APIs low-level. The rich-inline helper is the next layer up: it solves the repeated userland work needed when inline text fragments, links, code spans, and atomic chips must wrap inside one visual flow. What it handles Collapsed boundary whitespace across item boundaries Atomic items that should never split, such as mentions, badges, timestamps, or inline image placeholders Per-item extra width for caller-owned...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Testing and Diagnostics | Pretext">
-<meta property="og:title" content="Testing and Diagnostics | Pretext">
+<meta name="twitter:image:alt" content="Rich Inline API | Pretext">
+<meta property="og:title" content="Rich Inline API | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Testing and Diagnostics The test project shows the best patterns for keeping behavior deterministic. Useful tools in the library ProfilePrepare for coarse timing of preparation work SetLocale to stabilize locale-sensitive segmentation ClearCache to reset cached font state between tests Useful patterns in the repo Override measurement in tests so widths are deterministic Assert both Layout and LayoutWithLines Compare streamed LayoutNextLine output with batched line materialization Cover multilingual strings, preserved whitespace,...">
+<meta property="og:description" content="Rich Inline API Pretext keeps the core paragraph APIs low-level. The rich-inline helper is the next layer up: it solves the repeated userland work needed when inline text fragments, links, code spans, and atomic chips must wrap inside one visual flow. What it handles Collapsed boundary whitespace across item boundaries Atomic items that should never split, such as mentions, badges, timestamps, or inline image placeholders Per-item extra width for caller-owned...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Testing and Diagnostics | Pretext">
+<meta property="og:image:alt" content="Rich Inline API | Pretext">
   </head>
   <body>
 
@@ -100,19 +100,23 @@
         <div class="offcanvas-body">
           <ol id='menu-id-docs-0' class='menu menu-level0 show '>
             <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/' class='menu-link  '>Overview</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/' class='menu-link  '>Overview</a></span>  </li>
             <li id='menu-item-docs-2' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/integrating-in-uno/' class='menu-link  '>Integrating in Uno</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/packages-and-assemblies/' class='menu-link  '>Packages and Namespace</a></span>  </li>
             <li id='menu-item-docs-3' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host/' class='menu-link  '>Using Pretext in Any SkiaSharp Host</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/testing-and-diagnostics/' class='menu-link  '>Testing and Diagnostics</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/sample-gallery-tour/' class='menu-link  '>Sample Gallery Tour</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/public-types-and-operations/' class='menu-link  '>Public Types and Operations</a></span>  </li>
+            <li id='menu-item-docs-4' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/prepared-text-types/' class='menu-link  '>Prepared Text Types</a></span>  </li>
+            <li id='menu-item-docs-5' class='menu-item  active'>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/rich-inline-api/' class='menu-link  '>Rich Inline API</a></span>  </li>
             <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/markdown-chat-virtualization/' class='menu-link  '>Markdown Chat Virtualization</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/pretext-uno-helpers/' class='menu-link  '>Pretext.Uno Helpers</a></span>  </li>
             <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout/' class='menu-link  '>Shrinkwrap and Editorial Layout</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/scope-and-limitations/' class='menu-link  '>Scope and Limitations</a></span>  </li>
+            <li id='menu-item-docs-8' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/lunet-docs-pipeline/' class='menu-link  '>Lunet Docs Pipeline</a></span>  </li>
+            <li id='menu-item-docs-9' class='menu-item '>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/license/' class='menu-link  '>License</a></span>  </li>
           </ol>
 
         </div>
@@ -130,9 +134,9 @@
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
           <li class='breadcrumb-item '>
-            <a href='/PretextSharp/articles/guides/' class='breadcrumb-link  '>Guides</a>  </li>
+            <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
           <li class='breadcrumb-item  active'>
-            Testing and Diagnostics  </li>
+            Rich Inline API  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -159,43 +163,118 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="testing-and-diagnostics">Testing and Diagnostics</h1>
-<p>The test project shows the best patterns for keeping behavior deterministic.</p>
-<h2 id="useful-tools-in-the-library">Useful tools in the library</h2>
+<h1 id="rich-inline-api">Rich Inline API</h1>
+<p><code>Pretext</code> keeps the core paragraph APIs low-level. The rich-inline helper is the next layer up: it solves the repeated userland work needed when inline text fragments, links, code spans, and atomic chips must wrap inside one visual flow.</p>
+<h2 id="what-it-handles">What it handles</h2>
 <ul>
-<li><code>ProfilePrepare</code> for coarse timing of preparation work</li>
-<li><code>SetLocale</code> to stabilize locale-sensitive segmentation</li>
-<li><code>ClearCache</code> to reset cached font state between tests</li>
+<li>Collapsed boundary whitespace across item boundaries</li>
+<li>Atomic items that should never split, such as mentions, badges, timestamps, or inline image placeholders</li>
+<li>Per-item extra width for caller-owned chrome such as padding, borders, or pill backgrounds</li>
+<li>Geometry-only walking first, then optional text materialization later</li>
 </ul>
-<h2 id="useful-patterns-in-the-repo">Useful patterns in the repo</h2>
+<h2 id="main-types">Main types</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RichInlineItem</code></td>
+<td>Raw author item with <code>Text</code>, <code>Font</code>, optional <code>Break</code>, and optional <code>ExtraWidth</code>.</td>
+</tr>
+<tr>
+<td><code>PreparedRichInline</code></td>
+<td>Prepared handle that stores per-item prepared text and cached geometry.</td>
+</tr>
+<tr>
+<td><code>RichInlineCursor</code></td>
+<td>Cursor used to continue from one streamed line to the next.</td>
+</tr>
+<tr>
+<td><code>RichInlineFragmentRange</code></td>
+<td>Geometry-only fragment description for one line.</td>
+</tr>
+<tr>
+<td><code>RichInlineLineRange</code></td>
+<td>Geometry-only line result returned by the range walker.</td>
+</tr>
+<tr>
+<td><code>RichInlineFragment</code></td>
+<td>Materialized fragment with actual text.</td>
+</tr>
+<tr>
+<td><code>RichInlineLine</code></td>
+<td>Materialized rich-inline line.</td>
+</tr>
+<tr>
+<td><code>RichInlineStats</code></td>
+<td>Aggregate line count and widest line width.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="basic-workflow">Basic workflow</h2>
+<ol>
+<li>Build <code>RichInlineItem</code> values for your inline runs.</li>
+<li>Call <code>PrepareRichInline(...)</code> once.</li>
+<li>Use <code>WalkRichInlineLineRanges(...)</code> or <code>LayoutNextRichInlineLineRange(...)</code> to stream line geometry.</li>
+<li>Call <code>MaterializeRichInlineLineRange(...)</code> only on the lines you actually render.</li>
+</ol>
+<h2 id="example">Example</h2>
+<pre><code class="language-csharp">using Pretext;
+
+var prepared = PretextLayout.PrepareRichInline(
+[
+    new RichInlineItem(&quot;Ship &quot;, &quot;16px Inter&quot;),
+    new RichInlineItem(&quot;@maya&quot;, &quot;700 12px Inter&quot;, RichInlineBreakMode.Never, extraWidth: 18),
+    new RichInlineItem(&quot;'s note wraps cleanly around chips.&quot;, &quot;16px Inter&quot;),
+]);
+
+PretextLayout.WalkRichInlineLineRanges(prepared, 180, range =&gt;
+{
+    var line = PretextLayout.MaterializeRichInlineLineRange(prepared, range);
+    foreach (var fragment in line.Fragments)
+    {
+        Console.WriteLine($&quot;{fragment.Text} gap={fragment.GapBefore} width={fragment.OccupiedWidth}&quot;);
+    }
+});
+</code></pre>
+<h2 id="break-modes">Break modes</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Mode</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RichInlineBreakMode.Normal</code></td>
+<td>The item may split using the normal prepared-text line breaker.</td>
+</tr>
+<tr>
+<td><code>RichInlineBreakMode.Never</code></td>
+<td>The item stays atomic. If it starts on a line, it is placed as one unit.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Never</code> is the right mode for pills, badges, mentions, inline timestamps, or synthetic inline media placeholders.</p>
+<h2 id="when-to-use-geometry-only">When to use geometry only</h2>
+<p>Prefer <code>RichInlineLineRange</code> when you are:</p>
 <ul>
-<li>Override measurement in tests so widths are deterministic</li>
-<li>Assert both <code>Layout</code> and <code>LayoutWithLines</code></li>
-<li>Compare streamed <code>LayoutNextLine</code> output with batched line materialization</li>
-<li>Cover multilingual strings, preserved whitespace, tabs, soft hyphens, and zero-width breaks</li>
+<li>probing for shrinkwrap widths</li>
+<li>precomputing heights</li>
+<li>virtualizing large surfaces</li>
+<li>measuring many candidate widths before committing one</li>
 </ul>
-<h2 id="what-the-parity-suite-covers">What the parity suite covers</h2>
-<p>The current parity tests are a useful support matrix for product code and docs:</p>
+<p>That keeps the expensive step, text materialization, off the hot path until you actually need visible fragment text.</p>
+<h2 id="samples">Samples</h2>
 <ul>
-<li>collapsed whitespace in <code>Normal</code></li>
-<li>preserved spaces, tabs, and hard breaks in <code>PreWrap</code></li>
-<li>hanging trailing whitespace</li>
-<li>discretionary soft hyphens</li>
-<li>zero-width break opportunities</li>
-<li>URL-like and punctuation-chain tokenization</li>
-<li>Arabic, Devanagari, Myanmar, CJK, and Hangul punctuation attachment</li>
-<li>mixed-direction text</li>
-<li>locale-aware Thai segmentation</li>
-<li>alignment between <code>Layout</code>, <code>LayoutWithLines</code>, <code>LayoutNextLine</code>, and <code>WalkLineRanges</code></li>
+<li><code>Rich Text</code> in <code>samples/PretextSamples</code> uses the rich-inline helper for chips, links, and code spans.</li>
+<li><code>Markdown Chat</code> uses the same helper as the paragraph leaf inside a higher-level block layout model.</li>
 </ul>
-<h2 id="profiling-advice">Profiling advice</h2>
-<p>Use <code>ProfilePrepare</code> when you are investigating:</p>
-<ul>
-<li>how much of your cost is in analysis versus measurement</li>
-<li>whether a text source should be prepared once and cached</li>
-<li>whether a host is reparsing or remeasuring too often</li>
-</ul>
-<p>If you change tokenization or break behavior, the parity tests are the first place to verify regressions.</p>
 
       </div>
   </div>
