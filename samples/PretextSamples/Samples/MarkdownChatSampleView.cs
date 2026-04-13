@@ -7,8 +7,12 @@ namespace PretextSamples.Samples;
 public sealed class MarkdownChatSampleView : UserControl
 {
     private readonly IReadOnlyList<PreparedChatTemplate> _templates = MarkdownChatModel.CreatePreparedChatTemplates();
+    private readonly Grid _heroGrid;
+    private readonly StackPanel _headerStack;
+    private readonly Border _controlsCard;
     private readonly Grid _shell;
     private readonly ScrollViewer _viewport;
+    private readonly Grid _contentHost;
     private readonly Canvas _canvas;
     private readonly Border _topOcclusion;
     private readonly Border _bottomOcclusion;
@@ -22,6 +26,7 @@ public sealed class MarkdownChatSampleView : UserControl
     private ConversationFrame? _frame;
     private bool _visualizationEnabled;
     private double? _pendingScrollOffset;
+    private bool _isWideHeroLayout;
 
     public MarkdownChatSampleView()
     {
@@ -36,7 +41,7 @@ public sealed class MarkdownChatSampleView : UserControl
             Foreground = SampleTheme.WhiteBrush,
             BorderBrush = new SolidColorBrush(ColorHelper.FromArgb(25, 255, 255, 255)),
             BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(999),
+            CornerRadius = new CornerRadius(18),
             FontFamily = new FontFamily("Consolas"),
             FontSize = 12,
             FontWeight = FontWeights.SemiBold,
@@ -68,19 +73,30 @@ public sealed class MarkdownChatSampleView : UserControl
         };
         _widthSlider.ValueChanged += (_, _) => _renderScheduler.Schedule();
 
-        _canvas = new Canvas();
+        _canvas = new Canvas
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top,
+        };
+        _contentHost = new Grid
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Top,
+        };
+        _contentHost.Children.Add(_canvas);
         _viewport = new ScrollViewer
         {
             HorizontalScrollMode = ScrollMode.Disabled,
             HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
             VerticalScrollMode = ScrollMode.Enabled,
             VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-            Content = _canvas,
+            Content = _contentHost,
         };
         _viewport.ViewChanged += (_, _) => _renderScheduler.Schedule();
 
         _topOcclusion = new Border
         {
+            HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Top,
             Background = SampleTheme.Brush(0xF2, 0x33, 0x37, 0x40),
             Child = new Grid
@@ -95,6 +111,7 @@ public sealed class MarkdownChatSampleView : UserControl
 
         _bottomOcclusion = new Border
         {
+            HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Bottom,
             Background = SampleTheme.Brush(0xF2, 0x33, 0x37, 0x40),
             IsHitTestVisible = false,
@@ -103,8 +120,9 @@ public sealed class MarkdownChatSampleView : UserControl
         _shell = new Grid
         {
             Background = SampleTheme.Brush(0x33, 0x37, 0x40),
-            Height = MarkdownChatModel.ChatViewportHeight,
-            MaxWidth = MarkdownChatModel.MaxChatWidth + 80,
+            Height = 680,
+            MinHeight = 520,
+            MaxWidth = 1180,
             HorizontalAlignment = HorizontalAlignment.Stretch,
         };
         _shell.Children.Add(_viewport);
@@ -113,14 +131,14 @@ public sealed class MarkdownChatSampleView : UserControl
 
         var controls = new StackPanel
         {
-            Spacing = 10,
+            Spacing = 6,
         };
         controls.Children.Add(new TextBlock
         {
             Text = "Chat width",
             Foreground = SampleTheme.MutedBrush,
             FontFamily = new FontFamily("Consolas"),
-            FontSize = 12,
+            FontSize = 11,
         });
 
         var widthRow = new StackPanel
@@ -133,20 +151,58 @@ public sealed class MarkdownChatSampleView : UserControl
         controls.Children.Add(widthRow);
         controls.Children.Add(_statsText);
 
-        var controlsCard = SampleUi.CreateCard(controls, 16);
-        controlsCard.MaxWidth = 760;
-        controlsCard.Background = SampleTheme.Brush(0x3A, 0x40, 0x48);
-        controlsCard.BorderBrush = SampleTheme.Brush(0x56, 0x5C, 0x66);
+        _controlsCard = SampleUi.CreateCard(controls, 14);
+        _controlsCard.MaxWidth = 420;
+        _controlsCard.HorizontalAlignment = HorizontalAlignment.Stretch;
+        _controlsCard.Background = SampleTheme.Brush(0x3A, 0x40, 0x48);
+        _controlsCard.BorderBrush = SampleTheme.Brush(0x56, 0x5C, 0x66);
+
+        _headerStack = new StackPanel
+        {
+            Spacing = 4,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            MaxWidth = 720,
+        };
+        _headerStack.Children.Add(new TextBlock
+        {
+            Text = "DEMO",
+            Foreground = SampleTheme.AccentBrush,
+            FontSize = 11,
+            FontFamily = new FontFamily("Consolas"),
+            CharacterSpacing = 110,
+            TextWrapping = TextWrapping.NoWrap,
+        });
+        _headerStack.Children.Add(new TextBlock
+        {
+            Text = "Virtualized markdown chat",
+            Foreground = SampleTheme.InkBrush,
+            FontSize = 24,
+            FontWeight = FontWeights.Bold,
+            FontFamily = new FontFamily("Georgia"),
+            TextWrapping = TextWrapping.WrapWholeWords,
+        });
+        _headerStack.Children.Add(new TextBlock
+        {
+            Text = "A 10k-message chat surface measured ahead of time so only the visible message window is materialized into Uno elements.",
+            Foreground = SampleTheme.MutedBrush,
+            FontSize = 13,
+            MaxWidth = 620,
+            TextWrapping = TextWrapping.WrapWholeWords,
+        });
+
+        _heroGrid = new Grid
+        {
+            MaxWidth = 1180,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            ColumnSpacing = 20,
+            RowSpacing = 10,
+        };
+        _heroGrid.Children.Add(_headerStack);
+        _heroGrid.Children.Add(_controlsCard);
 
         var stack = SampleUi.CreatePageStack();
-        var header = SampleUi.CreateHeader(
-            "DEMO",
-            "Virtualized markdown chat",
-            "A 10k-message chat surface built from exact Pretext height prediction. Markdown blocks are parsed once, measured into reusable templates, and only the visible message window is materialized into Uno elements.");
-        header.MaxWidth = 760;
-        header.HorizontalAlignment = HorizontalAlignment.Center;
-        stack.Children.Add(header);
-        stack.Children.Add(controlsCard);
+        stack.Spacing = 12;
+        stack.Children.Add(_heroGrid);
         stack.Children.Add(_shell);
 
         _pageRoot = SampleUi.CreatePageRoot(stack);
@@ -157,13 +213,26 @@ public sealed class MarkdownChatSampleView : UserControl
 
     private void Render()
     {
-        if (_pageRoot.ActualWidth <= 0 || _shell.ActualHeight <= 0)
+        if (_pageRoot.ActualWidth <= 0)
         {
             return;
         }
 
+        UpdateHeroLayout(_pageRoot.ActualWidth);
+
+        var heroHeight = _heroGrid.ActualHeight > 0 ? _heroGrid.ActualHeight : (_isWideHeroLayout ? 112 : 168);
+        var desiredShellHeight = Math.Clamp(_pageRoot.ActualHeight - heroHeight - 120, 520, 860);
+        if (Math.Abs(_shell.Height - desiredShellHeight) > 0.5)
+        {
+            _shell.Height = desiredShellHeight;
+        }
+
         var viewportWidth = _shell.ActualWidth;
-        var viewportHeight = _shell.ActualHeight;
+        var viewportHeight = _shell.Height;
+        if (viewportWidth <= 0 || viewportHeight <= 0)
+        {
+            return;
+        }
         var requestedChatWidth = Math.Round(_widthSlider.Value);
         var maxChatWidth = MarkdownChatModel.GetMaxChatWidth(viewportWidth);
         var chatWidth = Math.Max(MarkdownChatModel.MinChatWidth, Math.Min(maxChatWidth, requestedChatWidth));
@@ -207,9 +276,13 @@ public sealed class MarkdownChatSampleView : UserControl
         _widthValue.Text = $"{Math.Round(chatWidth)}px";
         _statsText.Text = $"10k messages · visible window only · canvas height {Math.Round(frame.TotalHeight):N0}px";
 
+        _contentHost.Width = viewportWidth;
+        _contentHost.Height = frame.TotalHeight;
         _canvas.Width = frame.ChatWidth;
         _canvas.Height = frame.TotalHeight;
+        _topOcclusion.Width = frame.ChatWidth;
         _topOcclusion.Height = topMask;
+        _bottomOcclusion.Width = frame.ChatWidth;
         _bottomOcclusion.Height = bottomMask;
         _toggleButton.Content = _visualizationEnabled ? "Hide virtualization mask" : "Show virtualization mask";
 
@@ -227,6 +300,42 @@ public sealed class MarkdownChatSampleView : UserControl
 
         var (start, end) = MarkdownChatModel.FindVisibleRange(frame, _viewport.VerticalOffset, viewportHeight, topMask, bottomMask);
         RenderVisibleRows(frame, start, end);
+    }
+
+    private void UpdateHeroLayout(double hostWidth)
+    {
+        var useWideLayout = hostWidth >= 1120;
+        if (_heroGrid.ColumnDefinitions.Count > 0 && _isWideHeroLayout == useWideLayout)
+        {
+            return;
+        }
+
+        _isWideHeroLayout = useWideLayout;
+        _heroGrid.ColumnDefinitions.Clear();
+        _heroGrid.RowDefinitions.Clear();
+
+        if (useWideLayout)
+        {
+            _heroGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            _heroGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            _heroGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+            Grid.SetColumn(_headerStack, 0);
+            Grid.SetRow(_headerStack, 0);
+            Grid.SetColumn(_controlsCard, 1);
+            Grid.SetRow(_controlsCard, 0);
+        }
+        else
+        {
+            _heroGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            _heroGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            _heroGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+            Grid.SetColumn(_headerStack, 0);
+            Grid.SetRow(_headerStack, 0);
+            Grid.SetColumn(_controlsCard, 0);
+            Grid.SetRow(_controlsCard, 1);
+        }
     }
 
     private void RenderVisibleRows(ConversationFrame frame, int start, int end)
