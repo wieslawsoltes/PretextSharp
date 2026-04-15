@@ -25,13 +25,21 @@ The core package is enough when you want to:
 - drive your own SkiaSharp drawing code
 - use the engine outside Uno entirely
 
+The core `Pretext` package targets:
+
+- `netstandard2.0`
+- `net461`
+- `net6.0`
+- `net8.0`
+- `net10.0`
+
 ## Uno companion
 
 ```bash
 dotnet add package Pretext.Uno
 ```
 
-`Pretext.Uno` depends on `Pretext`, so the core engine is brought in transitively. Import the core namespace and whichever companion namespaces you want:
+`Pretext.Uno` depends on `Pretext`, so the core engine is brought in transitively. The companion package itself remains `net10.0-desktop`. Import the core namespace and whichever companion namespaces you want:
 
 ```csharp
 using Pretext;

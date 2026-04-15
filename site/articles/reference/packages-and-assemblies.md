@@ -9,11 +9,13 @@ title: "Packages and Namespace"
 - `Pretext`
   - source: `src/Pretext/Pretext.csproj`
   - primary namespace: `Pretext`
+  - target frameworks: `netstandard2.0`, `net461`, `net6.0`, `net8.0`, `net10.0`
   - contains the core preparation, measurement, bidi, and line-layout pipeline
 
 - `Pretext.Uno`
   - source: `src/Pretext.Uno/Pretext.Uno.csproj`
   - primary namespaces: `Pretext.Uno.Controls`, `Pretext.Uno.Layout`
+  - target framework: `net10.0-desktop`
   - contains reusable Uno host controls and obstacle-aware text-flow helpers layered on top of the core `Pretext` namespace
 
 ## Test project
