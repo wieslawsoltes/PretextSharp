@@ -151,6 +151,7 @@ public static partial class PretextLayout
     private static string[] GetSegmentGraphemes(PreparedTextWithSegments prepared, int segmentIndex)
     {
         var cache = _segmentTextCaches.GetValue(prepared, static _ => new SegmentTextCache());
+#if NET6_0_OR_GREATER
         ref var graphemes = ref CollectionsMarshal.GetValueRefOrAddDefault(
             cache.GraphemesBySegmentIndex,
             segmentIndex,
@@ -162,5 +163,15 @@ public static partial class PretextLayout
 
         graphemes = GetTextElements(prepared.Segments[segmentIndex]);
         return graphemes!;
+#else
+        if (cache.GraphemesBySegmentIndex.TryGetValue(segmentIndex, out var graphemes))
+        {
+            return graphemes;
+        }
+
+        graphemes = GetTextElements(prepared.Segments[segmentIndex]);
+        cache.GraphemesBySegmentIndex[segmentIndex] = graphemes;
+        return graphemes;
+#endif
     }
 }

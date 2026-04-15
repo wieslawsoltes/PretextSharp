@@ -48,11 +48,22 @@ public static partial class PretextLayout
 
     private readonly record struct AnalysisToken(string Text, SegmentBreakKind Kind, bool IsWordLike);
 
+#if NET7_0_OR_GREATER
     [GeneratedRegex("^[A-Za-z][A-Za-z0-9+.-]*:$", RegexOptions.CultureInvariant | RegexOptions.NonBacktracking)]
     private static partial Regex UrlSchemeSegmentRegex();
 
     [GeneratedRegex("^[A-Za-z][A-Za-z0-9+.-]*$", RegexOptions.CultureInvariant | RegexOptions.NonBacktracking)]
     private static partial Regex UrlSchemeBareSegmentRegex();
+#else
+    private static readonly Regex s_urlSchemeSegmentRegex = new("^[A-Za-z][A-Za-z0-9+.-]*:$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+    private static readonly Regex s_urlSchemeBareSegmentRegex = new("^[A-Za-z][A-Za-z0-9+.-]*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+    private static Regex UrlSchemeSegmentRegex()
+        => s_urlSchemeSegmentRegex;
+
+    private static Regex UrlSchemeBareSegmentRegex()
+        => s_urlSchemeBareSegmentRegex;
+#endif
 
     private static WhiteSpaceProfile GetWhiteSpaceProfile(WhiteSpaceMode whiteSpace)
     {
@@ -124,7 +135,7 @@ public static partial class PretextLayout
         }
 
         return text
-            .Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Replace("\r\n", "\n")
             .Replace('\r', '\n')
             .Replace('\f', '\n');
     }
@@ -580,7 +591,7 @@ public static partial class PretextLayout
                 while (next < tokens.Count && !IsTextRunBoundary(tokens[next].Kind))
                 {
                     text += tokens[next].Text;
-                    var endsQueryPrefix = tokens[next].Text.Contains('?', StringComparison.Ordinal);
+                    var endsQueryPrefix = tokens[next].Text.IndexOf('?') >= 0;
                     next++;
                     if (endsQueryPrefix)
                     {
@@ -670,7 +681,7 @@ public static partial class PretextLayout
         var splitTokens = new List<AnalysisToken>(tokens.Count);
         foreach (var token in tokens)
         {
-            if (token.Kind == SegmentBreakKind.Text && token.Text.Contains('-', StringComparison.Ordinal))
+            if (token.Kind == SegmentBreakKind.Text && token.Text.IndexOf('-') >= 0)
             {
                 var text = token.Text.AsSpan();
                 var start = 0;
@@ -881,27 +892,11 @@ public static partial class PretextLayout
 
     private static bool IsWordLikeText(string element)
     {
+#if NET6_0_OR_GREATER
         var sawWord = false;
         foreach (var rune in element.EnumerateRunes())
         {
-            var category = Rune.GetUnicodeCategory(rune);
-            if (category is UnicodeCategory.UppercaseLetter or
-                UnicodeCategory.LowercaseLetter or
-                UnicodeCategory.TitlecaseLetter or
-                UnicodeCategory.ModifierLetter or
-                UnicodeCategory.OtherLetter or
-                UnicodeCategory.DecimalDigitNumber or
-                UnicodeCategory.LetterNumber or
-                UnicodeCategory.OtherNumber or
-                UnicodeCategory.NonSpacingMark or
-                UnicodeCategory.SpacingCombiningMark or
-                UnicodeCategory.EnclosingMark)
-            {
-                sawWord = true;
-                continue;
-            }
-
-            if (category == UnicodeCategory.ConnectorPunctuation || rune.Value == '_')
+            if (IsWordLikeCodePoint(rune.Value, Rune.GetUnicodeCategory(rune)))
             {
                 sawWord = true;
                 continue;
@@ -911,6 +906,9 @@ public static partial class PretextLayout
         }
 
         return sawWord;
+#else
+        return UnicodeCompat.AllCodePoints(element, static (codePoint, category) => IsWordLikeCodePoint(codePoint, category), out var sawWord) && sawWord;
+#endif
     }
 
     private static IEnumerable<string> EnumerateTextElements(string text)
@@ -961,8 +959,8 @@ public static partial class PretextLayout
 
     private static bool IsUrlQueryBoundaryToken(string text)
     {
-        return text.Contains('?', StringComparison.Ordinal) &&
-               (text.Contains("://", StringComparison.Ordinal) || text.StartsWith("www.", StringComparison.OrdinalIgnoreCase));
+        return text.IndexOf('?') >= 0 &&
+               (text.IndexOf("://", StringComparison.Ordinal) >= 0 || text.StartsWith("www.", StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool SegmentContainsDecimalDigit(string text)
@@ -970,6 +968,7 @@ public static partial class PretextLayout
 
     private static bool SegmentContainsDecimalDigit(ReadOnlySpan<char> text)
     {
+#if NET6_0_OR_GREATER
         foreach (var rune in text.EnumerateRunes())
         {
             if (Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber)
@@ -979,6 +978,9 @@ public static partial class PretextLayout
         }
 
         return false;
+#else
+        return UnicodeCompat.AnyCodePoint(text.ToString(), static (_, category) => category == UnicodeCategory.DecimalDigitNumber);
+#endif
     }
 
     private static bool IsNumericRunSegment(string text)
@@ -991,6 +993,7 @@ public static partial class PretextLayout
             return false;
         }
 
+#if NET6_0_OR_GREATER
         foreach (var rune in text.EnumerateRunes())
         {
             if (Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber ||
@@ -1003,6 +1006,13 @@ public static partial class PretextLayout
         }
 
         return true;
+#else
+        return UnicodeCompat.AllCodePoints(
+            text.ToString(),
+            static (codePoint, category) => category == UnicodeCategory.DecimalDigitNumber ||
+                (codePoint <= char.MaxValue && NumericJoiners.Contains((char)codePoint)),
+            out var sawAny) && sawAny;
+#endif
     }
 
     private static bool IsAsciiPunctuationChainSegment(string text)
@@ -1062,6 +1072,7 @@ public static partial class PretextLayout
 
     private static bool ContainsArabicScript(string text)
     {
+#if NET6_0_OR_GREATER
         foreach (var rune in text.EnumerateRunes())
         {
             var code = rune.Value;
@@ -1078,10 +1089,21 @@ public static partial class PretextLayout
         }
 
         return false;
+#else
+        return UnicodeCompat.AnyCodePoint(text, static code =>
+            (code >= 0x0600 && code <= 0x06FF) ||
+            (code >= 0x0750 && code <= 0x077F) ||
+            (code >= 0x08A0 && code <= 0x08FF) ||
+            (code >= 0xFB50 && code <= 0xFDFF) ||
+            (code >= 0xFE70 && code <= 0xFEFF) ||
+            (code >= 0x10E60 && code <= 0x10E7F) ||
+            (code >= 0x1EE00 && code <= 0x1EEFF));
+#endif
     }
 
     private static bool ContainsMyanmarScript(string text)
     {
+#if NET6_0_OR_GREATER
         foreach (var rune in text.EnumerateRunes())
         {
             var code = rune.Value;
@@ -1094,6 +1116,12 @@ public static partial class PretextLayout
         }
 
         return false;
+#else
+        return UnicodeCompat.AnyCodePoint(text, static code =>
+            (code >= 0x1000 && code <= 0x109F) ||
+            (code >= 0xA9E0 && code <= 0xA9FF) ||
+            (code >= 0xAA60 && code <= 0xAA7F));
+#endif
     }
 
     private static bool IsCombiningMark(char ch)
@@ -1216,13 +1244,14 @@ public static partial class PretextLayout
         var sawCjk = false;
         var sawNonCjkWord = false;
 
+#if NET6_0_OR_GREATER
         foreach (var rune in text.EnumerateRunes())
         {
             if (IsCjkCodePoint(rune.Value))
             {
                 sawCjk = true;
             }
-            else if (IsWordLikeRune(rune))
+            else if (IsWordLikeCodePoint(rune.Value, Rune.GetUnicodeCategory(rune)))
             {
                 sawNonCjkWord = true;
             }
@@ -1232,8 +1261,23 @@ public static partial class PretextLayout
                 return true;
             }
         }
+#else
+        UnicodeCompat.AllCodePoints(text, (codePoint, category) =>
+        {
+            if (IsCjkCodePoint(codePoint))
+            {
+                sawCjk = true;
+            }
+            else if (IsWordLikeCodePoint(codePoint, category))
+            {
+                sawNonCjkWord = true;
+            }
 
-        return false;
+            return !(sawCjk && sawNonCjkWord);
+        }, out _);
+#endif
+
+        return sawCjk && sawNonCjkWord;
     }
 
     private static bool IsMixedScriptKeepAllContinuationPunctuation(char ch)
@@ -1260,9 +1304,8 @@ public static partial class PretextLayout
         return span[index];
     }
 
-    private static bool IsWordLikeRune(Rune rune)
+    private static bool IsWordLikeCodePoint(int codePoint, UnicodeCategory category)
     {
-        var category = Rune.GetUnicodeCategory(rune);
         return category is UnicodeCategory.UppercaseLetter or
                UnicodeCategory.LowercaseLetter or
                UnicodeCategory.TitlecaseLetter or
@@ -1275,7 +1318,7 @@ public static partial class PretextLayout
                UnicodeCategory.SpacingCombiningMark or
                UnicodeCategory.EnclosingMark or
                UnicodeCategory.ConnectorPunctuation ||
-               rune.Value == '_';
+               codePoint == '_';
     }
 
     private static bool IsCjkCodePoint(int code)

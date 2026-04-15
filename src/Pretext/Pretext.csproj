@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461;net6.0;net8.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <OutputType>Library</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -14,5 +15,13 @@
 
   <ItemGroup>
     <PackageReference Include="SkiaSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461'">
+    <PackageReference Include="System.Memory" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" />
   </ItemGroup>
 </Project>

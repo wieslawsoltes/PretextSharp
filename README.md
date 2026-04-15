@@ -4,11 +4,13 @@
 [![NuGet](https://img.shields.io/nuget/v/Pretext.svg)](https://www.nuget.org/packages/Pretext)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.svg)](https://www.nuget.org/packages/Pretext)
 [![Docs](https://img.shields.io/badge/docs-github%20pages-0f766e)](https://wieslawsoltes.github.io/PretextSharp/)
-![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4)
+![Targets](https://img.shields.io/badge/targets-netstandard2.0%20%7C%20net461%20%7C%20net6.0%20%7C%20net8.0%20%7C%20net10.0-512BD4)
 ![SkiaSharp 3.119.1](https://img.shields.io/badge/SkiaSharp-3.119.1-16A34A)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Universal text preparation and line layout for any SkiaSharp-based UI, with grapheme-aware wrapping, locale-aware segmentation, bidi support, and streaming line walking.
+
+The core `Pretext` package targets `netstandard2.0`, `net461`, `net6.0`, `net8.0`, and `net10.0`. The `Pretext.Uno` companion package and sample app remain `net10.0-desktop`.
 
 PretextSharp is a .NET/C# port of the original [pretext](https://github.com/chenglou/pretext) project by [Cheng Lou](https://github.com/chenglou).
 
@@ -86,6 +88,14 @@ Install from NuGet:
 ```bash
 dotnet add package Pretext
 ```
+
+Supported target frameworks for the core package:
+
+- `netstandard2.0`
+- `net461`
+- `net6.0`
+- `net8.0`
+- `net10.0`
 
 Then prepare and lay out text:
 
@@ -192,7 +202,7 @@ dotnet run --project samples/PretextSamples/PretextSamples.csproj -f net10.0-des
 
 ### Prerequisites
 
-- .NET 10 SDK
+- .NET 10 SDK for building this repository
 - Uno.Sdk 6.5.x for the sample app only
 
 ### Build, test, and pack

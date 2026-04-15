@@ -9,8 +9,15 @@ public static partial class PretextLayout
 {
     private static readonly HashSet<char> NumericJoiners = ['-', ':', '/', '×', ',', '.', '+', '\u2013', '\u2014'];
 
+#if NET7_0_OR_GREATER
     [GeneratedRegex(@"(\d+(?:\.\d+)?)\s*px", RegexOptions.CultureInvariant | RegexOptions.NonBacktracking)]
     private static partial Regex FontSizeRegex();
+#else
+    private static readonly Regex s_fontSizeRegex = new(@"(\d+(?:\.\d+)?)\s*px", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+    private static Regex FontSizeRegex()
+        => s_fontSizeRegex;
+#endif
 
     private static EngineProfile GetEngineProfile()
     {
@@ -203,6 +210,7 @@ public static partial class PretextLayout
 
     private static bool ContainsCjk(string text)
     {
+#if NET6_0_OR_GREATER
         foreach (var rune in text.EnumerateRunes())
         {
             if (IsCjkCodePoint(rune.Value))
@@ -212,6 +220,9 @@ public static partial class PretextLayout
         }
 
         return false;
+#else
+        return UnicodeCompat.AnyCodePoint(text, static codePoint => IsCjkCodePoint(codePoint));
+#endif
     }
 
     private static string[] GetTextElements(string text)
@@ -332,7 +343,16 @@ public static partial class PretextLayout
                 return 0;
             }
 
-            return MeasureTextOverride?.Invoke(text.ToString(), Font) ?? SkFont!.MeasureText(text);
+            if (MeasureTextOverride is { } measureTextOverride)
+            {
+                return measureTextOverride(text.ToString(), Font);
+            }
+
+#if NET6_0_OR_GREATER
+            return SkFont!.MeasureText(text);
+#else
+            return SkFont!.MeasureText(text.ToString());
+#endif
         }
     }
 
@@ -381,6 +401,7 @@ public static partial class PretextLayout
                 var token = (nextSeparator >= 0 ? scan[..nextSeparator] : scan).Trim();
                 if (!token.IsEmpty)
                 {
+#if NET6_0_OR_GREATER
                     if (token.Equals("italic", StringComparison.OrdinalIgnoreCase) ||
                         token.Equals("oblique", StringComparison.OrdinalIgnoreCase))
                     {
@@ -397,6 +418,25 @@ public static partial class PretextLayout
                     {
                         weight = 700;
                     }
+#else
+                    var tokenText = token.ToString();
+                    if (string.Equals(tokenText, "italic", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(tokenText, "oblique", StringComparison.OrdinalIgnoreCase))
+                    {
+                        italic = true;
+                    }
+
+                    if (int.TryParse(tokenText, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
+                    {
+                        weight = parsed;
+                        break;
+                    }
+
+                    if (string.Equals(tokenText, "bold", StringComparison.OrdinalIgnoreCase))
+                    {
+                        weight = 700;
+                    }
+#endif
                 }
 
                 if (nextSeparator < 0)

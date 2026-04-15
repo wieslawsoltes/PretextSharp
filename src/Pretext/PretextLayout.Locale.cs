@@ -67,7 +67,7 @@ public static partial class PretextLayout
             {
                 if (!string.IsNullOrWhiteSpace(locale))
                 {
-                    localePtr = Marshal.StringToCoTaskMemUTF8(locale);
+                    localePtr = MarshalCompat.StringToCoTaskMemUtf8(locale!);
                 }
 
                 textPtr = Marshal.StringToHGlobalUni(text);
@@ -147,7 +147,7 @@ public static partial class PretextLayout
         {
             var assembly = typeof(PretextLayout).Assembly;
 
-            if (OperatingSystem.IsWindows())
+            if (PlatformCompat.IsWindows())
             {
                 if (!TryLoad("icuuc77", assembly, NativeLibrarySearchDirectories, out _icuLibrary) &&
                     !TryLoad("icuuc", assembly, NativeLibrarySearchDirectories, out _icuLibrary))
@@ -155,7 +155,7 @@ public static partial class PretextLayout
                     throw new DllNotFoundException("Failed to load ICU word-break library.");
                 }
             }
-            else if (OperatingSystem.IsMacOS())
+            else if (PlatformCompat.IsMacOS())
             {
                 if (!TryLoad("icudata", assembly, NativeLibrarySearchDirectories, out _))
                 {
@@ -169,7 +169,7 @@ public static partial class PretextLayout
                     throw new DllNotFoundException("Failed to load ICU word-break library.");
                 }
             }
-            else if (OperatingSystem.IsLinux())
+            else if (PlatformCompat.IsLinux())
             {
                 if (!TryLoad("icui18n", assembly, NativeLibrarySearchDirectories, out _icuLibrary) &&
                     !TryLoad("libicui18n", assembly, NativeLibrarySearchDirectories, out _icuLibrary) &&
@@ -186,7 +186,7 @@ public static partial class PretextLayout
                 throw new PlatformNotSupportedException("Locale-aware word segmentation is only available on desktop targets.");
             }
 
-            if (NativeLibrary.TryGetExport(_icuLibrary, nameof(ubrk_open), out _))
+            if (NativeLibraryCompat.TryGetExport(_icuLibrary, nameof(ubrk_open), out _))
             {
                 _icuVersion = 0;
                 InitializeCommonDataIfAvailable();
@@ -195,7 +195,7 @@ public static partial class PretextLayout
 
             for (var version = MaxSupportedIcuVersion; version >= MinSupportedIcuVersion; version--)
             {
-                if (NativeLibrary.TryGetExport(_icuLibrary, $"{nameof(ubrk_open)}_{version}", out _))
+                if (NativeLibraryCompat.TryGetExport(_icuLibrary, $"{nameof(ubrk_open)}_{version}", out _))
                 {
                     _icuVersion = version;
                     InitializeCommonDataIfAvailable();
@@ -211,7 +211,7 @@ public static partial class PretextLayout
             handle = IntPtr.Zero;
             try
             {
-                handle = NativeLibrary.Load(libraryName, assembly, searchPath);
+                handle = NativeLibraryCompat.Load(libraryName, assembly, searchPath);
                 return true;
             }
             catch
@@ -226,7 +226,7 @@ public static partial class PretextLayout
 
             for (var version = MaxSupportedIcuVersion; version >= MinSupportedIcuVersion; version--)
             {
-                if (NativeLibrary.TryLoad($"{libraryNamePrefix}{version}", out handle))
+                if (NativeLibraryCompat.TryLoad($"{libraryNamePrefix}{version}", out handle))
                 {
                     return true;
                 }
@@ -267,7 +267,7 @@ public static partial class PretextLayout
                     return false;
                 }
 
-                handle = NativeLibrary.Load(matches[0]);
+                handle = NativeLibraryCompat.Load(matches[0]);
                 return true;
             }
             catch
@@ -277,9 +277,9 @@ public static partial class PretextLayout
             }
         }
 
-        private static unsafe void InitializeCommonDataIfAvailable()
+        private static void InitializeCommonDataIfAvailable()
         {
-            if (_commonDataInitialized || !(OperatingSystem.IsMacOS() || OperatingSystem.IsWindows()))
+            if (_commonDataInitialized || !(PlatformCompat.IsMacOS() || PlatformCompat.IsWindows()))
             {
                 return;
             }
@@ -295,8 +295,8 @@ public static partial class PretextLayout
                     return;
                 }
 
-                _commonDataBuffer = (IntPtr)NativeMemory.AlignedAlloc((nuint)stream.Length, 16);
-                stream.ReadExactly(new Span<byte>((void*)_commonDataBuffer, (int)stream.Length));
+                _commonDataBuffer = NativeMemoryCompat.AlignedAlloc((int)stream.Length, 16);
+                StreamCompat.ReadExactly(stream, _commonDataBuffer, (int)stream.Length);
                 GetMethod<udata_setCommonData>()(_commonDataBuffer, out var status);
                 CheckErrorCode<udata_setCommonData>(status);
             }
@@ -304,7 +304,7 @@ public static partial class PretextLayout
             {
                 if (_commonDataBuffer != IntPtr.Zero)
                 {
-                    NativeMemory.AlignedFree((void*)_commonDataBuffer);
+                    NativeMemoryCompat.AlignedFree(_commonDataBuffer);
                     _commonDataBuffer = IntPtr.Zero;
                 }
             }
@@ -347,11 +347,11 @@ public static partial class PretextLayout
         private static Stream? TryOpenUnoPackIcuDataStream()
         {
             string? packageId = null;
-            if (OperatingSystem.IsMacOS())
+            if (PlatformCompat.IsMacOS())
             {
                 packageId = "uno.icu-macos";
             }
-            else if (OperatingSystem.IsWindows())
+            else if (PlatformCompat.IsWindows())
             {
                 packageId = "uno.icu-win";
             }
@@ -412,15 +412,15 @@ public static partial class PretextLayout
             }
 
             var methodName = typeof(T).Name;
-            if (!NativeLibrary.TryGetExport(_icuLibrary, methodName, out var pointer))
+            if (!NativeLibraryCompat.TryGetExport(_icuLibrary, methodName, out var pointer))
             {
-                if (_icuVersion <= 0 || !NativeLibrary.TryGetExport(_icuLibrary, $"{methodName}_{_icuVersion}", out pointer))
+                if (_icuVersion <= 0 || !NativeLibraryCompat.TryGetExport(_icuLibrary, $"{methodName}_{_icuVersion}", out pointer))
                 {
                     throw new MissingMethodException($"Failed to load ICU symbol {methodName}.");
                 }
             }
 
-            var method = Marshal.GetDelegateForFunctionPointer<T>(pointer);
+            var method = MarshalCompat.GetDelegateForFunctionPointer<T>(pointer);
             LookupCache[typeof(T)] = method;
             return method;
         }
