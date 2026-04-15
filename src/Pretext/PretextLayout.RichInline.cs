@@ -107,7 +107,7 @@ public static partial class PretextLayout
 
     public static PreparedRichInline PrepareRichInline(IReadOnlyList<RichInlineItem> items)
     {
-        ArgumentNullException.ThrowIfNull(items);
+        GuardCompat.ThrowIfNull(items, nameof(items));
 
         var preparedItems = new List<PreparedRichInlineItem>(items.Count);
         var itemsBySourceItemIndex = new PreparedRichInlineItem?[items.Count];
@@ -166,7 +166,7 @@ public static partial class PretextLayout
         double maxWidth,
         RichInlineCursor? start = null)
     {
-        ArgumentNullException.ThrowIfNull(prepared);
+        GuardCompat.ThrowIfNull(prepared, nameof(prepared));
 
         var end = start ?? RichInlineStartCursor;
         var fragments = new List<RichInlineFragmentRange>();
@@ -190,8 +190,8 @@ public static partial class PretextLayout
 
     public static RichInlineLine MaterializeRichInlineLineRange(PreparedRichInline prepared, RichInlineLineRange line)
     {
-        ArgumentNullException.ThrowIfNull(prepared);
-        ArgumentNullException.ThrowIfNull(line);
+        GuardCompat.ThrowIfNull(prepared, nameof(prepared));
+        GuardCompat.ThrowIfNull(line, nameof(line));
 
         var flow = prepared.ItemsBySourceItemIndexInternal;
         var fragments = new RichInlineFragment[line.Fragments.Length];
@@ -217,8 +217,8 @@ public static partial class PretextLayout
         double maxWidth,
         Action<RichInlineLineRange> onLine)
     {
-        ArgumentNullException.ThrowIfNull(prepared);
-        ArgumentNullException.ThrowIfNull(onLine);
+        GuardCompat.ThrowIfNull(prepared, nameof(prepared));
+        GuardCompat.ThrowIfNull(onLine, nameof(onLine));
 
         var lineCount = 0;
         var cursor = RichInlineStartCursor;
@@ -239,7 +239,7 @@ public static partial class PretextLayout
 
     public static RichInlineStats MeasureRichInlineStats(PreparedRichInline prepared, double maxWidth)
     {
-        ArgumentNullException.ThrowIfNull(prepared);
+        GuardCompat.ThrowIfNull(prepared, nameof(prepared));
 
         var cursor = RichInlineStartCursor;
         var lineCount = 0;
@@ -281,6 +281,7 @@ public static partial class PretextLayout
 
     private static double GetCollapsedSpaceWidth(string font, Dictionary<string, double> cache)
     {
+#if NET6_0_OR_GREATER
         ref var cached = ref CollectionsMarshal.GetValueRefOrAddDefault(cache, font, out var exists);
         if (exists)
         {
@@ -292,6 +293,18 @@ public static partial class PretextLayout
         var collapsedWidth = Math.Max(0, joinedWidth - compactWidth);
         cached = collapsedWidth;
         return cached;
+#else
+        if (cache.TryGetValue(font, out var cached))
+        {
+            return cached;
+        }
+
+        var joinedWidth = MeasureNaturalWidth(PrepareWithSegments("A A", font));
+        var compactWidth = MeasureNaturalWidth(PrepareWithSegments("AA", font));
+        var collapsedWidth = Math.Max(0, joinedWidth - compactWidth);
+        cache[font] = collapsedWidth;
+        return collapsedWidth;
+#endif
     }
 
     private static BoundaryTrimResult TrimCollapsibleBoundaryText(string text)

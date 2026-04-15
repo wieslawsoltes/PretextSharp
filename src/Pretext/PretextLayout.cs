@@ -260,7 +260,7 @@ public static partial class PretextLayout
 
     public static int WalkLineRanges(PreparedTextWithSegments prepared, double maxWidth, Action<LayoutLineRange> onLine)
     {
-        ArgumentNullException.ThrowIfNull(onLine);
+        GuardCompat.ThrowIfNull(onLine, nameof(onLine));
 
         var cursor = new LayoutCursor(0, 0);
         var lineCount = 0;
