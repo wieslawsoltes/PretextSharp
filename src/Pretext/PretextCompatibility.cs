@@ -170,7 +170,7 @@ internal static class NativeLibraryCompat
             return true;
         }
 
-        foreach (var candidatePath in EnumerateCandidatePaths(libraryName, assembly))
+        foreach (var candidatePath in EnumerateCandidatePaths(libraryName, assembly, searchPath))
         {
             if (TryLoadPlatformLibrary(candidatePath, out handle))
             {
@@ -206,17 +206,12 @@ internal static class NativeLibraryCompat
     }
 
 #if !NET6_0_OR_GREATER
-    private static IEnumerable<string> EnumerateCandidatePaths(string libraryName, Assembly assembly)
+    private static IEnumerable<string> EnumerateCandidatePaths(string libraryName, Assembly assembly, DllImportSearchPath searchPath)
     {
         var comparer = PlatformCompat.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
         var seen = new HashSet<string>(comparer);
-        var directories = new[]
-        {
-            Path.GetDirectoryName(assembly.Location),
-            AppContext.BaseDirectory,
-        };
 
-        foreach (var directory in directories)
+        foreach (var directory in EnumerateSearchDirectories(assembly, searchPath))
         {
             if (string.IsNullOrWhiteSpace(directory))
             {
@@ -232,6 +227,63 @@ internal static class NativeLibraryCompat
                 }
             }
         }
+    }
+
+    private static IEnumerable<string> EnumerateSearchDirectories(Assembly assembly, DllImportSearchPath searchPath)
+    {
+        if ((searchPath & DllImportSearchPath.AssemblyDirectory) != 0)
+        {
+            yield return Path.GetDirectoryName(assembly.Location) ?? string.Empty;
+        }
+
+        if ((searchPath & DllImportSearchPath.ApplicationDirectory) != 0)
+        {
+            yield return AppContext.BaseDirectory;
+        }
+
+        if ((searchPath & DllImportSearchPath.UserDirectories) != 0)
+        {
+            foreach (var directory in EnumerateUserDirectories())
+            {
+                yield return directory;
+            }
+        }
+
+        if (searchPath == 0)
+        {
+            yield return Path.GetDirectoryName(assembly.Location) ?? string.Empty;
+            yield return AppContext.BaseDirectory;
+        }
+    }
+
+    private static IEnumerable<string> EnumerateUserDirectories()
+    {
+        var rawDirectories = GetAppContextData("NATIVE_DLL_SEARCH_DIRECTORIES")
+            ?? AppDomain.CurrentDomain.GetData("NATIVE_DLL_SEARCH_DIRECTORIES") as string;
+        if (string.IsNullOrWhiteSpace(rawDirectories))
+        {
+            yield break;
+        }
+
+        foreach (var directory in rawDirectories!.Split(new[] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var candidate = directory.Trim();
+            if (candidate.Length > 0)
+            {
+                yield return candidate.ToString();
+            }
+        }
+    }
+
+    private static string? GetAppContextData(string key)
+    {
+        var getDataMethod = typeof(AppContext).GetMethod(
+            "GetData",
+            BindingFlags.Public | BindingFlags.Static,
+            binder: null,
+            types: new[] { typeof(string) },
+            modifiers: null);
+        return getDataMethod?.Invoke(null, new object[] { key }) as string;
     }
 
     private static IEnumerable<string> EnumerateLibraryNameVariants(string libraryName)
