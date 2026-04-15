@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Installation | Pretext">
-<meta name="twitter:description" content="Installation Install the package that matches the layer you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; The core package is enough when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own SkiaSharp drawing code use the engine outside Uno entirely Uno companion dotnet add package Pretext.Uno...">
+<meta name="twitter:description" content="Installation Install the package that matches the layer you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; The core package is enough when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own SkiaSharp drawing code use the engine outside Uno entirely The core Pretext package targets: netstandard2.0...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Installation | Pretext">
 <meta property="og:title" content="Installation | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Installation Install the package that matches the layer you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; The core package is enough when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own SkiaSharp drawing code use the engine outside Uno entirely Uno companion dotnet add package Pretext.Uno...">
+<meta property="og:description" content="Installation Install the package that matches the layer you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; The core package is enough when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own SkiaSharp drawing code use the engine outside Uno entirely The core Pretext package targets: netstandard2.0...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Installation | Pretext">
   </head>
@@ -172,10 +172,18 @@
 <li>drive your own SkiaSharp drawing code</li>
 <li>use the engine outside Uno entirely</li>
 </ul>
+<p>The core <code>Pretext</code> package targets:</p>
+<ul>
+<li><code>netstandard2.0</code></li>
+<li><code>net461</code></li>
+<li><code>net6.0</code></li>
+<li><code>net8.0</code></li>
+<li><code>net10.0</code></li>
+</ul>
 <h2 id="uno-companion">Uno companion</h2>
 <pre><code class="language-bash">dotnet add package Pretext.Uno
 </code></pre>
-<p><code>Pretext.Uno</code> depends on <code>Pretext</code>, so the core engine is brought in transitively. Import the core namespace and whichever companion namespaces you want:</p>
+<p><code>Pretext.Uno</code> depends on <code>Pretext</code>, so the core engine is brought in transitively. The companion package itself remains <code>net10.0-desktop</code>. Import the core namespace and whichever companion namespaces you want:</p>
 <pre><code class="language-csharp">using Pretext;
 using Pretext.Uno.Controls;
 using Pretext.Uno.Layout;

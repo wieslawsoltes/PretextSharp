@@ -1,127 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/lunet-docs-pipeline</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/license</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/packages-and-assemblies</loc>
-    <lastmod>2026-04-14</lastmod>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/pretext-uno-helpers</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/pretext-uno-helpers</loc>
-    <lastmod>2026-04-14</lastmod>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/public-types-and-operations</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/rich-inline-api</loc>
-    <lastmod>2026-04-14</lastmod>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/scope-and-limitations</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/lunet-docs-pipeline</loc>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/public-types-and-operations</loc>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/rich-inline-api</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/integrating-in-uno</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/markdown-chat-virtualization</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/testing-and-diagnostics</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/sample-gallery-tour</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout</loc>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/testing-and-diagnostics</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/font-strings-and-measurement</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/architecture-and-packages</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/font-strings-and-measurement</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/incremental-layout-apis</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/locale-segmentation-and-bidi</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/prepared-text-lifecycle</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/choosing-an-api</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/whitespace-and-break-kinds</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/installation</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/prepared-text-types</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/choosing-an-api</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/overview</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started</loc>
-    <lastmod>2026-04-14</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/quickstart-workflows</loc>
-    <lastmod>2026-04-14</lastmod>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/prepared-text-lifecycle</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/quickstart-prepare-and-layout</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started</loc>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/quickstart-workflows</loc>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/license</loc>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/packages-and-assemblies</loc>
+    <lastmod>2026-04-15</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/installation</loc>
+    <lastmod>2026-04-15</lastmod>
   </url>
 </urlset>
