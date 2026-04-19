@@ -2,9 +2,19 @@ namespace PretextSamples.MacOS;
 
 internal sealed class MarkdownChatPageView : SamplePageView
 {
+    private const string Eyebrow = "DEMO";
+    private const string Title = "Virtualized markdown chat";
+    private const string DescriptionText = "A 10k-message chat surface measured ahead of time so only the visible message window is materialized into native AppKit drawing.";
+    private static readonly nfloat ControlsCardHeight = 90;
+
     private readonly IReadOnlyList<PreparedChatTemplate> _templates = MarkdownChatModel.CreatePreparedChatTemplates();
     private readonly NSSlider _widthSlider = MacTheme.CreateSlider(MarkdownChatModel.MinChatWidth, MarkdownChatModel.MaxChatWidth, MarkdownChatModel.DefaultChatWidth);
-    private readonly NSButton _maskToggle = MacTheme.CreateCheckBox("Show virtualization mask", false);
+    private readonly NSButton _maskButton = new()
+    {
+        BezelStyle = NSBezelStyle.Rounded,
+        Font = MacTheme.Mono(12, bold: true),
+        Bordered = true,
+    };
     private readonly NSScrollView _viewport = new()
     {
         HasVerticalScroller = true,
@@ -13,49 +23,80 @@ internal sealed class MarkdownChatPageView : SamplePageView
         DrawsBackground = false,
     };
     private readonly MarkdownChatCanvasView _canvas = new();
+    private readonly MarkdownChatHostView _host;
     private readonly MaskOverlayView _topMask = new();
     private readonly MaskOverlayView _bottomMask = new();
 
     private ConversationFrame? _frame;
+    private CGRect _headerRect;
     private CGRect _controlsRect;
     private CGRect _sliderFrame;
-    private CGRect _toggleFrame;
     private CGRect _shellRect;
-    private nfloat _headerBottom;
+    private CGRect _statsRect;
+    private CGRect _widthValueRect;
     private nfloat _occlusionHeight;
+    private bool _visualizationEnabled;
+    private bool _isWideHeroLayout;
+    private double? _pendingScrollOffset;
 
     public MarkdownChatPageView()
     {
+        _host = new MarkdownChatHostView(_canvas);
+
         AddSubview(_viewport);
         AddSubview(_topMask);
         AddSubview(_bottomMask);
         AddSubview(_widthSlider);
-        AddSubview(_maskToggle);
-        _viewport.DocumentView = _canvas;
+        AddSubview(_maskButton);
+
+        _viewport.DocumentView = _host;
         _viewport.ContentView.PostsBoundsChangedNotifications = true;
         NSNotificationCenter.DefaultCenter.AddObserver(NSView.BoundsChangedNotification, _ => _canvas.NeedsDisplay = true, _viewport.ContentView);
 
         _widthSlider.Activated += (_, _) => InvalidatePageLayout();
-        _maskToggle.Activated += (_, _) =>
+        _maskButton.Activated += (_, _) =>
         {
+            _visualizationEnabled = !_visualizationEnabled;
             UpdateMaskState();
             _canvas.NeedsDisplay = true;
         };
+
+        UpdateMaskState();
     }
 
     protected override CGSize MeasurePage(CGSize availableSize)
     {
         var contentWidth = MacTheme.Max(MacTheme.N(960), availableSize.Width);
-        _headerBottom = MacTheme.MeasureHeaderHeight(contentWidth, "DEMO", "Virtualized markdown chat", "A 10k-message chat surface measured ahead of time so only the visible message window is materialized into native AppKit drawing.");
+        _isWideHeroLayout = contentWidth >= 1120;
 
-        _controlsRect = new CGRect(MacTheme.PageMargin, _headerBottom + 18, MacTheme.Min(MacTheme.N(460), contentWidth - MacTheme.PageMargin * 2), 78);
-        _sliderFrame = new CGRect(_controlsRect.X + 16, _controlsRect.Y + 26, _controlsRect.Width - 120, 24);
-        _toggleFrame = new CGRect(_controlsRect.X + 16, _controlsRect.Y + 52, 200, 18);
+        var headerWidth = MacTheme.Min(MacTheme.N(720), contentWidth - MacTheme.PageMargin * 2);
+        var eyebrowHeight = MacTheme.MeasureString(Eyebrow, MacTheme.CreateAttributes(MacTheme.Mono(11), MacTheme.AccentBrush), headerWidth).Height;
+        var titleHeight = MacTheme.MeasureString(Title, MacTheme.CreateAttributes(MacTheme.Serif(24, bold: true), MacTheme.InkBrush, 30), headerWidth).Height;
+        var descriptionHeight = MacTheme.MeasureString(DescriptionText, MacTheme.CreateAttributes(MacTheme.Sans(13), MacTheme.MutedBrush, 19), MacTheme.Min(headerWidth, MacTheme.N(620))).Height;
+        var headerHeight = eyebrowHeight + 4 + titleHeight + 4 + descriptionHeight;
 
-        var shellHeight = MacTheme.Max(MacTheme.N(560), availableSize.Height - _headerBottom - 180);
-        shellHeight = MacTheme.Min(shellHeight, MacTheme.N(860));
-        _shellRect = new CGRect(MacTheme.PageMargin, _controlsRect.Bottom + 18, contentWidth - MacTheme.PageMargin * 2, shellHeight);
+        var controlsWidth = MacTheme.Min(MacTheme.N(420), contentWidth - MacTheme.PageMargin * 2);
+        var heroTop = MacTheme.PageMargin;
+        if (_isWideHeroLayout)
+        {
+            _headerRect = new CGRect(MacTheme.PageMargin, heroTop, headerWidth, headerHeight);
+            _controlsRect = new CGRect(contentWidth - MacTheme.PageMargin - controlsWidth, heroTop + 8, controlsWidth, ControlsCardHeight);
+        }
+        else
+        {
+            _headerRect = new CGRect(MacTheme.PageMargin, heroTop, headerWidth, headerHeight);
+            _controlsRect = new CGRect(MacTheme.PageMargin, _headerRect.Bottom + 12, controlsWidth, ControlsCardHeight);
+        }
+
+        var heroBottom = Math.Max(_headerRect.Bottom, _controlsRect.Bottom);
+        var shellWidth = MacTheme.Min(MacTheme.N(1180), contentWidth - MacTheme.PageMargin * 2);
+        var shellHeight = Math.Clamp(availableSize.Height - heroBottom - 120, 520, 860);
+        _shellRect = new CGRect((contentWidth - shellWidth) / 2, heroBottom + 12, shellWidth, shellHeight);
         _occlusionHeight = MacTheme.N(MarkdownChatModel.GetOcclusionBannerHeight(shellHeight));
+
+        _sliderFrame = new CGRect(_controlsRect.X + 16, _controlsRect.Y + 32, _controlsRect.Width - 112, 24);
+        _widthValueRect = new CGRect(_controlsRect.Right - 78, _controlsRect.Y + 31, 60, 16);
+        _statsRect = new CGRect(_controlsRect.X + 16, _controlsRect.Y + 60, _controlsRect.Width - 32, 16);
 
         var requestedWidth = Math.Round(_widthSlider.DoubleValue);
         var maxChatWidth = MarkdownChatModel.GetMaxChatWidth(_shellRect.Width);
@@ -64,62 +105,130 @@ internal sealed class MarkdownChatPageView : SamplePageView
         _widthSlider.DoubleValue = chatWidth;
 
         var previousFrame = _frame;
-        if (previousFrame is null ||
-            Math.Abs(previousFrame.ChatWidth - chatWidth) > 0.5 ||
-            Math.Abs(previousFrame.OcclusionBannerHeight - _occlusionHeight) > 0.5)
+        var canReuse = previousFrame is not null &&
+                       Math.Abs(previousFrame.ChatWidth - chatWidth) < 0.5 &&
+                       Math.Abs(previousFrame.OcclusionBannerHeight - _occlusionHeight) < 0.5;
+
+        if (!canReuse)
         {
-            var scrollRatio = 0d;
             if (previousFrame is not null)
             {
                 var oldScrollableHeight = Math.Max(0, previousFrame.TotalHeight - _shellRect.Height);
                 if (oldScrollableHeight > 0)
                 {
-                    scrollRatio = _viewport.ContentView.Bounds.Y / oldScrollableHeight;
+                    var ratio = _viewport.ContentView.Bounds.Y / oldScrollableHeight;
+                    _frame = MarkdownChatModel.BuildConversationFrame(_templates, chatWidth, _occlusionHeight);
+                    var newScrollableHeight = Math.Max(0, _frame.TotalHeight - _shellRect.Height);
+                    _pendingScrollOffset = ratio * newScrollableHeight;
+                }
+                else
+                {
+                    _frame = MarkdownChatModel.BuildConversationFrame(_templates, chatWidth, _occlusionHeight);
                 }
             }
-
-            _frame = MarkdownChatModel.BuildConversationFrame(_templates, chatWidth, _occlusionHeight);
-            var newScrollableHeight = Math.Max(0, _frame.TotalHeight - _shellRect.Height);
-            _viewport.ContentView.ScrollToPoint(new CGPoint(0, scrollRatio * newScrollableHeight));
+            else
+            {
+                _frame = MarkdownChatModel.BuildConversationFrame(_templates, chatWidth, _occlusionHeight);
+            }
         }
 
-        _canvas.UpdateFrame(_frame!, _occlusionHeight, _maskToggle.State == NSCellStateValue.On);
+        _frame ??= MarkdownChatModel.BuildConversationFrame(_templates, chatWidth, _occlusionHeight);
         UpdateMaskState();
         return new CGSize(contentWidth, _shellRect.Bottom + MacTheme.PageMargin);
     }
 
     protected override void LayoutPage(CGRect bounds)
     {
+        if (_frame is null)
+        {
+            return;
+        }
+
         _widthSlider.Frame = _sliderFrame;
-        _maskToggle.Frame = _toggleFrame;
         _viewport.Frame = _shellRect;
-        _topMask.Frame = new CGRect(_shellRect.X, _shellRect.Y, _shellRect.Width, _occlusionHeight);
-        _bottomMask.Frame = new CGRect(_shellRect.X, _shellRect.Bottom - _occlusionHeight, _shellRect.Width, _occlusionHeight);
+        _host.UpdateLayout(_frame, _shellRect.Width, _occlusionHeight, _visualizationEnabled);
+
+        var maskLeft = _shellRect.X + (_shellRect.Width - MacTheme.N(_frame.ChatWidth)) / 2;
+        _topMask.Frame = new CGRect(maskLeft, _shellRect.Y, MacTheme.N(_frame.ChatWidth), _occlusionHeight);
+        _bottomMask.Frame = new CGRect(maskLeft, _shellRect.Bottom - _occlusionHeight, MacTheme.N(_frame.ChatWidth), _occlusionHeight);
+
+        var buttonWidth = MacTheme.MeasureString(_maskButton.Title, MacTheme.CreateAttributes(MacTheme.Mono(12, bold: true), MacTheme.InkBrush), 1000).Width + 28;
+        var buttonSize = new CGSize(Math.Min(_topMask.Frame.Width - 24, Math.Max(180, buttonWidth)), 28);
+        _maskButton.Frame = new CGRect(
+            _topMask.Frame.X + (_topMask.Frame.Width - buttonSize.Width) / 2,
+            _topMask.Frame.Y + (_topMask.Frame.Height - buttonSize.Height) / 2,
+            buttonSize.Width,
+            buttonSize.Height);
+
+        if (_pendingScrollOffset is double offset)
+        {
+            _pendingScrollOffset = null;
+            _viewport.ContentView.ScrollToPoint(new CGPoint(0, offset));
+            _viewport.ReflectScrolledClipView(_viewport.ContentView);
+        }
     }
 
     public override void DrawRect(CGRect dirtyRect)
     {
         base.DrawRect(dirtyRect);
         MacTheme.FillRect(Bounds, MacTheme.PageBrush);
-        MacTheme.DrawHeader(Bounds, "DEMO", "Virtualized markdown chat", "A 10k-message chat surface measured ahead of time so only the visible message window is materialized into native AppKit drawing.");
 
-        MacTheme.FillRoundedRect(_controlsRect, MacTheme.CardRadius, MacTheme.PanelBrush, MacTheme.RuleBrush);
-        MacTheme.DrawWrappedString("Chat width", new CGRect(_controlsRect.X + 16, _controlsRect.Y + 8, 90, 14), MacTheme.CreateAttributes(MacTheme.Mono(12), MacTheme.MutedBrush));
+        DrawHeader();
+        DrawControlsCard();
+        MacTheme.FillRoundedRect(_shellRect, 18, MacTheme.ChatBackgroundBrush);
+    }
+
+    private void DrawHeader()
+    {
+        var eyebrowRect = new CGRect(_headerRect.X, _headerRect.Y, _headerRect.Width, 14);
+        MacTheme.DrawWrappedString(Eyebrow, eyebrowRect, MacTheme.CreateAttributes(MacTheme.Mono(11), MacTheme.AccentBrush));
+
+        var titleY = eyebrowRect.Bottom + 4;
+        var titleRect = new CGRect(_headerRect.X, titleY, _headerRect.Width, 60);
+        MacTheme.DrawWrappedString(Title, titleRect, MacTheme.CreateAttributes(MacTheme.Serif(24, bold: true), MacTheme.InkBrush, 30));
+
+        var descriptionY = titleY + MacTheme.MeasureString(Title, MacTheme.CreateAttributes(MacTheme.Serif(24, bold: true), MacTheme.InkBrush, 30), _headerRect.Width).Height + 4;
+        var descriptionRect = new CGRect(_headerRect.X, descriptionY, MacTheme.Min(_headerRect.Width, MacTheme.N(620)), _headerRect.Height);
+        MacTheme.DrawWrappedString(DescriptionText, descriptionRect, MacTheme.CreateAttributes(MacTheme.Sans(13), MacTheme.MutedBrush, 19));
+    }
+
+    private void DrawControlsCard()
+    {
+        MacTheme.FillRoundedRect(_controlsRect, 14, MacTheme.Color(0x3A, 0x40, 0x48), MacTheme.Color(0x56, 0x5C, 0x66));
+        MacTheme.DrawWrappedString("Chat width", new CGRect(_controlsRect.X + 16, _controlsRect.Y + 12, 90, 14), MacTheme.CreateAttributes(MacTheme.Mono(11), MacTheme.MutedBrush));
+
         if (_frame is not null)
         {
-            MacTheme.DrawWrappedString(MacTheme.FormatPixels(_frame.ChatWidth), new CGRect(_controlsRect.Right - 76, _controlsRect.Y + 8, 60, 14), MacTheme.CreateAttributes(MacTheme.Mono(12), MacTheme.AccentBrush));
-            MacTheme.DrawWrappedString($"10k messages · visible window only · canvas height {Math.Round(_frame.TotalHeight):N0}px", new CGRect(_controlsRect.X + 16, _controlsRect.Y + 30, _controlsRect.Width - 32, 16), MacTheme.CreateAttributes(MacTheme.Sans(12), MacTheme.MutedBrush));
+            MacTheme.DrawWrappedString(MacTheme.FormatPixels(_frame.ChatWidth), _widthValueRect, MacTheme.CreateAttributes(MacTheme.Sans(13, bold: true), MacTheme.Color(0xCF, 0xD7, 0xE1), alignment: NSTextAlignment.Right));
+            MacTheme.DrawWrappedString($"10k messages · visible window only · canvas height {Math.Round(_frame.TotalHeight):N0}px", _statsRect, MacTheme.CreateAttributes(MacTheme.Sans(12), MacTheme.Color(0xCF, 0xD7, 0xE1)));
         }
-
-        MacTheme.FillRoundedRect(_shellRect, 18, MacTheme.ChatBackgroundBrush);
     }
 
     private void UpdateMaskState()
     {
-        var active = _maskToggle.State == NSCellStateValue.On;
-        var alpha = active ? (byte)0x9C : (byte)0xF2;
+        var alpha = _visualizationEnabled ? (byte)0x9C : (byte)0xF2;
         _topMask.FillColor = MacTheme.Color(0x33, 0x37, 0x40, alpha);
         _bottomMask.FillColor = MacTheme.Color(0x33, 0x37, 0x40, alpha);
+        _maskButton.Title = _visualizationEnabled ? "Hide virtualization mask" : "Show virtualization mask";
+    }
+
+    private sealed class MarkdownChatHostView(MarkdownChatCanvasView canvas) : NSView
+    {
+        private readonly MarkdownChatCanvasView _canvas = canvas;
+
+        public override bool IsFlipped => true;
+
+        public void UpdateLayout(ConversationFrame frame, nfloat viewportWidth, nfloat occlusionHeight, bool showMask)
+        {
+            SetFrameSize(new CGSize(viewportWidth, MacTheme.N(frame.TotalHeight)));
+            _canvas.UpdateFrame(frame, occlusionHeight, showMask);
+            if (_canvas.Superview is null)
+            {
+                AddSubview(_canvas);
+            }
+
+            _canvas.Frame = new CGRect((viewportWidth - MacTheme.N(frame.ChatWidth)) / 2, 0, MacTheme.N(frame.ChatWidth), MacTheme.N(frame.TotalHeight));
+        }
     }
 
     private sealed class MaskOverlayView : NSView
