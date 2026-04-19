@@ -6,7 +6,7 @@ internal sealed class SampleShellView : NSView
     private static readonly nfloat SidebarButtonHeight = 34;
     private static readonly nfloat SidebarGap = 8;
 
-    private readonly NSView _sidebar = new();
+    private readonly NSView _sidebar = new FlippedContainerView();
     private readonly NSScrollView _contentScroll = new()
     {
         HasVerticalScroller = true,
@@ -42,7 +42,8 @@ internal sealed class SampleShellView : NSView
         AddSubview(_contentScroll);
 
         BuildSidebar();
-        ShowSample("overview");
+        var initialTag = Environment.GetEnvironmentVariable("PRETEXT_SAMPLE_TAG");
+        ShowSample(string.IsNullOrWhiteSpace(initialTag) ? "overview" : initialTag);
     }
 
     public override bool IsFlipped => true;
@@ -118,5 +119,10 @@ internal sealed class SampleShellView : NSView
         {
             pair.Value.State = pair.Key == tag ? NSCellStateValue.On : NSCellStateValue.Off;
         }
+    }
+
+    private sealed class FlippedContainerView : NSView
+    {
+        public override bool IsFlipped => true;
     }
 }
