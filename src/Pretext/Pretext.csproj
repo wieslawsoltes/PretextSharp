@@ -8,13 +8,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>Pretext</PackageId>
     <Title>Pretext</Title>
-    <Description>Universal text preparation and line layout for any SkiaSharp-based UI, with grapheme-aware wrapping, locale-aware segmentation, bidi support, and streaming line walking.</Description>
-    <PackageTags>skiasharp;text-layout;line-breaking;word-wrap;unicode;bidi;typography;text-measurement;text-rendering</PackageTags>
-    <PackageReleaseNotes>Initial public packaging of the Pretext text preparation and layout engine.</PackageReleaseNotes>
+    <Description>Universal text preparation and line layout engine with grapheme-aware wrapping, locale-aware segmentation, bidi support, and pluggable text measurement backends.</Description>
+    <PackageTags>text-layout;line-breaking;word-wrap;unicode;bidi;typography;text-measurement;text-rendering</PackageTags>
+    <PackageReleaseNotes>Split text measurement behind backend contracts and added pluggable graphics integrations.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" />
+    <ProjectReference Include="..\Pretext.Contracts\Pretext.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461'">
@@ -23,5 +23,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" />
+    <PackageReference Include="System.ValueTuple" />
   </ItemGroup>
 </Project>

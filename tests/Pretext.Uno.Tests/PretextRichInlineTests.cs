@@ -10,13 +10,13 @@ public sealed class PretextRichInlineTests : IDisposable
 
     public PretextRichInlineTests()
     {
-        PretextLayout.SetMeasurementOverrideForTests(PretextLayoutParityTests_Accessor.MeasureWidth);
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(PretextLayoutParityTests_Accessor.MeasureWidth));
         PretextLayout.ClearCache();
     }
 
     public void Dispose()
     {
-        PretextLayout.SetMeasurementOverrideForTests(null);
+        PretextLayout.SetTextMeasurerFactory(null);
         PretextLayout.ClearCache();
     }
 

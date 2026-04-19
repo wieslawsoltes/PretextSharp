@@ -180,7 +180,6 @@ public static partial class PretextLayout
     private static readonly object FontStateGate = new();
     private static ConditionalWeakTable<PreparedTextWithSegments, SegmentTextCache> _segmentTextCaches = new();
     private static string? _locale;
-    private static Func<string, string, double>? _measureTextOverride;
     private static EngineProfile? _cachedEngineProfile;
 
     public static PreparedText Prepare(string text, string font, PrepareOptions? options = null)
@@ -325,12 +324,6 @@ public static partial class PretextLayout
     public static void SetLocale(string? locale = null)
     {
         _locale = locale;
-        ClearCache();
-    }
-
-    internal static void SetMeasurementOverrideForTests(Func<string, string, double>? measureText)
-    {
-        _measureTextOverride = measureText;
         ClearCache();
     }
 

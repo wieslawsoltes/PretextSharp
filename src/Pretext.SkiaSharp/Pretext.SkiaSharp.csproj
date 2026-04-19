@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461;net6.0;net8.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Pretext.SkiaSharp</PackageId>
+    <Title>Pretext.SkiaSharp</Title>
+    <Description>SkiaSharp text measurement backend for Pretext.</Description>
+    <PackageTags>skiasharp;text-layout;text-measurement;typography;graphics-backend</PackageTags>
+    <PackageReleaseNotes>Initial SkiaSharp backend package for Pretext.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pretext.Contracts\Pretext.Contracts.csproj" />
+    <PackageReference Include="SkiaSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" />
+  </ItemGroup>
+</Project>
