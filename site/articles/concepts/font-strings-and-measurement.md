@@ -4,9 +4,9 @@ title: "Font Strings and Measurement"
 
 # Font Strings and Measurement
 
-Every preparation API takes a `font` string. The parser accepts a CSS-like subset and maps it into the SkiaSharp font state used for measurement.
+Every preparation API takes a `font` string. The active measurement backend decides how to interpret that string, but the first-party backends share one parser from `Pretext.Contracts`.
 
-## Accepted format
+## Accepted format in the first-party backends
 
 The parser looks for:
 
@@ -30,20 +30,20 @@ Examples:
 | Token | Effect |
 | --- | --- |
 | `bold` | weight `700` |
-| numeric weight such as `500` or `700` | mapped to normal, medium, or bold Skia font weight |
+| numeric weight such as `500` or `700` | mapped to backend-specific weight values |
 | `italic` or `oblique` | italic slant |
 
 ## Family fallback rules
 
-If the primary family is a generic CSS family, `Pretext` maps it to a concrete desktop fallback:
+If the primary family is a generic CSS family, the first-party backends map it to a concrete platform fallback:
 
 | Input family | Effective family |
 | --- | --- |
-| `sans-serif`, `system-ui` | `Arial` |
-| `serif` | `Times New Roman` |
-| `monospace`, `ui-monospace` | `Menlo` |
+| `sans-serif`, `system-ui` | backend-specific sans-serif fallback |
+| `serif` | backend-specific serif fallback |
+| `monospace`, `ui-monospace` | backend-specific monospace fallback |
 
-If the parser cannot find a valid size, it falls back to `16px Arial`.
+If the parser cannot find a valid size, it falls back to `16px` with the backend's default sans-serif family.
 
 ## What is not parsed
 
@@ -56,12 +56,19 @@ If a `/line-height` segment appears after the size, it is ignored by the parser.
 
 ## Measurement model
 
-`Pretext` measures through SkiaSharp and stores:
+`Pretext` stores:
 
 - width of each prepared segment
 - discretionary hyphen width
 - tab stop advance, based on eight space widths
 - per-grapheme break widths for breakable runs
+
+When you use one of the first-party backends, widths come from that backend's native or renderer-specific text stack:
+
+- `Pretext.DirectWrite` on Windows
+- `Pretext.FreeType` on Linux
+- `Pretext.CoreText` on macOS
+- `Pretext.SkiaSharp` as the portable fallback
 
 Because line height is caller-supplied, you stay in control of:
 

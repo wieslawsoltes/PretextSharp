@@ -4,7 +4,12 @@ title: "Using Pretext in Any SkiaSharp Host"
 
 # Using Pretext in Any SkiaSharp Host
 
-The core `Pretext` package does not depend on Uno. If your host can measure and draw text through SkiaSharp, the integration pattern stays the same.
+The core `Pretext` package does not depend on Uno or a specific renderer. In a generic SkiaSharp host, add `Pretext.SkiaSharp` so the engine can discover the first-party SkiaSharp measurement backend automatically.
+
+```bash
+dotnet add package Pretext
+dotnet add package Pretext.SkiaSharp
+```
 
 ## Generic host pattern
 

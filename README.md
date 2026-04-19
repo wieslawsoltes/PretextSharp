@@ -8,7 +8,7 @@
 ![SkiaSharp 3.119.1](https://img.shields.io/badge/SkiaSharp-3.119.1-16A34A)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Universal text preparation and line layout for any SkiaSharp-based UI, with grapheme-aware wrapping, locale-aware segmentation, bidi support, and streaming line walking.
+Universal text preparation and line layout with grapheme-aware wrapping, locale-aware segmentation, bidi support, and pluggable text-measurement backends.
 
 The core `Pretext` package targets `netstandard2.0`, `net461`, `net6.0`, `net8.0`, and `net10.0`. The `Pretext.Uno` companion package and sample app remain `net10.0-desktop`.
 
@@ -30,7 +30,12 @@ Key documentation:
 
 | Package Name | NuGet | Downloads | Description |
 | --- | --- | --- | --- |
-| `Pretext` | [![NuGet](https://img.shields.io/nuget/v/Pretext.svg)](https://www.nuget.org/packages/Pretext) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.svg)](https://www.nuget.org/packages/Pretext) | Universal text preparation and line layout engine for any SkiaSharp-based UI. |
+| `Pretext` | [![NuGet](https://img.shields.io/nuget/v/Pretext.svg)](https://www.nuget.org/packages/Pretext) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.svg)](https://www.nuget.org/packages/Pretext) | Backend-agnostic text preparation and line layout engine. |
+| `Pretext.Contracts` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | Contracts for implementing custom text-measurement backends. |
+| `Pretext.DirectWrite` | [![NuGet](https://img.shields.io/nuget/v/Pretext.DirectWrite.svg)](https://www.nuget.org/packages/Pretext.DirectWrite) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.DirectWrite.svg)](https://www.nuget.org/packages/Pretext.DirectWrite) | First-party DirectWrite backend for Windows hosts. |
+| `Pretext.FreeType` | [![NuGet](https://img.shields.io/nuget/v/Pretext.FreeType.svg)](https://www.nuget.org/packages/Pretext.FreeType) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.FreeType.svg)](https://www.nuget.org/packages/Pretext.FreeType) | First-party FreeType + Fontconfig backend for Linux hosts. |
+| `Pretext.CoreText` | [![NuGet](https://img.shields.io/nuget/v/Pretext.CoreText.svg)](https://www.nuget.org/packages/Pretext.CoreText) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.CoreText.svg)](https://www.nuget.org/packages/Pretext.CoreText) | First-party CoreText backend for macOS hosts. |
+| `Pretext.SkiaSharp` | [![NuGet](https://img.shields.io/nuget/v/Pretext.SkiaSharp.svg)](https://www.nuget.org/packages/Pretext.SkiaSharp) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.SkiaSharp.svg)](https://www.nuget.org/packages/Pretext.SkiaSharp) | First-party SkiaSharp backend for `Pretext`. |
 | `Pretext.Uno` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Uno.svg)](https://www.nuget.org/packages/Pretext.Uno) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Uno.svg)](https://www.nuget.org/packages/Pretext.Uno) | Uno-specific controls and obstacle-aware layout helpers built on top of `Pretext`. |
 
 ## Features
@@ -44,7 +49,8 @@ Key documentation:
 - Support `WordBreakMode.KeepAll` for CJK-focused no-space wrapping behavior.
 - Build rich inline flows with `PrepareRichInline`, `WalkRichInlineLineRanges`, and `MaterializeRichInlineLineRange`.
 - Support multilingual text with locale-aware segmentation on desktop targets and bidi-aware segment levels.
-- Depend only on `SkiaSharp` in the core library so the package can be used outside Uno as well.
+- Keep the core library graphics-backend agnostic through `Pretext.Contracts`.
+- Ship first-party native backends for Windows (`Pretext.DirectWrite`), Linux (`Pretext.FreeType`), and macOS (`Pretext.CoreText`), plus the portable `Pretext.SkiaSharp` fallback backend.
 - Ship with a published `Pretext.Uno` companion library for reusable Uno host controls and obstacle-aware flow helpers.
 - Ship with deterministic parity tests and a Uno sample app that demonstrates bubbles, masonry, editorial, justification, rich-inline, and virtualized markdown chat layouts.
 
@@ -83,10 +89,19 @@ Key documentation:
 
 ## Quick Start
 
-Install from NuGet:
+Install the engine plus one or more backends:
 
 ```bash
 dotnet add package Pretext
+dotnet add package Pretext.SkiaSharp
+```
+
+Optional host-native backends:
+
+```bash
+dotnet add package Pretext.DirectWrite   # Windows
+dotnet add package Pretext.FreeType      # Linux
+dotnet add package Pretext.CoreText      # macOS
 ```
 
 Supported target frameworks for the core package:
@@ -121,7 +136,7 @@ foreach (var line in lines.Lines)
 
 If the prepared text is empty after normalization, `Layout` returns `new LayoutResult(0, 0)`. If a container in your UI must still reserve one visual row, clamp with `Math.Max(1, metrics.LineCount)` in the caller instead of expecting `Pretext` to synthesize a blank line.
 
-The core package exposes the `Pretext` namespace and is not tied to Uno. Use it anywhere you use SkiaSharp.
+The core package exposes the `Pretext` namespace and is not tied to Uno. Add one or more backend packages in non-Uno hosts so measurement can be provided automatically. When multiple first-party backends are referenced, `Pretext` prefers the host-native backend on its matching OS and falls back to `Pretext.SkiaSharp` otherwise.
 
 The `font` argument is a CSS-like subset such as `16px Inter`, `italic 16px Georgia`, or `700 18px "IBM Plex Sans"`. Line height is supplied separately to layout calls.
 
@@ -168,7 +183,7 @@ Install the Uno companion package when you want the reusable Uno-specific helper
 dotnet add package Pretext.Uno
 ```
 
-It brings the `Pretext` core package transitively and exposes:
+It brings `Pretext`, `Pretext.Contracts`, `Pretext.SkiaSharp`, `Pretext.DirectWrite`, `Pretext.FreeType`, and `Pretext.CoreText` transitively, then lets backend discovery choose the best supported backend for the current OS. It exposes:
 
 - `Pretext.PretextLayout`
 - `Pretext.Uno.Controls.StretchScrollHost`
@@ -210,7 +225,12 @@ dotnet run --project samples/PretextSamples/PretextSamples.csproj -f net10.0-des
 ```bash
 dotnet build PretextSamples.slnx
 dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
+dotnet pack src/Pretext.Contracts/Pretext.Contracts.csproj -c Release
 dotnet pack src/Pretext/Pretext.csproj -c Release
+dotnet pack src/Pretext.DirectWrite/Pretext.DirectWrite.csproj -c Release
+dotnet pack src/Pretext.FreeType/Pretext.FreeType.csproj -c Release
+dotnet pack src/Pretext.CoreText/Pretext.CoreText.csproj -c Release
+dotnet pack src/Pretext.SkiaSharp/Pretext.SkiaSharp.csproj -c Release
 dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release
 ```
 
@@ -228,14 +248,19 @@ The docs cover:
 - installation and namespace/package selection
 - font strings, measurement, and prepared-text lifecycle
 - whitespace and break behavior, locale-aware segmentation, and bidi
-- practical Uno and generic SkiaSharp integration patterns
+- practical Uno, native host, and generic SkiaSharp integration patterns
 - full reference coverage for the public core API and `Pretext.Uno` helpers
 
 ## Project Structure
 
 ```text
 src/
+  Pretext.Contracts/
   Pretext/
+  Pretext.DirectWrite/
+  Pretext.FreeType/
+  Pretext.CoreText/
+  Pretext.SkiaSharp/
   Pretext.Uno/
 tests/
   Pretext.Uno.Tests/
@@ -246,7 +271,7 @@ site/
 
 ## Attribution
 
-The core Pretext implementation in this repository is ported from the original [pretext](https://github.com/chenglou/pretext) project by [Cheng Lou](https://github.com/chenglou). This repository adapts that work to .NET, SkiaSharp, packaging, tests, samples, and companion Uno helpers.
+The core Pretext implementation in this repository is ported from the original [pretext](https://github.com/chenglou/pretext) project by [Cheng Lou](https://github.com/chenglou). This repository adapts that work to .NET, native and SkiaSharp backends, packaging, tests, samples, and companion Uno helpers.
 
 ## License
 
