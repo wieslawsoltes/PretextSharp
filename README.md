@@ -210,9 +210,12 @@ It brings `Pretext`, `Pretext.Layout`, `Pretext.Contracts`, `Pretext.SkiaSharp`,
 - `Pretext.Uno.Controls.StretchScrollHost`
 - `Pretext.Uno.Controls.UiRenderScheduler`
 
-## Sample App
+## Sample Apps
 
-The sample app lives in `samples/PretextSamples` and demonstrates the library in visually different layouts. It uses Uno Platform, exercises the core `Pretext` APIs together with the `Pretext.Uno` companion helpers, and keeps only sample-specific UI/theme code in the sample tree.
+The sample hosts share reusable data, prepared-model logic, and sample assets through `samples/PretextSamples.Shared`.
+
+- `samples/PretextSamples` uses Uno Platform and `Pretext.Uno`
+- `samples/PretextSamples.MacOS` uses native AppKit on `net10.0-macos` and binds `Pretext` explicitly to `Pretext.CoreText`
 
 - Overview
 - Accordion
@@ -225,10 +228,16 @@ The sample app lives in `samples/PretextSamples` and demonstrates the library in
 - Justification Comparison
 - Variable ASCII
 
-Run it with:
+Run the Uno host with:
 
 ```bash
 dotnet run --project samples/PretextSamples/PretextSamples.csproj -f net10.0-desktop
+```
+
+Run the native macOS host with:
+
+```bash
+dotnet run --project samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj -f net10.0-macos
 ```
 
 ## Building
@@ -242,6 +251,7 @@ dotnet run --project samples/PretextSamples/PretextSamples.csproj -f net10.0-des
 
 ```bash
 dotnet build PretextSamples.slnx
+dotnet build samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj
 dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
 dotnet pack src/Pretext.Contracts/Pretext.Contracts.csproj -c Release
 dotnet pack src/Pretext/Pretext.csproj -c Release
@@ -286,6 +296,8 @@ tests/
   Pretext.Uno.Tests/
 samples/
   PretextSamples/
+  PretextSamples.Shared/
+  PretextSamples.MacOS/
 site/
 ```
 

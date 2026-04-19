@@ -20,6 +20,10 @@
   <Project Path="samples/PretextSamples/PretextSamples.csproj">
     <Deploy />
   </Project>
+  <Project Path="samples/PretextSamples.Shared/PretextSamples.Shared.csproj" />
+  <Project Path="samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj">
+    <Deploy />
+  </Project>
   <Project Path="src/Pretext.Contracts/Pretext.Contracts.csproj" />
   <Project Path="src/Pretext/Pretext.csproj" />
   <Project Path="src/Pretext.Layout/Pretext.Layout.csproj" />
