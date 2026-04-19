@@ -41,14 +41,14 @@ Size MeasureBubble(double maxWidth, double lineHeight, Thickness padding)
 
 ## Companion helpers
 
-The `Pretext.Uno` package in this repository adds reusable helpers around the core engine:
+The companion packages in this repository add reusable helpers around the core engine:
 
 - `StretchScrollHost` for page-like scrollable samples and viewport calculations
 - `UiRenderScheduler` for coalesced redraw scheduling on `DispatcherQueue`
 - `PreparedTextMetrics` for wrap metrics and tight-width calculations
 - `ColumnFlowLayout` and `ObstacleLayoutHelper` for flowing lines into constrained regions
 
-Use them when they match your layout model, but keep the core `Pretext` API as the main dependency.
+`StretchScrollHost` and `UiRenderScheduler` live in `Pretext.Uno`. The layout helpers now live in `Pretext.Layout`, which `Pretext.Uno` brings transitively for Uno apps. Use them when they match your layout model, but keep the core `Pretext` API as the main dependency.
 
 ## Uno-specific advice
 

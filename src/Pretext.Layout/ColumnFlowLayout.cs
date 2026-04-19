@@ -1,4 +1,4 @@
-namespace Pretext.Uno.Layout;
+namespace Pretext.Layout;
 
 public static class ColumnFlowLayout
 {

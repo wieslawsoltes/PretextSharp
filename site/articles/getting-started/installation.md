@@ -44,27 +44,43 @@ The core `Pretext` package targets:
 
 `Pretext.Contracts` is available when you want to implement a custom measurement backend instead of using one of the first-party backends.
 
+## Platform-neutral helper package
+
+```bash
+dotnet add package Pretext.Layout
+```
+
+Import the helper namespace when you want the wrap-metric and obstacle-layout utilities without any Uno dependency:
+
+```csharp
+using Pretext.Layout;
+```
+
+Use `Pretext.Layout` when you want:
+
+- `PreparedTextMetrics`
+- `ColumnFlowLayout`
+- `ObstacleLayoutHelper`
+- geometry primitives such as `RectObstacle`, `CircleObstacle`, and `Interval`
+
 ## Uno companion
 
 ```bash
 dotnet add package Pretext.Uno
 ```
 
-`Pretext.Uno` depends on `Pretext` and all first-party backends, so the core engine and the host-native/portable backend set are brought in transitively. The companion package itself remains `net10.0-desktop`. Backend discovery then prefers the native backend for the current OS and falls back to `Pretext.SkiaSharp` when needed. Import the core namespace and whichever companion namespaces you want:
+`Pretext.Uno` depends on `Pretext`, `Pretext.Layout`, and the first-party backend packages, so the core engine, helper layer, and host-native/portable backend set are brought in transitively. The companion package itself remains `net10.0-desktop`. Backend discovery then prefers the native backend for the current OS and falls back to `Pretext.SkiaSharp` when needed. Import the core namespace and whichever companion namespaces you want:
 
 ```csharp
 using Pretext;
+using Pretext.Layout;
 using Pretext.Uno.Controls;
-using Pretext.Uno.Layout;
 ```
 
-Use the companion package when you want the reusable Uno-side helpers from this repository:
+Use the companion package when you want the reusable Uno-side controls from this repository:
 
 - `StretchScrollHost`
 - `UiRenderScheduler`
-- `PreparedTextMetrics`
-- `ColumnFlowLayout`
-- `ObstacleLayoutHelper`
 
 ## Font string format
 
@@ -93,6 +109,7 @@ dotnet build PretextSamples.slnx
 dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
 dotnet pack src/Pretext.Contracts/Pretext.Contracts.csproj -c Release
 dotnet pack src/Pretext/Pretext.csproj -c Release
+dotnet pack src/Pretext.Layout/Pretext.Layout.csproj -c Release
 dotnet pack src/Pretext.DirectWrite/Pretext.DirectWrite.csproj -c Release
 dotnet pack src/Pretext.FreeType/Pretext.FreeType.csproj -c Release
 dotnet pack src/Pretext.CoreText/Pretext.CoreText.csproj -c Release

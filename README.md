@@ -24,7 +24,7 @@ Key documentation:
 - [Prepared Text Lifecycle](https://wieslawsoltes.github.io/PretextSharp/articles/concepts/prepared-text-lifecycle/)
 - [Public Types and Operations](https://wieslawsoltes.github.io/PretextSharp/articles/reference/public-types-and-operations/)
 - [Rich Inline API](https://wieslawsoltes.github.io/PretextSharp/articles/reference/rich-inline-api/)
-- [Pretext.Uno Helpers](https://wieslawsoltes.github.io/PretextSharp/articles/reference/pretext-uno-helpers/)
+- [Companion Helpers](https://wieslawsoltes.github.io/PretextSharp/articles/reference/pretext-uno-helpers/)
 
 ## NuGet Packages
 
@@ -32,11 +32,12 @@ Key documentation:
 | --- | --- | --- | --- |
 | `Pretext` | [![NuGet](https://img.shields.io/nuget/v/Pretext.svg)](https://www.nuget.org/packages/Pretext) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.svg)](https://www.nuget.org/packages/Pretext) | Backend-agnostic text preparation and line layout engine. |
 | `Pretext.Contracts` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | Contracts for implementing custom text-measurement backends. |
+| `Pretext.Layout` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Layout.svg)](https://www.nuget.org/packages/Pretext.Layout) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Layout.svg)](https://www.nuget.org/packages/Pretext.Layout) | Platform-neutral wrap and obstacle-layout helpers built on top of `Pretext`. |
 | `Pretext.DirectWrite` | [![NuGet](https://img.shields.io/nuget/v/Pretext.DirectWrite.svg)](https://www.nuget.org/packages/Pretext.DirectWrite) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.DirectWrite.svg)](https://www.nuget.org/packages/Pretext.DirectWrite) | First-party DirectWrite backend for Windows hosts. |
 | `Pretext.FreeType` | [![NuGet](https://img.shields.io/nuget/v/Pretext.FreeType.svg)](https://www.nuget.org/packages/Pretext.FreeType) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.FreeType.svg)](https://www.nuget.org/packages/Pretext.FreeType) | First-party FreeType + Fontconfig backend for Linux hosts. |
 | `Pretext.CoreText` | [![NuGet](https://img.shields.io/nuget/v/Pretext.CoreText.svg)](https://www.nuget.org/packages/Pretext.CoreText) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.CoreText.svg)](https://www.nuget.org/packages/Pretext.CoreText) | First-party CoreText backend for macOS hosts. |
 | `Pretext.SkiaSharp` | [![NuGet](https://img.shields.io/nuget/v/Pretext.SkiaSharp.svg)](https://www.nuget.org/packages/Pretext.SkiaSharp) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.SkiaSharp.svg)](https://www.nuget.org/packages/Pretext.SkiaSharp) | First-party SkiaSharp backend for `Pretext`. |
-| `Pretext.Uno` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Uno.svg)](https://www.nuget.org/packages/Pretext.Uno) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Uno.svg)](https://www.nuget.org/packages/Pretext.Uno) | Uno-specific controls and obstacle-aware layout helpers built on top of `Pretext`. |
+| `Pretext.Uno` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Uno.svg)](https://www.nuget.org/packages/Pretext.Uno) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Uno.svg)](https://www.nuget.org/packages/Pretext.Uno) | Uno-specific controls and render scheduling helpers built on top of `Pretext`. |
 
 ## Features
 
@@ -51,7 +52,8 @@ Key documentation:
 - Support multilingual text with locale-aware segmentation on desktop targets and bidi-aware segment levels.
 - Keep the core library graphics-backend agnostic through `Pretext.Contracts`.
 - Ship first-party native backends for Windows (`Pretext.DirectWrite`), Linux (`Pretext.FreeType`), and macOS (`Pretext.CoreText`), plus the portable `Pretext.SkiaSharp` fallback backend.
-- Ship with a published `Pretext.Uno` companion library for reusable Uno host controls and obstacle-aware flow helpers.
+- Ship with a published `Pretext.Layout` helper library for platform-neutral wrap and obstacle-layout workflows.
+- Ship with a published `Pretext.Uno` companion library for reusable Uno host controls and render scheduling helpers.
 - Ship with deterministic parity tests and a Uno sample app that demonstrates bubbles, masonry, editorial, justification, rich-inline, and virtualized markdown chat layouts.
 
 ## Core API
@@ -175,6 +177,22 @@ PretextLayout.WalkRichInlineLineRanges(flow, 180, line =>
 });
 ```
 
+## Companion Packages
+
+Install the platform-neutral layout-helper package when you want reusable wrap-metric and obstacle-flow helpers outside Uno as well:
+
+```bash
+dotnet add package Pretext.Layout
+```
+
+It exposes:
+
+- `Pretext.Layout.PreparedTextMetrics`
+- `Pretext.Layout.ColumnFlowLayout`
+- `Pretext.Layout.ObstacleLayoutHelper`
+- `Pretext.Layout.WrapMetrics`
+- `Pretext.Layout.PositionedLine`
+
 ## Uno Companion
 
 Install the Uno companion package when you want the reusable Uno-specific helpers on top of the core engine:
@@ -183,14 +201,14 @@ Install the Uno companion package when you want the reusable Uno-specific helper
 dotnet add package Pretext.Uno
 ```
 
-It brings `Pretext`, `Pretext.Contracts`, `Pretext.SkiaSharp`, `Pretext.DirectWrite`, `Pretext.FreeType`, and `Pretext.CoreText` transitively, then lets backend discovery choose the best supported backend for the current OS. It exposes:
+It brings `Pretext`, `Pretext.Layout`, `Pretext.Contracts`, `Pretext.SkiaSharp`, `Pretext.DirectWrite`, `Pretext.FreeType`, and `Pretext.CoreText` transitively, then lets backend discovery choose the best supported backend for the current OS. It exposes:
 
 - `Pretext.PretextLayout`
+- `Pretext.Layout.PreparedTextMetrics`
+- `Pretext.Layout.ColumnFlowLayout`
+- `Pretext.Layout.ObstacleLayoutHelper`
 - `Pretext.Uno.Controls.StretchScrollHost`
 - `Pretext.Uno.Controls.UiRenderScheduler`
-- `Pretext.Uno.Layout.PreparedTextMetrics`
-- `Pretext.Uno.Layout.ColumnFlowLayout`
-- `Pretext.Uno.Layout.ObstacleLayoutHelper`
 
 ## Sample App
 
@@ -227,6 +245,7 @@ dotnet build PretextSamples.slnx
 dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
 dotnet pack src/Pretext.Contracts/Pretext.Contracts.csproj -c Release
 dotnet pack src/Pretext/Pretext.csproj -c Release
+dotnet pack src/Pretext.Layout/Pretext.Layout.csproj -c Release
 dotnet pack src/Pretext.DirectWrite/Pretext.DirectWrite.csproj -c Release
 dotnet pack src/Pretext.FreeType/Pretext.FreeType.csproj -c Release
 dotnet pack src/Pretext.CoreText/Pretext.CoreText.csproj -c Release
@@ -249,7 +268,7 @@ The docs cover:
 - font strings, measurement, and prepared-text lifecycle
 - whitespace and break behavior, locale-aware segmentation, and bidi
 - practical Uno, native host, and generic SkiaSharp integration patterns
-- full reference coverage for the public core API and `Pretext.Uno` helpers
+- full reference coverage for the public core API and companion helper packages
 
 ## Project Structure
 
@@ -257,6 +276,7 @@ The docs cover:
 src/
   Pretext.Contracts/
   Pretext/
+  Pretext.Layout/
   Pretext.DirectWrite/
   Pretext.FreeType/
   Pretext.CoreText/

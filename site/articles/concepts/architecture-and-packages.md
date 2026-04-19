@@ -10,11 +10,12 @@ The repository has these main parts:
 | --- | --- |
 | `src/Pretext.Contracts` | Packable contract library for backend implementations |
 | `src/Pretext` | Packable library with the preparation, measurement, bidi, and layout pipeline |
+| `src/Pretext.Layout` | Packable platform-neutral wrap and obstacle-layout helper library |
 | `src/Pretext.DirectWrite` | Packable Windows DirectWrite measurement backend |
 | `src/Pretext.FreeType` | Packable Linux FreeType + Fontconfig measurement backend |
 | `src/Pretext.CoreText` | Packable macOS CoreText measurement backend |
 | `src/Pretext.SkiaSharp` | Packable SkiaSharp measurement backend |
-| `src/Pretext.Uno` | Uno companion library with reusable host controls and obstacle-aware flow/layout helpers |
+| `src/Pretext.Uno` | Uno companion library with reusable host controls and render scheduling helpers |
 | `tests/Pretext.Uno.Tests` | Deterministic tests covering segmentation, wrapping, pre-wrap behavior, bidi, and line walking |
 | `samples/PretextSamples` | Uno sample app that exercises the library in visually different layouts |
 
@@ -22,11 +23,12 @@ The repository has these main parts:
 
 - `Pretext` publishes the core engine from `src/Pretext` and exposes the `Pretext` namespace.
 - `Pretext.Contracts` publishes the public contracts for custom measurement backends.
+- `Pretext.Layout` publishes the platform-neutral helper layer built on top of `Pretext`.
 - `Pretext.DirectWrite` publishes the first-party Windows-native backend.
 - `Pretext.FreeType` publishes the first-party Linux-native backend.
 - `Pretext.CoreText` publishes the first-party macOS-native backend.
 - `Pretext.SkiaSharp` publishes the first-party SkiaSharp backend.
-- `Pretext.Uno` publishes the Uno-specific controls and helpers from `src/Pretext.Uno`.
+- `Pretext.Uno` publishes the Uno-specific controls from `src/Pretext.Uno`.
 - The sample app references the same core, backend, and Uno-layer APIs that ship in the published packages.
 
 ## Pipeline shape
@@ -81,3 +83,4 @@ This architecture gives you deterministic behavior across host controls:
 - you can switch between aggregate, materialized, and streaming APIs without changing the prepared data
 - custom containers can reuse the same prepared text as ordinary controls
 - apps can reference multiple backends while the engine auto-selects the best supported one for the current OS
+- apps can reuse `Pretext.Layout` without taking a dependency on Uno Platform

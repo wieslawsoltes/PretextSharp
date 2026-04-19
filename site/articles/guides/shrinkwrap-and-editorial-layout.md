@@ -42,7 +42,7 @@ Both patterns depend on the same property of `Pretext`: width-dependent layout i
 
 ## Related helpers
 
-In the Uno companion package, these helpers support the same patterns:
+In `Pretext.Layout`, these helpers support the same patterns:
 
 - `PreparedTextMetrics`
 - `ColumnFlowLayout`

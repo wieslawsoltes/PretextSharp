@@ -4,7 +4,7 @@ title: "Documentation"
 
 # Documentation
 
-This site documents the reusable `Pretext` layout engine, the optional `Pretext.Uno` companion package, and the sample-app patterns built on top of them.
+This site documents the reusable `Pretext` layout engine, the optional `Pretext.Layout` and `Pretext.Uno` companion packages, and the sample-app patterns built on top of them.
 
 ## Sections
 
@@ -29,6 +29,6 @@ This site documents the reusable `Pretext` layout engine, the optional `Pretext.
 - [Reference](reference)
   - package and namespace map
   - public types, results, and operations
-  - `Pretext.Uno` helpers
+  - companion helper packages
   - scope, limitations, and platform notes
   - docs pipeline and license

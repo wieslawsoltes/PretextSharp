@@ -12,7 +12,7 @@ This section maps the repository and documents the public surface exposed by the
 - [Public Types and Operations](public-types-and-operations)
 - [Prepared Text Types](prepared-text-types)
 - [Rich Inline API](rich-inline-api)
-- [Pretext.Uno Helpers](pretext-uno-helpers)
+- [Companion Helpers](pretext-uno-helpers)
 - [Scope and Limitations](scope-and-limitations)
 - [Lunet Docs Pipeline](lunet-docs-pipeline)
 - [License](license)

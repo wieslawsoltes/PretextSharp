@@ -85,5 +85,5 @@ This page is the top-level map of the public surface. Use the linked pages for d
 
 - [Prepared Text Types](prepared-text-types)
 - [Rich Inline API](rich-inline-api)
-- [Pretext.Uno Helpers](pretext-uno-helpers)
+- [Companion Helpers](pretext-uno-helpers)
 - [Scope and Limitations](scope-and-limitations)

@@ -1,4 +1,4 @@
-namespace Pretext.Uno.Layout;
+namespace Pretext.Layout;
 
 public readonly record struct WrapMetrics(int LineCount, double Height, double MaxLineWidth);
 

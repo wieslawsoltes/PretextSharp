@@ -45,7 +45,7 @@ You still own:
   <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Getting Started</h2><p>Install the packages, learn the font string contract, and build the first useful `Prepare` + `Layout` flow.</p><a href="articles/getting-started" class="btn btn-sm btn-primary">Open section</a></div></div></div>
   <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Concepts</h2><p>Understand the prepared-text lifecycle, whitespace modes, break kinds, locale-aware segmentation, bidi, and line fitting.</p><a href="articles/concepts" class="btn btn-sm btn-primary">Open section</a></div></div></div>
   <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Guides</h2><p>Integrate `Pretext` into Uno, native Windows/Linux/macOS hosts, or any SkiaSharp-based renderer, then reuse the sample app patterns for shrinkwrap, editorial, and obstacle-aware layouts.</p><a href="articles/guides" class="btn btn-sm btn-primary">Open section</a></div></div></div>
-  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Reference</h2><p>Browse every public type and operation, the `Pretext.Uno` companion helpers, platform notes, and repository structure.</p><a href="articles/reference" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Reference</h2><p>Browse every public type and operation, the companion helper packages, platform notes, and repository structure.</p><a href="articles/reference" class="btn btn-sm btn-primary">Open section</a></div></div></div>
 </div>
 
 ## Repository Layout
@@ -54,10 +54,11 @@ You still own:
 | --- | --- |
 | `src/Pretext` | The packable library project containing `PretextLayout` and the text preparation/layout pipeline. |
 | `src/Pretext.Contracts` | Shared backend contracts and first-party font-string parsing helpers. |
+| `src/Pretext.Layout` | Platform-neutral wrap and obstacle-layout helpers built on top of `Pretext`. |
 | `src/Pretext.DirectWrite` | Windows DirectWrite measurement backend. |
 | `src/Pretext.FreeType` | Linux FreeType + Fontconfig measurement backend. |
 | `src/Pretext.CoreText` | macOS CoreText measurement backend. |
-| `src/Pretext.Uno` | The source for the `Pretext.Uno` package, with Uno-specific reusable controls and layout helpers. |
+| `src/Pretext.Uno` | The source for the `Pretext.Uno` package, with Uno-specific reusable controls and render scheduling helpers. |
 | `tests/Pretext.Uno.Tests` | Deterministic parity tests for whitespace handling, break behavior, bidi text, and line walking. |
 | `samples/PretextSamples` | A Uno sample app with layout demos including bubbles, masonry, editorial, and justification views. |
 
@@ -67,11 +68,12 @@ You still own:
 | --- | --- |
 | `Pretext` | Backend-agnostic text preparation and layout engine. |
 | `Pretext.Contracts` | Public backend contracts and shared font parsing. |
+| `Pretext.Layout` | Platform-neutral wrap and obstacle-layout helpers. |
 | `Pretext.DirectWrite` | Windows-native DirectWrite backend. |
 | `Pretext.FreeType` | Linux-native FreeType + Fontconfig backend. |
 | `Pretext.CoreText` | macOS-native CoreText backend. |
 | `Pretext.SkiaSharp` | Portable SkiaSharp backend and fallback. |
-| `Pretext.Uno` | Uno-specific controls and helpers layered on top of `Pretext`. |
+| `Pretext.Uno` | Uno-specific controls layered on top of `Pretext`. |
 
 ## Start With These Pages
 
