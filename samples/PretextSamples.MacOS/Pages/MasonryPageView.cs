@@ -8,6 +8,7 @@ internal sealed class MasonryPageView : SamplePageView
     private const double CardPadding = 16;
     private const double Gap = 12;
     private const double MaxColumnWidth = 400;
+    private const double ViewportOverscan = 200;
 
     private readonly List<(string Text, PreparedText Prepared)> _cards = MasonrySampleData.LoadCards()
         .Select(text => (text, PretextLayout.Prepare(text, CardFont)))
@@ -39,11 +40,30 @@ internal sealed class MasonryPageView : SamplePageView
             return;
         }
 
-        MacTheme.DrawWrappedString($"Showing {_cards.Count} cards", new CGRect(MacTheme.PageMargin, _headerBottom + 2, 220, 18), MacTheme.CreateAttributes(MacTheme.Sans(15), MacTheme.MutedBrush));
+        var viewport = EnclosingScrollView?.ContentView.Bounds ?? Bounds;
+        var viewportTop = Math.Max(0, viewport.Y - ViewportOverscan - _headerBottom - 24);
+        var viewportBottom = viewport.Y + viewport.Height + ViewportOverscan - _headerBottom - 24;
+        var visibleCount = 0;
+        foreach (var card in _state.PositionedCards)
+        {
+            if (card.Y > viewportBottom || card.Y + card.Height < viewportTop)
+            {
+                continue;
+            }
+
+            visibleCount++;
+        }
+
+        MacTheme.DrawWrappedString($"Showing {_cards.Count} cards • {visibleCount} visible", new CGRect(MacTheme.PageMargin, _headerBottom + 2, 280, 18), MacTheme.CreateAttributes(MacTheme.Sans(15), MacTheme.MutedBrush));
         var textAttributes = MacTheme.CreateCssAttributes(CardFont, MacTheme.InkBrush, MacTheme.N(LineHeight));
 
         foreach (var card in _state.PositionedCards)
         {
+            if (card.Y > viewportBottom || card.Y + card.Height < viewportTop)
+            {
+                continue;
+            }
+
             var cardRect = new CGRect(MacTheme.PageMargin + card.X, _headerBottom + 24 + card.Y, _state.ColumnWidth, card.Height);
             if (!dirtyRect.IntersectsWith(cardRect))
             {

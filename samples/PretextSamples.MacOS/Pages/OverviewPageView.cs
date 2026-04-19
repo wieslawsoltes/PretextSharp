@@ -2,12 +2,16 @@ namespace PretextSamples.MacOS;
 
 internal sealed class OverviewPageView : SamplePageView
 {
+    private const string Eyebrow = "PRETEXT";
+    private const string Title = "Uno samples for manual text layout";
+    private const string DescriptionText = "This port keeps the library-style API shape from the original project and recreates the demo surface in native AppKit views. The pages below focus on predicted line counts, shrinkwrap widths, manual line routing, and custom editorial geometry.";
+
     private readonly List<CGRect> _cardRects = [];
 
     protected override CGSize MeasurePage(CGSize availableSize)
     {
         var contentWidth = MacTheme.Max(MacTheme.N(680), availableSize.Width);
-        var headerHeight = MacTheme.MeasureHeaderHeight(contentWidth, "PRETEXT", "Native macOS samples for manual text layout", "This host uses AppKit and the CoreText backend directly. The pages below mirror the Uno sample set while keeping rendering and layout native to macOS.");
+        var headerHeight = MacTheme.MeasureHeaderHeight(contentWidth, Eyebrow, Title, DescriptionText);
         var cardWidth = MacTheme.Min(MacTheme.N(920), contentWidth - MacTheme.PageMargin * 2);
         nfloat bodyHeight = 0;
         var attributes = MacTheme.CreateAttributes(MacTheme.Sans(15), MacTheme.MutedBrush, MacTheme.N(22));
@@ -24,7 +28,7 @@ internal sealed class OverviewPageView : SamplePageView
     protected override void LayoutPage(CGRect bounds)
     {
         _cardRects.Clear();
-        var y = MacTheme.MeasureHeaderHeight(bounds.Width, "PRETEXT", "Native macOS samples for manual text layout", "This host uses AppKit and the CoreText backend directly. The pages below mirror the Uno sample set while keeping rendering and layout native to macOS.") + 24;
+        var y = MacTheme.MeasureHeaderHeight(bounds.Width, Eyebrow, Title, DescriptionText) + 24;
         var width = MacTheme.Min(MacTheme.N(920), bounds.Width - MacTheme.PageMargin * 2);
         var attrs = MacTheme.CreateAttributes(MacTheme.Sans(15), MacTheme.MutedBrush, MacTheme.N(22));
         foreach (var feature in SampleCatalog.OverviewFeatures)
@@ -40,7 +44,7 @@ internal sealed class OverviewPageView : SamplePageView
     {
         base.DrawRect(dirtyRect);
         MacTheme.FillRect(Bounds, MacTheme.PageBrush);
-        MacTheme.DrawHeader(Bounds, "PRETEXT", "Native macOS samples for manual text layout", "This host uses AppKit and the CoreText backend directly. The pages below mirror the Uno sample set while keeping rendering and layout native to macOS.");
+        MacTheme.DrawHeader(Bounds, Eyebrow, Title, DescriptionText);
 
         var titleAttributes = MacTheme.CreateAttributes(MacTheme.Sans(18, bold: true), MacTheme.InkBrush);
         var bodyAttributes = MacTheme.CreateAttributes(MacTheme.Sans(15), MacTheme.MutedBrush, MacTheme.N(22));

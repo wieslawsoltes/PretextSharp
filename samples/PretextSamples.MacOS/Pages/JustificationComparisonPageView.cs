@@ -2,9 +2,13 @@ namespace PretextSamples.MacOS;
 
 internal sealed class JustificationComparisonPageView : SamplePageView
 {
+    private const string Eyebrow = "DEMO";
+    private const string Title = "Justification Algorithms Compared";
+    private const string DescriptionText = "Side-by-side comparison of greedy justification, greedy hyphenation, and optimal Knuth-Plass breaking. The sample visualizes rivers and spacing variance so the typography tradeoffs are obvious.";
+
     private readonly JustificationResources _resources = JustificationComparisonModel.CreateResources();
     private readonly NSSlider _widthSlider = MacTheme.CreateSlider(200, 600, 364);
-    private readonly NSButton _indicatorToggle = MacTheme.CreateCheckBox("Show river visualizers", true);
+    private readonly NSButton _indicatorToggle = MacTheme.CreateCheckBox("Toggle red visualizers", true);
 
     private CGRect _controlsRect;
     private CGRect _sliderFrame;
@@ -23,7 +27,7 @@ internal sealed class JustificationComparisonPageView : SamplePageView
     protected override CGSize MeasurePage(CGSize availableSize)
     {
         var viewportWidth = availableSize.Width;
-        _headerBottom = MacTheme.MeasureHeaderHeight(viewportWidth, "DEMO", "Justification algorithms compared", "Side-by-side comparison of greedy justification, greedy hyphenation, and optimal Knuth-Plass breaking. Rivers and spacing variance are visualized so the typographic tradeoffs are obvious.");
+        _headerBottom = MacTheme.MeasureHeaderHeight(viewportWidth, Eyebrow, Title, DescriptionText);
         _controlsRect = new CGRect(MacTheme.PageMargin, _headerBottom + 18, 320, 74);
         _sliderFrame = new CGRect(_controlsRect.X + 16, _controlsRect.Y + 26, 180, 24);
         _toggleFrame = new CGRect(_controlsRect.X + 16, _controlsRect.Y + 50, 220, 20);
@@ -44,7 +48,7 @@ internal sealed class JustificationComparisonPageView : SamplePageView
     {
         base.DrawRect(dirtyRect);
         MacTheme.FillRect(Bounds, MacTheme.PageBrush);
-        MacTheme.DrawHeader(Bounds, "DEMO", "Justification algorithms compared", "Side-by-side comparison of greedy justification, greedy hyphenation, and optimal Knuth-Plass breaking. Rivers and spacing variance are visualized so the typographic tradeoffs are obvious.");
+        MacTheme.DrawHeader(Bounds, Eyebrow, Title, DescriptionText);
 
         if (_state is null)
         {

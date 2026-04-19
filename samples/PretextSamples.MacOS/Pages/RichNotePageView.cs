@@ -2,13 +2,19 @@ namespace PretextSamples.MacOS;
 
 internal sealed class RichNotePageView : SamplePageView
 {
+    private const string Eyebrow = "DEMO";
+    private const string Title = "Rich text fragments that still wrap";
+    private const string DescriptionText = "The sample now uses the core rich-inline helper directly. Text, links, and code spans split across lines, while chips stay atomic and still participate in the same inline flow.";
+
     private readonly NSSlider _slider = MacTheme.CreateSlider(RichNoteModel.BodyMinWidth, RichNoteModel.BodyMaxWidth, RichNoteModel.BodyDefaultWidth);
     private readonly PreparedRichInlineNote _preparedNote = RichNoteModel.PrepareRichInlineNote();
     private RichNoteLayout? _layout;
+    private CGRect _eyebrowRect;
+    private CGRect _titleRect;
+    private CGRect _descriptionRect;
     private CGRect _controlsRect;
     private CGRect _sliderFrame;
     private CGRect _shellRect;
-    private nfloat _headerBottom;
 
     public RichNotePageView()
     {
@@ -19,9 +25,22 @@ internal sealed class RichNotePageView : SamplePageView
     protected override CGSize MeasurePage(CGSize availableSize)
     {
         var contentWidth = MacTheme.Max(MacTheme.N(920), availableSize.Width);
-        _headerBottom = MacTheme.MeasureHeaderHeight(contentWidth, "DEMO", "Rich text fragments that still wrap", "The sample uses the core rich-inline helper directly. Text, links, and code spans split across lines, while chips stay atomic and still participate in the same inline flow.");
+        var centerX = contentWidth / 2;
+        var headerWidth = MacTheme.N(720);
+        var eyebrowHeight = MacTheme.MeasureString(Eyebrow, MacTheme.CreateAttributes(MacTheme.Mono(11), MacTheme.AccentBrush), headerWidth).Height;
+        var titleHeight = MacTheme.MeasureString(Title, MacTheme.CreateAttributes(MacTheme.Serif(32, bold: true), MacTheme.InkBrush, 38, NSTextAlignment.Center), headerWidth).Height;
+        var descriptionHeight = MacTheme.MeasureString(DescriptionText, MacTheme.CreateAttributes(MacTheme.Sans(15), MacTheme.MutedBrush, 22, NSTextAlignment.Center), headerWidth).Height;
+
+        var y = MacTheme.PageMargin;
+        _eyebrowRect = new CGRect(centerX - headerWidth / 2, y, headerWidth, eyebrowHeight);
+        y += eyebrowHeight + 8;
+        _titleRect = new CGRect(centerX - headerWidth / 2, y, headerWidth, titleHeight);
+        y += titleHeight + 8;
+        _descriptionRect = new CGRect(centerX - headerWidth / 2, y, headerWidth, descriptionHeight);
+        y += descriptionHeight;
+
         var controlsWidth = MacTheme.Min(MacTheme.N(720), contentWidth - MacTheme.PageMargin * 2);
-        _controlsRect = new CGRect((contentWidth - controlsWidth) / 2, _headerBottom + 18, controlsWidth, 62);
+        _controlsRect = new CGRect((contentWidth - controlsWidth) / 2, y + 18, controlsWidth, 62);
         _sliderFrame = new CGRect(_controlsRect.X + 110, _controlsRect.Y + 14, _controlsRect.Width - 190, 24);
 
         var (bodyWidth, maxBodyWidth) = RichNoteModel.ResolveRichNoteBodyWidth(contentWidth, _slider.DoubleValue);
@@ -41,7 +60,9 @@ internal sealed class RichNotePageView : SamplePageView
     {
         base.DrawRect(dirtyRect);
         MacTheme.FillRect(Bounds, MacTheme.PageBrush);
-        MacTheme.DrawHeader(Bounds, "DEMO", "Rich text fragments that still wrap", "The sample uses the core rich-inline helper directly. Text, links, and code spans split across lines, while chips stay atomic and still participate in the same inline flow.");
+        MacTheme.DrawWrappedString(Eyebrow, _eyebrowRect, MacTheme.CreateAttributes(MacTheme.Mono(11), MacTheme.AccentBrush, alignment: NSTextAlignment.Center));
+        MacTheme.DrawWrappedString(Title, _titleRect, MacTheme.CreateAttributes(MacTheme.Serif(32, bold: true), MacTheme.InkBrush, 38, NSTextAlignment.Center));
+        MacTheme.DrawWrappedString(DescriptionText, _descriptionRect, MacTheme.CreateAttributes(MacTheme.Sans(15), MacTheme.MutedBrush, 22, NSTextAlignment.Center));
 
         if (_layout is null)
         {
