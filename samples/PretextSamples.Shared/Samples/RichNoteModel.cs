@@ -2,14 +2,14 @@ using Pretext;
 
 namespace PretextSamples.Samples;
 
-internal enum RichNoteTextStyleName
+public enum RichNoteTextStyleName
 {
     Body,
     Link,
     Code,
 }
 
-internal enum RichNoteChipTone
+public enum RichNoteChipTone
 {
     Mention,
     Status,
@@ -18,32 +18,32 @@ internal enum RichNoteChipTone
     Count,
 }
 
-internal abstract record RichNoteInlineSpec;
+public abstract record RichNoteInlineSpec;
 
-internal sealed record RichNoteTextSpec(string Text, RichNoteTextStyleName Style) : RichNoteInlineSpec;
+public sealed record RichNoteTextSpec(string Text, RichNoteTextStyleName Style) : RichNoteInlineSpec;
 
-internal sealed record RichNoteChipSpec(string Label, RichNoteChipTone Tone) : RichNoteInlineSpec;
+public sealed record RichNoteChipSpec(string Label, RichNoteChipTone Tone) : RichNoteInlineSpec;
 
-internal sealed record PreparedRichInlineNote(
+public sealed record PreparedRichInlineNote(
     string[] ClassNames,
     PreparedRichInline Flow);
 
-internal sealed record RichNoteFragment(
+public sealed record RichNoteFragment(
     string ClassName,
     double LeadingGap,
     string Text);
 
-internal sealed record RichNoteLine(
+public sealed record RichNoteLine(
     IReadOnlyList<RichNoteFragment> Fragments);
 
-internal sealed record RichNoteLayout(
+public sealed record RichNoteLayout(
     double BodyWidth,
     int LineCount,
     IReadOnlyList<RichNoteLine> Lines,
     double NoteBodyHeight,
     double NoteWidth);
 
-internal static class RichNoteModel
+public static class RichNoteModel
 {
     public const string BodyFont = "500 17px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
     public const string LinkFont = "600 17px \"Helvetica Neue\", Helvetica, Arial, sans-serif";

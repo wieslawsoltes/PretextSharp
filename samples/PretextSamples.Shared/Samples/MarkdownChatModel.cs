@@ -7,30 +7,30 @@ using MarkdownInline = Markdig.Syntax.Inlines.Inline;
 
 namespace PretextSamples.Samples;
 
-internal enum ChatRole
+public enum ChatRole
 {
     Assistant,
     User,
 }
 
-internal enum InlineVariant
+public enum InlineVariant
 {
     Body,
     Heading1,
     Heading2,
 }
 
-internal sealed record MarkState(
+public sealed record MarkState(
     bool Bold,
     bool Italic,
     bool Strike,
     string? Href);
 
-internal sealed record ParseContext(
+public sealed record ParseContext(
     int ListDepth,
     int QuoteDepth);
 
-internal sealed record InlinePiece(
+public sealed record InlinePiece(
     RichInlineBreakMode BreakMode,
     string ClassName,
     double ExtraWidth,
@@ -38,7 +38,7 @@ internal sealed record InlinePiece(
     string? Href,
     string Text);
 
-internal abstract record PreparedBlock(
+public abstract record PreparedBlock(
     double ContentLeft,
     double MarginTop,
     string? MarkerClassName,
@@ -46,7 +46,7 @@ internal abstract record PreparedBlock(
     string? MarkerText,
     double[] QuoteRailLefts);
 
-internal sealed record PreparedInlineBlock(
+public sealed record PreparedInlineBlock(
     double ContentLeft,
     double MarginTop,
     string? MarkerClassName,
@@ -59,7 +59,7 @@ internal sealed record PreparedInlineBlock(
     double LineHeight)
     : PreparedBlock(ContentLeft, MarginTop, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts);
 
-internal sealed record PreparedCodeBlock(
+public sealed record PreparedCodeBlock(
     double ContentLeft,
     double MarginTop,
     string? MarkerClassName,
@@ -70,7 +70,7 @@ internal sealed record PreparedCodeBlock(
     PreparedTextWithSegments Prepared)
     : PreparedBlock(ContentLeft, MarginTop, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts);
 
-internal sealed record PreparedRuleBlock(
+public sealed record PreparedRuleBlock(
     double ContentLeft,
     double MarginTop,
     string? MarkerClassName,
@@ -80,11 +80,11 @@ internal sealed record PreparedRuleBlock(
     double Height)
     : PreparedBlock(ContentLeft, MarginTop, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts);
 
-internal sealed record PreparedChatTemplate(
+public sealed record PreparedChatTemplate(
     ChatRole Role,
     IReadOnlyList<PreparedBlock> Blocks);
 
-internal abstract record BlockFrame(
+public abstract record BlockFrame(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -93,7 +93,7 @@ internal abstract record BlockFrame(
     double[] QuoteRailLefts,
     double Top);
 
-internal sealed record InlineBlockFrame(
+public sealed record InlineBlockFrame(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -105,7 +105,7 @@ internal sealed record InlineBlockFrame(
     double UsedWidth)
     : BlockFrame(ContentLeft, Height, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts, Top);
 
-internal sealed record CodeBlockFrame(
+public sealed record CodeBlockFrame(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -117,7 +117,7 @@ internal sealed record CodeBlockFrame(
     double Width)
     : BlockFrame(ContentLeft, Height, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts, Top);
 
-internal sealed record RuleBlockFrame(
+public sealed record RuleBlockFrame(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -128,13 +128,13 @@ internal sealed record RuleBlockFrame(
     double Width)
     : BlockFrame(ContentLeft, Height, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts, Top);
 
-internal sealed record InlineFragmentLayout(
+public sealed record InlineFragmentLayout(
     string ClassName,
     string? Href,
     double LeadingGap,
     string Text);
 
-internal abstract record BlockLayout(
+public abstract record BlockLayout(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -143,7 +143,7 @@ internal abstract record BlockLayout(
     double[] QuoteRailLefts,
     double Top);
 
-internal sealed record InlineBlockLayout(
+public sealed record InlineBlockLayout(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -156,7 +156,7 @@ internal sealed record InlineBlockLayout(
     IReadOnlyList<(IReadOnlyList<InlineFragmentLayout> Fragments, double Width)> Lines)
     : BlockLayout(ContentLeft, Height, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts, Top);
 
-internal sealed record CodeBlockLayout(
+public sealed record CodeBlockLayout(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -169,7 +169,7 @@ internal sealed record CodeBlockLayout(
     IReadOnlyList<LayoutLine> Lines)
     : BlockLayout(ContentLeft, Height, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts, Top);
 
-internal sealed record RuleBlockLayout(
+public sealed record RuleBlockLayout(
     double ContentLeft,
     double Height,
     string? MarkerClassName,
@@ -180,7 +180,7 @@ internal sealed record RuleBlockLayout(
     double Width)
     : BlockLayout(ContentLeft, Height, MarkerClassName, MarkerLeft, MarkerText, QuoteRailLefts, Top);
 
-internal sealed record TemplateFrame(
+public sealed record TemplateFrame(
     IReadOnlyList<BlockFrame> Blocks,
     double BubbleHeight,
     double ContentInsetX,
@@ -189,19 +189,19 @@ internal sealed record TemplateFrame(
     ChatRole Role,
     double TotalHeight);
 
-internal sealed record ChatMessageInstance(
+public sealed record ChatMessageInstance(
     double Bottom,
     PreparedChatTemplate Prepared,
     TemplateFrame Frame,
     double Top);
 
-internal sealed record ConversationFrame(
+public sealed record ConversationFrame(
     double ChatWidth,
     IReadOnlyList<ChatMessageInstance> Messages,
     double OcclusionBannerHeight,
     double TotalHeight);
 
-internal static class MarkdownChatModel
+public static class MarkdownChatModel
 {
     public const double MinChatWidth = 360;
     public const double DefaultChatWidth = 640;

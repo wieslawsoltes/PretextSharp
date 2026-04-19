@@ -1,10 +1,10 @@
 namespace PretextSamples.Samples;
 
-internal sealed record MarkdownChatSeed(
+public sealed record MarkdownChatSeed(
     string Role,
     string Markdown);
 
-internal static class MarkdownChatData
+public static class MarkdownChatData
 {
     private static MarkdownChatSeed Message(string role, params string[] lines)
         => new(role, string.Join('\n', lines));

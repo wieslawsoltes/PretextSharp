@@ -1,6 +1,6 @@
 namespace PretextSamples.Samples;
 
-internal static class SharedText
+public static class SharedText
 {
     public const string LongExcerpt =
         "You can see the future first in San Francisco. Over the past year, the talk of the town has shifted from $10 billion compute clusters to $100 billion clusters to trillion-dollar clusters. Every six months another zero is added to the boardroom plans. Behind the scenes, there’s a fierce scramble to secure every power contract still available for the rest of the decade, every voltage transformer that can possibly be procured. American industrial might is being reorganized around AI infrastructure. Everyone is now talking about AI, but few have the faintest glimmer of what is about to hit them. There are perhaps a few hundred people, most of them in San Francisco and the AI labs, that have situational awareness. Whether these people are right about the next few years remains to be seen, but they are the ones building this technology. If they are seeing the future even close to correctly, we are in for a wild ride. The pace of deep learning progress in the last decade has simply been extraordinary. Over and over again, skeptics have claimed deep learning won’t be able to do X and have been quickly proven wrong. If there’s one lesson we’ve learned, it’s that you should never bet against the trendlines. We are rapidly racing through the orders of magnitude, and the numbers suggest we should expect another GPT-2-to-GPT-4 sized qualitative jump on top of GPT-4 this decade.";

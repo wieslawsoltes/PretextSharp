@@ -4,23 +4,23 @@ using Pretext;
 
 namespace PretextSamples.Samples;
 
-internal sealed record JustificationResources(
+public sealed record JustificationResources(
     PreparedTextWithSegments[] BasePreparedParagraphs,
     PreparedTextWithSegments[] HyphenatedPreparedParagraphs,
     double NaturalSpaceWidth,
     double HyphenWidth);
 
-internal readonly record struct BreakCandidate(int SegmentIndex, bool IsSoftHyphen);
+public readonly record struct BreakCandidate(int SegmentIndex, bool IsSoftHyphen);
 
-internal readonly record struct LineInfo(double WordWidth, int SpaceCount, bool EndsWithHyphen);
+public readonly record struct LineInfo(double WordWidth, int SpaceCount, bool EndsWithHyphen);
 
-internal readonly record struct JustifiedSegment(string Text, double Width, bool IsSpace);
+public readonly record struct JustifiedSegment(string Text, double Width, bool IsSpace);
 
-internal sealed record JustifiedLine(IReadOnlyList<JustifiedSegment> Segments, double MaxWidth, bool IsLast, double LineWidth);
+public sealed record JustifiedLine(IReadOnlyList<JustifiedSegment> Segments, double MaxWidth, bool IsLast, double LineWidth);
 
-internal sealed record QualityMetrics(double AvgDeviation, double MaxDeviation, int RiverCount, int LineCount, double LayoutMs);
+public sealed record QualityMetrics(double AvgDeviation, double MaxDeviation, int RiverCount, int LineCount, double LayoutMs);
 
-internal static partial class JustificationComparisonModel
+public static partial class JustificationComparisonModel
 {
     public const string FontFamilyCss = "Georgia, \"Times New Roman\", serif";
     public const string FontFamilyDisplay = "Georgia";

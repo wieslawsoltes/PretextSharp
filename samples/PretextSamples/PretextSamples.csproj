@@ -1,7 +1,7 @@
 <Project Sdk="Uno.Sdk">
   <ItemGroup>
-    <PackageReference Include="Markdig" />
     <ProjectReference Include="..\..\src\Pretext.Uno\Pretext.Uno.csproj" />
+    <ProjectReference Include="..\PretextSamples.Shared\PretextSamples.Shared.csproj" />
     <PackageReference Include="Tmds.DBus.Protocol" />
   </ItemGroup>
   <PropertyGroup>

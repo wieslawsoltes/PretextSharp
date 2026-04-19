@@ -33,26 +33,23 @@ public sealed class MasonrySampleView : UserControl
 
         _pageRoot = (StretchScrollHost)SampleUi.CreatePageRoot(stack);
         Content = _pageRoot;
-        Loaded += async (_, _) =>
+        Loaded += (_, _) =>
         {
-            await EnsureCardsAsync();
+            EnsureCards();
             HookScrollViewer();
             _renderScheduler.Schedule();
         };
         SizeChanged += (_, _) => _renderScheduler.Schedule();
     }
 
-    private async Task EnsureCardsAsync()
+    private void EnsureCards()
     {
         if (_cards.Count > 0)
         {
             return;
         }
 
-        var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/shower_thoughts.json"));
-        var raw = await FileIO.ReadTextAsync(file);
-        var texts = JsonSerializer.Deserialize<string[]>(raw) ?? [];
-        _cards = texts
+        _cards = MasonrySampleData.LoadCards()
             .Select(text => (text, PretextLayout.Prepare(text, CardFont)))
             .ToList();
         _status.Text = $"Showing {_cards.Count} cards";

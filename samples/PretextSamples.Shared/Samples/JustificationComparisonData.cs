@@ -2,7 +2,7 @@ using System.Text;
 
 namespace PretextSamples.Samples;
 
-internal static class JustificationComparisonData
+public static class JustificationComparisonData
 {
     public static readonly string[] Paragraphs =
     [

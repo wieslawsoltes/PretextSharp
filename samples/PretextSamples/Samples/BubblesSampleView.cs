@@ -9,15 +9,9 @@ public sealed class BubblesSampleView : UserControl
     private const double BubbleMaxRatio = 0.8;
 
     private readonly (bool Sent, string Text, PreparedTextWithSegments Prepared)[] _messages =
-    {
-        (false, "Yo did you see the new Pretext library?", PretextLayout.PrepareWithSegments("Yo did you see the new Pretext library?", Font)),
-        (true, "yeah! It measures text without the DOM. Pure JavaScript arithmetic", PretextLayout.PrepareWithSegments("yeah! It measures text without the DOM. Pure JavaScript arithmetic", Font)),
-        (false, "That shrinkwrap demo is wild it finds the exact minimum width for multiline text. CSS can't do that.", PretextLayout.PrepareWithSegments("That shrinkwrap demo is wild it finds the exact minimum width for multiline text. CSS can't do that.", Font)),
-        (true, "성능 최적화가 정말 많이 되었더라고요 🎉", PretextLayout.PrepareWithSegments("성능 최적화가 정말 많이 되었더라고요 🎉", Font)),
-        (false, "Oh wow it handles CJK and emoji too??", PretextLayout.PrepareWithSegments("Oh wow it handles CJK and emoji too??", Font)),
-        (true, "كل شيء! Mixed bidi, grapheme clusters, whatever you want. Try resizing", PretextLayout.PrepareWithSegments("كل شيء! Mixed bidi, grapheme clusters, whatever you want. Try resizing", Font)),
-        (true, "the best part: zero layout reflow. You could shrinkwrap 10,000 bubbles and the browser wouldn't even blink", PretextLayout.PrepareWithSegments("the best part: zero layout reflow. You could shrinkwrap 10,000 bubbles and the browser wouldn't even blink", Font)),
-    };
+        BubblesSampleData.Messages
+            .Select(static message => (message.Sent, message.Text, PretextLayout.PrepareWithSegments(message.Text, Font)))
+            .ToArray();
 
     private readonly Slider _slider = new() { Minimum = 220, Maximum = 760, Value = 340 };
     private readonly TextBlock _sliderValue = new() { FontFamily = new FontFamily("Consolas"), Foreground = SampleTheme.MutedBrush };
