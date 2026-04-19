@@ -1,6 +1,10 @@
 <Project Sdk="Uno.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\Pretext\Pretext.csproj" />
+    <ProjectReference Include="..\Pretext.DirectWrite\Pretext.DirectWrite.csproj" />
+    <ProjectReference Include="..\Pretext.FreeType\Pretext.FreeType.csproj" />
+    <ProjectReference Include="..\Pretext.CoreText\Pretext.CoreText.csproj" />
+    <ProjectReference Include="..\Pretext.SkiaSharp\Pretext.SkiaSharp.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

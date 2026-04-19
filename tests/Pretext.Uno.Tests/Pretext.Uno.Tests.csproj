@@ -20,5 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Pretext\Pretext.csproj" />
+    <ProjectReference Include="..\..\src\Pretext.DirectWrite\Pretext.DirectWrite.csproj" />
+    <ProjectReference Include="..\..\src\Pretext.FreeType\Pretext.FreeType.csproj" />
+    <ProjectReference Include="..\..\src\Pretext.CoreText\Pretext.CoreText.csproj" />
+    <ProjectReference Include="..\..\src\Pretext.SkiaSharp\Pretext.SkiaSharp.csproj" />
   </ItemGroup>
 </Project>
