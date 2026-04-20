@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/scope-and-limitations</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-directwrite</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/prepared-text-types</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-skiasharp</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/markdown-chat-virtualization</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/implementing-a-custom-backend</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/public-types-and-operations</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/pretext-uno-helpers</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
@@ -9,15 +41,11 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/public-types-and-operations</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/rich-inline-api</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/integrating-in-uno</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
@@ -25,47 +53,7 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/scope-and-limitations</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/prepared-text-types</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-coretext</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/license</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/backend-discovery-and-overrides</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/implementing-a-custom-backend</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/markdown-chat-virtualization</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/sample-gallery-tour</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/integrating-in-uno</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
@@ -73,7 +61,15 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/sample-gallery-tour</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-layout</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
@@ -81,11 +77,11 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/using-pretext-in-native-hosts</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/using-pretext-in-native-hosts</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
@@ -97,6 +93,22 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-coretext</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/packages-and-assemblies</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-freetype</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-contracts</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/incremental-layout-apis</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
@@ -105,35 +117,15 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-freetype</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/license</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/packages-and-assemblies</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-directwrite</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-layout</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-contracts</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/package-pretext-skiasharp</loc>
-    <lastmod>2026-04-20</lastmod>
-  </url>
-  <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/lunet-docs-pipeline</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
@@ -141,7 +133,7 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/whitespace-and-break-kinds</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
@@ -157,6 +149,10 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/reference/lunet-docs-pipeline</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
     <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/getting-started/quickstart-prepare-and-layout</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
@@ -165,7 +161,11 @@
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
-    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/concepts/whitespace-and-break-kinds</loc>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/backend-discovery-and-overrides</loc>
+    <lastmod>2026-04-20</lastmod>
+  </url>
+  <url>
+    <loc>https://wieslawsoltes.github.io/PretextSharp/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout</loc>
     <lastmod>2026-04-20</lastmod>
   </url>
   <url>
