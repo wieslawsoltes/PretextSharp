@@ -10,7 +10,7 @@
 
 Universal text preparation and line layout with grapheme-aware wrapping, locale-aware segmentation, bidi support, and pluggable text-measurement backends.
 
-The core `Pretext` package targets `netstandard2.0`, `net461`, `net6.0`, `net8.0`, and `net10.0`. The `Pretext.Uno` companion package and sample app remain `net10.0-desktop`.
+The core `Pretext` package targets `netstandard2.0`, `net461`, `net6.0`, `net8.0`, and `net10.0`. The `Pretext.Uno` companion package targets `net10.0-desktop`, and the native macOS sample host targets `net10.0-macos`.
 
 PretextSharp is a .NET/C# port of the original [pretext](https://github.com/chenglou/pretext) project by [Cheng Lou](https://github.com/chenglou).
 
@@ -19,8 +19,12 @@ Documentation site: [wieslawsoltes.github.io/PretextSharp](https://wieslawsoltes
 Key documentation:
 
 - [Getting Started Overview](https://wieslawsoltes.github.io/PretextSharp/articles/getting-started/overview/)
+- [Backend Discovery and Overrides](https://wieslawsoltes.github.io/PretextSharp/articles/guides/backend-discovery-and-overrides/)
 - [Quickstart: Prepare and Layout](https://wieslawsoltes.github.io/PretextSharp/articles/getting-started/quickstart-prepare-and-layout/)
 - [Choosing an API](https://wieslawsoltes.github.io/PretextSharp/articles/getting-started/choosing-an-api/)
+- [Package: Pretext](https://wieslawsoltes.github.io/PretextSharp/articles/reference/package-pretext/)
+- [Package: Pretext.Layout](https://wieslawsoltes.github.io/PretextSharp/articles/reference/package-pretext-layout/)
+- [Package: Pretext.Uno](https://wieslawsoltes.github.io/PretextSharp/articles/reference/package-pretext-uno/)
 - [Prepared Text Lifecycle](https://wieslawsoltes.github.io/PretextSharp/articles/concepts/prepared-text-lifecycle/)
 - [Public Types and Operations](https://wieslawsoltes.github.io/PretextSharp/articles/reference/public-types-and-operations/)
 - [Rich Inline API](https://wieslawsoltes.github.io/PretextSharp/articles/reference/rich-inline-api/)
@@ -54,7 +58,7 @@ Key documentation:
 - Ship first-party native backends for Windows (`Pretext.DirectWrite`), Linux (`Pretext.FreeType`), and macOS (`Pretext.CoreText`), plus the portable `Pretext.SkiaSharp` fallback backend.
 - Ship with a published `Pretext.Layout` helper library for platform-neutral wrap and obstacle-layout workflows.
 - Ship with a published `Pretext.Uno` companion library for reusable Uno host controls and render scheduling helpers.
-- Ship with deterministic parity tests and a Uno sample app that demonstrates bubbles, masonry, editorial, justification, rich-inline, and virtualized markdown chat layouts.
+- Ship with deterministic parity tests plus shared, Uno, and native macOS sample hosts that demonstrate bubbles, masonry, editorial, justification, rich-inline, and virtualized markdown chat layouts.
 
 ## Core API
 
@@ -240,12 +244,18 @@ Run the native macOS host with:
 dotnet run --project samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj -f net10.0-macos
 ```
 
+For the current documentation map covering package selection, backend discovery, custom backends, and sample hosts, start in:
+
+- [Installation](https://wieslawsoltes.github.io/PretextSharp/articles/getting-started/installation/)
+- [Backend Discovery and Overrides](https://wieslawsoltes.github.io/PretextSharp/articles/guides/backend-discovery-and-overrides/)
+- [Sample Hosts and Shared Assets](https://wieslawsoltes.github.io/PretextSharp/articles/guides/sample-hosts-and-shared-assets/)
+
 ## Building
 
 ### Prerequisites
 
 - .NET 10 SDK for building this repository
-- Uno.Sdk 6.5.x for the sample app only
+- Uno.Sdk 6.5.x for the Uno sample host only
 
 ### Build, test, and pack
 
