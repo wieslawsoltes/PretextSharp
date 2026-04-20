@@ -18,9 +18,11 @@ internal sealed class MarkdownChatPageView : SamplePageView
     private readonly NSScrollView _viewport = new()
     {
         HasVerticalScroller = true,
-        AutohidesScrollers = true,
+        AutohidesScrollers = false,
         BorderType = NSBorderType.NoBorder,
         DrawsBackground = false,
+        ScrollerStyle = NSScrollerStyle.Legacy,
+        ScrollerKnobStyle = NSScrollerKnobStyle.Light,
     };
     private readonly MarkdownChatCanvasView _canvas = new();
     private readonly MarkdownChatHostView _host;
@@ -50,6 +52,12 @@ internal sealed class MarkdownChatPageView : SamplePageView
         AddSubview(_maskButton);
 
         _viewport.DocumentView = _host;
+        if (_viewport.VerticalScroller is not null)
+        {
+            _viewport.VerticalScroller.KnobStyle = NSScrollerKnobStyle.Light;
+            _viewport.VerticalScroller.ScrollerStyle = NSScrollerStyle.Legacy;
+        }
+
         _viewport.ContentView.PostsBoundsChangedNotifications = true;
         NSNotificationCenter.DefaultCenter.AddObserver(NSView.BoundsChangedNotification, _ => _canvas.NeedsDisplay = true, _viewport.ContentView);
 
