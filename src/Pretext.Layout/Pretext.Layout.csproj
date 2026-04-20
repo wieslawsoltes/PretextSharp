@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461;net6.0;net8.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Pretext.Layout</PackageId>
+    <Title>Pretext.Layout</Title>
+    <Description>Platform-neutral wrap and obstacle-layout helpers built on top of Pretext.</Description>
+    <PackageTags>text-layout;obstacle-layout;column-layout;editorial-layout;typography</PackageTags>
+    <PackageReleaseNotes>Initial public packaging of the platform-neutral Pretext layout helpers.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pretext\Pretext.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" />
+    <PackageReference Include="System.ValueTuple" />
+  </ItemGroup>
+</Project>

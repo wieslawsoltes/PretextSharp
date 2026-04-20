@@ -17,10 +17,20 @@
     <File Path="Directory.Packages.props" />
     <File Path="global.json" />
   </Folder>
-  <Project Path="samples/PretextSamples/PretextSamples.csproj">
+  <Project Path="samples/PretextSamples.Uno/PretextSamples.Uno.csproj">
     <Deploy />
   </Project>
+  <Project Path="samples/PretextSamples.Shared/PretextSamples.Shared.csproj" />
+  <Project Path="samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="src/Pretext.Contracts/Pretext.Contracts.csproj" />
   <Project Path="src/Pretext/Pretext.csproj" />
+  <Project Path="src/Pretext.Layout/Pretext.Layout.csproj" />
+  <Project Path="src/Pretext.DirectWrite/Pretext.DirectWrite.csproj" />
+  <Project Path="src/Pretext.FreeType/Pretext.FreeType.csproj" />
+  <Project Path="src/Pretext.CoreText/Pretext.CoreText.csproj" />
+  <Project Path="src/Pretext.SkiaSharp/Pretext.SkiaSharp.csproj" />
   <Project Path="src/Pretext.Uno/Pretext.Uno.csproj" />
   <Project Path="tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj" />
 </Solution>

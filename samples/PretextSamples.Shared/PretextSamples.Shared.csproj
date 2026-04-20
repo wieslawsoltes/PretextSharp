@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <EmbeddedResource Include="Assets/shower_thoughts.json" />
+    <PackageReference Include="Markdig" />
+    <ProjectReference Include="..\..\src\Pretext\Pretext.csproj" />
+    <ProjectReference Include="..\..\src\Pretext.Layout\Pretext.Layout.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+</Project>

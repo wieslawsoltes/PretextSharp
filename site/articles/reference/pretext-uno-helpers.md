@@ -1,12 +1,67 @@
 ---
-title: "Pretext.Uno Helpers"
+title: "Companion Helpers"
 ---
 
-# Pretext.Uno Helpers
+# Companion Helpers
 
-`Pretext.Uno` is the companion package that adds reusable Uno-side helpers on top of the core `Pretext` engine.
+The companion surface is now split across two packages:
 
-## Controls
+- `Pretext.Layout` for platform-neutral wrap and obstacle-layout helpers
+- `Pretext.Uno` for Uno-specific controls and render scheduling
+
+## `Pretext.Layout`
+
+`Pretext.Layout` builds on the core `Pretext` engine without taking any Uno Platform dependency.
+
+### Data types
+
+#### `WrapMetrics`
+
+Aggregate metrics for a wrapped text block:
+
+- `LineCount`
+- `Height`
+- `MaxLineWidth`
+
+#### `PositionedLine`
+
+Represents one laid-out line placed into a coordinate system:
+
+- `Text`
+- `X`
+- `Y`
+- `Width`
+
+#### Obstacle primitives
+
+- `RectObstacle`
+- `CircleObstacle`
+- `Interval`
+
+These are the geometric primitives used by the obstacle-aware helpers.
+
+### Helper types
+
+#### `PreparedTextMetrics`
+
+Utility methods for common wrap calculations:
+
+- `MeasureMaxLineWidth`
+- `CollectWrapMetrics`
+- `FindTightWrapMetrics`
+- `IsEnd`
+
+#### `ColumnFlowLayout`
+
+Flows prepared text through rectangular columns while respecting rectangular and circular obstacles.
+
+#### `ObstacleLayoutHelper`
+
+Lower-level helper methods for carving intervals and selecting usable slots around obstacles.
+
+## `Pretext.Uno`
+
+`Pretext.Uno` now focuses on the Uno-specific pieces.
 
 ### `StretchScrollHost`
 
@@ -29,52 +84,11 @@ Use it when:
 - you want to avoid stacking redundant render passes
 - your custom surface already owns a render action
 
-## Layout types
+## When to use which package
 
-### `WrapMetrics`
+Use `Pretext.Layout` when you want the helper patterns from the sample hosts without taking a UI framework dependency. Add `Pretext.Uno` only when your application already targets Uno and wants the reusable Uno controls as well.
 
-Aggregate metrics for a wrapped text block:
+See the dedicated package pages for installation and dependency details:
 
-- `LineCount`
-- `Height`
-- `MaxLineWidth`
-
-### `PositionedLine`
-
-Represents one laid-out line placed into a coordinate system:
-
-- `Text`
-- `X`
-- `Y`
-- `Width`
-
-### Obstacle primitives
-
-- `RectObstacle`
-- `CircleObstacle`
-- `Interval`
-
-These are the geometric primitives used by the obstacle-aware helpers.
-
-## Layout helpers
-
-### `PreparedTextMetrics`
-
-Utility methods for common wrap calculations:
-
-- `MeasureMaxLineWidth`
-- `CollectWrapMetrics`
-- `FindTightWrapMetrics`
-- `IsEnd`
-
-### `ColumnFlowLayout`
-
-Flows prepared text through rectangular columns while respecting rectangular and circular obstacles.
-
-### `ObstacleLayoutHelper`
-
-Lower-level helper methods for carving intervals and selecting usable slots around obstacles.
-
-## When to use the companion package
-
-Use `Pretext.Uno` when your application already targets Uno and wants to reuse the same helper patterns as the sample app. If you only need the text preparation and layout engine, stay on the core `Pretext` package.
+- [Package: Pretext.Layout](package-pretext-layout)
+- [Package: Pretext.Uno](package-pretext-uno)

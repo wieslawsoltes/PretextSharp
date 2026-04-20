@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "PretextSamples.Uno",
+  "display": "standalone",
+  "name": "PretextSamples.Uno",
+  "short_name": "PretextSamples.Uno",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}

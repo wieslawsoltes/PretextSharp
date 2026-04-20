@@ -1,7 +1,11 @@
 docs:
   - {path: readme.md, title: "Overview", self: true}
+  - {path: backend-discovery-and-overrides.md, title: "Backend Discovery and Overrides"}
+  - {path: using-pretext-in-native-hosts.md, title: "Using Pretext in Native Hosts"}
   - {path: integrating-in-uno.md, title: "Integrating in Uno"}
   - {path: using-pretext-in-any-skiasharp-host.md, title: "Using Pretext in Any SkiaSharp Host"}
+  - {path: implementing-a-custom-backend.md, title: "Implementing a Custom Backend"}
+  - {path: sample-hosts-and-shared-assets.md, title: "Sample Hosts and Shared Assets"}
   - {path: testing-and-diagnostics.md, title: "Testing and Diagnostics"}
   - {path: sample-gallery-tour.md, title: "Sample Gallery Tour"}
   - {path: markdown-chat-virtualization.md, title: "Markdown Chat Virtualization"}

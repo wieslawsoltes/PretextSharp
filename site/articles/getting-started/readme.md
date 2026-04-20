@@ -12,4 +12,4 @@ This section gets you from package installation to the first useful `PretextLayo
 - [Installation](installation)
 - [Quickstart: Prepare and Layout](quickstart-prepare-and-layout)
 - [Choosing an API](choosing-an-api)
-- [Quickstart: Sample App Tour](quickstart-workflows)
+- [Quickstart: Sample Hosts](quickstart-workflows)

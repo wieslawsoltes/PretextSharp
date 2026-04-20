@@ -16,7 +16,7 @@ public sealed partial class PretextLayoutParityTests : IDisposable
 
     public PretextLayoutParityTests()
     {
-        PretextLayout.SetMeasurementOverrideForTests(MeasureWidth);
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(MeasureWidth));
         PretextLayout.SetLocale();
         PretextLayout.ClearCache();
     }
@@ -24,7 +24,7 @@ public sealed partial class PretextLayoutParityTests : IDisposable
     public void Dispose()
     {
         PretextLayout.SetLocale();
-        PretextLayout.SetMeasurementOverrideForTests(null);
+        PretextLayout.SetTextMeasurerFactory(null);
     }
 
     private static IReadOnlyList<double> RequireBreakableWidths(IReadOnlyList<double>? widths)

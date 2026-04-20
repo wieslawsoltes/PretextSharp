@@ -1,10 +1,18 @@
 docs:
   - {path: readme.md, title: "Overview", self: true}
   - {path: packages-and-assemblies.md, title: "Packages and Namespace"}
+  - {path: package-pretext.md, title: "Package: Pretext"}
+  - {path: package-pretext-contracts.md, title: "Package: Pretext.Contracts"}
+  - {path: package-pretext-layout.md, title: "Package: Pretext.Layout"}
+  - {path: package-pretext-directwrite.md, title: "Package: Pretext.DirectWrite"}
+  - {path: package-pretext-freetype.md, title: "Package: Pretext.FreeType"}
+  - {path: package-pretext-coretext.md, title: "Package: Pretext.CoreText"}
+  - {path: package-pretext-skiasharp.md, title: "Package: Pretext.SkiaSharp"}
+  - {path: package-pretext-uno.md, title: "Package: Pretext.Uno"}
   - {path: public-types-and-operations.md, title: "Public Types and Operations"}
   - {path: prepared-text-types.md, title: "Prepared Text Types"}
   - {path: rich-inline-api.md, title: "Rich Inline API"}
-  - {path: pretext-uno-helpers.md, title: "Pretext.Uno Helpers"}
+  - {path: pretext-uno-helpers.md, title: "Companion Helpers"}
   - {path: scope-and-limitations.md, title: "Scope and Limitations"}
   - {path: lunet-docs-pipeline.md, title: "Lunet Docs Pipeline"}
   - {path: license.md, title: "License"}

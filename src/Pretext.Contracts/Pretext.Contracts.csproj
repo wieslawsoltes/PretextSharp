@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461;net6.0;net8.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Pretext.Contracts</PackageId>
+    <Title>Pretext.Contracts</Title>
+    <Description>Backend contracts for Pretext text measurement integrations.</Description>
+    <PackageTags>text-layout;text-measurement;contracts;abstractions;typography</PackageTags>
+    <PackageReleaseNotes>Initial public packaging of the Pretext backend contracts.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" />
+  </ItemGroup>
+</Project>

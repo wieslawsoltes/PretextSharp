@@ -4,7 +4,12 @@ title: "Using Pretext in Any SkiaSharp Host"
 
 # Using Pretext in Any SkiaSharp Host
 
-The core `Pretext` package does not depend on Uno. If your host can measure and draw text through SkiaSharp, the integration pattern stays the same.
+The core `Pretext` package does not depend on Uno or a specific renderer. In a generic SkiaSharp host, add `Pretext.SkiaSharp` so the engine can discover the first-party SkiaSharp measurement backend automatically.
+
+```bash
+dotnet add package Pretext
+dotnet add package Pretext.SkiaSharp
+```
 
 ## Generic host pattern
 
@@ -12,6 +17,8 @@ The core `Pretext` package does not depend on Uno. If your host can measure and 
 2. Keep the prepared object in control or view-model state.
 3. Re-run layout when available width changes.
 4. Draw the resulting lines with your host's SkiaSharp surface.
+
+If the same application also references native backends, call `PretextLayout.SetTextMeasurerFactory(new SkiaSharpTextMeasurerFactory())` when the SkiaSharp backend should remain the source of truth.
 
 ## Minimal drawing example
 
@@ -64,3 +71,8 @@ Use `LayoutNextLine` instead of `LayoutWithLines` when:
 - desktop editors or note surfaces built directly on SkiaSharp
 - design tools that need repeated text measurement during resize
 - reporting or export pipelines that place text into rectangles manually
+
+## Read next
+
+- [Backend Discovery and Overrides](backend-discovery-and-overrides)
+- [Package: Pretext.SkiaSharp](../reference/package-pretext-skiasharp)

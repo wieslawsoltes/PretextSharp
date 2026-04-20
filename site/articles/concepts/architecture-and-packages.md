@@ -4,27 +4,41 @@ title: "Architecture and Packages"
 
 # Architecture and Packages
 
-The repository has four main parts:
+The repository has these main parts:
 
 | Path | Role |
 | --- | --- |
+| `src/Pretext.Contracts` | Packable contract library for backend implementations |
 | `src/Pretext` | Packable library with the preparation, measurement, bidi, and layout pipeline |
-| `src/Pretext.Uno` | Uno companion library with reusable host controls and obstacle-aware flow/layout helpers |
+| `src/Pretext.Layout` | Packable platform-neutral wrap and obstacle-layout helper library |
+| `src/Pretext.DirectWrite` | Packable Windows DirectWrite measurement backend |
+| `src/Pretext.FreeType` | Packable Linux FreeType + Fontconfig measurement backend |
+| `src/Pretext.CoreText` | Packable macOS CoreText measurement backend |
+| `src/Pretext.SkiaSharp` | Packable SkiaSharp measurement backend |
+| `src/Pretext.Uno` | Uno companion library with reusable host controls and render scheduling helpers |
 | `tests/Pretext.Uno.Tests` | Deterministic tests covering segmentation, wrapping, pre-wrap behavior, bidi, and line walking |
-| `samples/PretextSamples` | Uno sample app that exercises the library in visually different layouts |
+| `samples/PretextSamples.Shared` | Shared sample catalog, assets, and data/model layer reused by the sample hosts |
+| `samples/PretextSamples.Uno` | Uno sample host that exercises the library in visually different layouts |
+| `samples/PretextSamples.MacOS` | Native AppKit sample host that binds `Pretext` to CoreText |
 
 ## Package mapping
 
 - `Pretext` publishes the core engine from `src/Pretext` and exposes the `Pretext` namespace.
-- `Pretext.Uno` publishes the Uno-specific controls and helpers from `src/Pretext.Uno`.
-- The sample app references the same core and Uno-layer APIs that ship in `Pretext` and `Pretext.Uno`.
+- `Pretext.Contracts` publishes the public contracts for custom measurement backends.
+- `Pretext.Layout` publishes the platform-neutral helper layer built on top of `Pretext`.
+- `Pretext.DirectWrite` publishes the first-party Windows-native backend.
+- `Pretext.FreeType` publishes the first-party Linux-native backend.
+- `Pretext.CoreText` publishes the first-party macOS-native backend.
+- `Pretext.SkiaSharp` publishes the first-party SkiaSharp backend.
+- `Pretext.Uno` publishes the Uno-specific controls from `src/Pretext.Uno`.
+- The sample hosts reference the same core, backend, and Uno-layer APIs that ship in the published packages.
 
 ## Pipeline shape
 
 At a high level the library does this:
 
 1. Analyze text into tokens and segments.
-2. Measure those segments against a font string.
+2. Measure those segments through the configured backend against a font string.
 3. Store break opportunities and derived widths.
 4. Walk lines repeatedly against different widths.
 
@@ -37,10 +51,22 @@ That split is why `Prepare` is important: it separates expensive setup from repe
 - token and segment analysis
 - whitespace normalization
 - classification into `SegmentBreakKind`
-- measurement through SkiaSharp
+- backend selection and measurement caching
 - line fitting, cursor advancement, and materialized line text
 - locale-aware segmentation when ICU is available on desktop targets
 - segment bidi level computation for mixed-direction text
+
+`Pretext.Contracts` is responsible for:
+
+- defining the measurement contracts
+- parsing the shared CSS-like font string used by the first-party backends
+- exposing the backend advertisement attribute used for discovery
+
+First-party backend packages are responsible for:
+
+- creating native or renderer-specific font objects
+- mapping the shared font descriptor into backend-specific weight/slant/family values
+- returning measured widths through the `Pretext.Contracts` interfaces
 
 Your host UI is responsible for:
 
@@ -58,3 +84,5 @@ This architecture gives you deterministic behavior across host controls:
 - width-only changes do not require reanalysis
 - you can switch between aggregate, materialized, and streaming APIs without changing the prepared data
 - custom containers can reuse the same prepared text as ordinary controls
+- apps can reference multiple backends while the engine auto-selects the best supported one for the current OS
+- apps can reuse `Pretext.Layout` without taking a dependency on Uno Platform

@@ -4,6 +4,8 @@ title: "Integrating in Uno"
 
 # Integrating in Uno
 
+For Uno applications, `Pretext.Uno` is now the convenience package. It brings the core engine, `Pretext.Layout`, and the first-party backend set transitively.
+
 The common integration pattern is:
 
 1. Prepare content when the text or font changes.
@@ -41,14 +43,22 @@ Size MeasureBubble(double maxWidth, double lineHeight, Thickness padding)
 
 ## Companion helpers
 
-The `Pretext.Uno` package in this repository adds reusable helpers around the core engine:
+The companion packages in this repository add reusable helpers around the core engine:
 
 - `StretchScrollHost` for page-like scrollable samples and viewport calculations
 - `UiRenderScheduler` for coalesced redraw scheduling on `DispatcherQueue`
 - `PreparedTextMetrics` for wrap metrics and tight-width calculations
 - `ColumnFlowLayout` and `ObstacleLayoutHelper` for flowing lines into constrained regions
 
-Use them when they match your layout model, but keep the core `Pretext` API as the main dependency.
+`StretchScrollHost` and `UiRenderScheduler` live in `Pretext.Uno`. The layout helpers now live in `Pretext.Layout`, which `Pretext.Uno` brings transitively for Uno apps. Use them when they match your layout model, but keep the core `Pretext` API as the main dependency.
+
+## What to inspect in this repository
+
+If you want the current Uno integration pattern rather than older experiments, start with:
+
+- `samples/PretextSamples.Uno/MainPage.xaml.cs`
+- `samples/PretextSamples.Uno/Samples`
+- `samples/PretextSamples.Shared/Samples`
 
 ## Uno-specific advice
 
@@ -59,4 +69,6 @@ Use them when they match your layout model, but keep the core `Pretext` API as t
 
 ## Further reading
 
-For broader Uno renderer context, see [How Uno Platform Works](https://platform.uno/docs/articles/how-uno-works.html).
+- [Package: Pretext.Uno](../reference/package-pretext-uno)
+- [Package: Pretext.Layout](../reference/package-pretext-layout)
+- For broader Uno renderer context, see [How Uno Platform Works](https://platform.uno/docs/articles/how-uno-works.html).

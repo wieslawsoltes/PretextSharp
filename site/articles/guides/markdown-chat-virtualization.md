@@ -48,9 +48,10 @@ This is the important architectural point: `Pretext` stays the paragraph leaf, w
 
 ## Files to read
 
-- `samples/PretextSamples/Samples/MarkdownChatData.cs`
-- `samples/PretextSamples/Samples/MarkdownChatModel.cs`
-- `samples/PretextSamples/Samples/MarkdownChatSampleView.cs`
+- `samples/PretextSamples.Shared/Samples/MarkdownChatData.cs`
+- `samples/PretextSamples.Shared/Samples/MarkdownChatModel.cs`
+- `samples/PretextSamples.Uno/Samples/MarkdownChatSampleView.cs`
+- `samples/PretextSamples.MacOS/Pages/MarkdownChatPageView.cs`
 
 ## Takeaway
 

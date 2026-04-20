@@ -10,7 +10,7 @@ title: "Scope and Limitations"
 
 - analyzes text into reusable segments
 - classifies whitespace and break opportunities
-- measures text through SkiaSharp
+- measures text through the configured backend
 - computes wrapped line counts, heights, and materialized lines
 - supports streamed line walking for custom layouts
 - carries locale-aware segmentation and bidi metadata where available

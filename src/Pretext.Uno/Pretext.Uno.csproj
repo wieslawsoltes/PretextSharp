@@ -1,6 +1,11 @@
 <Project Sdk="Uno.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\Pretext\Pretext.csproj" />
+    <ProjectReference Include="..\Pretext.Layout\Pretext.Layout.csproj" />
+    <ProjectReference Include="..\Pretext.DirectWrite\Pretext.DirectWrite.csproj" />
+    <ProjectReference Include="..\Pretext.FreeType\Pretext.FreeType.csproj" />
+    <ProjectReference Include="..\Pretext.CoreText\Pretext.CoreText.csproj" />
+    <ProjectReference Include="..\Pretext.SkiaSharp\Pretext.SkiaSharp.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -13,9 +18,9 @@
     <Nullable>enable</Nullable>
     <PackageId>Pretext.Uno</PackageId>
     <Title>Pretext.Uno</Title>
-    <Description>Uno-specific controls and layout helpers for Pretext text rendering scenarios.</Description>
-    <PackageTags>uno;winui;skiasharp;text-layout;controls;editorial-layout;text-flow</PackageTags>
-    <PackageReleaseNotes>Initial public packaging of the Uno-specific companion controls and layout helpers for Pretext.</PackageReleaseNotes>
+    <Description>Uno-specific controls and render scheduling helpers for Pretext text rendering scenarios.</Description>
+    <PackageTags>uno;winui;skiasharp;text-layout;controls;rendering</PackageTags>
+    <PackageReleaseNotes>Split platform-neutral layout helpers into Pretext.Layout and kept Uno-specific controls in Pretext.Uno.</PackageReleaseNotes>
 
     <UnoFeatures>
       SkiaRenderer;
