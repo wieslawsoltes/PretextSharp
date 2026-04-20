@@ -9,7 +9,7 @@
   },
   "profiles": {
     // This profile is first in order for dotnet run to pick it up by default
-    "PretextSamples (WebAssembly)": {
+    "PretextSamples.Uno (WebAssembly)": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PretextSamples (WebAssembly IIS Express)": {
+    "PretextSamples.Uno (WebAssembly IIS Express)": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
@@ -27,13 +27,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PretextSamples (Desktop)": {
+    "PretextSamples.Uno (Desktop)": {
       "commandName": "Project",
       "compatibleTargetFramework": "desktop"
     },
-    "PretextSamples (Desktop WSL2)": {
+    "PretextSamples.Uno (Desktop WSL2)": {
       "commandName": "WSL2",
-      "commandLineArgs": "{ProjectDir}/bin/Debug/net10.0-desktop/PretextSamples.dll",
+      "commandLineArgs": "{ProjectDir}/bin/Debug/net10.0-desktop/PretextSamples.Uno.dll",
       "distributionName": "",
       "compatibleTargetFramework": "desktop"
     }

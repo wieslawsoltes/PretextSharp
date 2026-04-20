@@ -17,7 +17,7 @@
     <File Path="Directory.Packages.props" />
     <File Path="global.json" />
   </Folder>
-  <Project Path="samples/PretextSamples/PretextSamples.csproj">
+  <Project Path="samples/PretextSamples.Uno/PretextSamples.Uno.csproj">
     <Deploy />
   </Project>
   <Project Path="samples/PretextSamples.Shared/PretextSamples.Shared.csproj" />

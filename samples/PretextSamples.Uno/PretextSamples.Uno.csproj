@@ -12,16 +12,16 @@
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
-    <ApplicationTitle>PretextSamples</ApplicationTitle>
+    <ApplicationTitle>PretextSamples.Uno</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.pretextsamples</ApplicationId>
+    <ApplicationId>com.companyname.pretextsamples.uno</ApplicationId>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <!-- Package Publisher -->
-    <ApplicationPublisher>PretextSamples</ApplicationPublisher>
+    <ApplicationPublisher>PretextSamples.Uno</ApplicationPublisher>
     <!-- Package Description -->
-    <Description>PretextSamples powered by Uno Platform.</Description>
+    <Description>PretextSamples.Uno powered by Uno Platform.</Description>
 
     <!--
       UnoFeatures are used to quickly add and manage features enabled for your app.

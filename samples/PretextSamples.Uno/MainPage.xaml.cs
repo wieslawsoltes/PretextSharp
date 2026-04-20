@@ -1,7 +1,7 @@
 using Microsoft.UI.Xaml.Controls;
 using PretextSamples.Samples;
 
-namespace PretextSamples;
+namespace PretextSamples.Uno;
 
 public sealed partial class MainPage : Page
 {

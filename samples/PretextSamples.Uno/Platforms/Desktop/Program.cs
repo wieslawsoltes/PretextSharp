@@ -1,6 +1,6 @@
 using Uno.UI.Hosting;
 
-namespace PretextSamples;
+namespace PretextSamples.Uno;
 
 internal class Program
 {

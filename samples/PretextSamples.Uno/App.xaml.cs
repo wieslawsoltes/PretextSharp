@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using Uno.Resizetizer;
 
-namespace PretextSamples;
+namespace PretextSamples.Uno;
 
 public partial class App : Application
 {
