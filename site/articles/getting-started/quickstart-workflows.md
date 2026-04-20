@@ -11,7 +11,7 @@ The sample projects are the fastest way to understand how the new package split 
 | Project | Purpose |
 | --- | --- |
 | `samples/PretextSamples.Shared` | Shared sample data, markdown/rich-text models, and catalog definitions |
-| `samples/PretextSamples` | Uno host using `Pretext.Uno` |
+| `samples/PretextSamples.Uno` | Uno host using `Pretext.Uno` |
 | `samples/PretextSamples.MacOS` | Native AppKit host using `Pretext` + `Pretext.CoreText` |
 
 ## Shared sample menu
@@ -49,7 +49,7 @@ Start from the shared layer and then branch into the host you care about:
 
 1. `samples/PretextSamples.Shared/Samples/SampleCatalog.cs`
 2. shared models under `samples/PretextSamples.Shared/Samples`
-3. Uno views in `samples/PretextSamples/Samples`
+3. Uno views in `samples/PretextSamples.Uno/Samples`
 4. native AppKit pages in `samples/PretextSamples.MacOS/Pages`
 
 That reading order separates reusable layout/data logic from host-specific UI code.

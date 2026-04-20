@@ -62,7 +62,7 @@ You still own:
 | `src/Pretext.Uno` | The source for the `Pretext.Uno` package, with Uno-specific reusable controls and render scheduling helpers. |
 | `tests/Pretext.Uno.Tests` | Deterministic parity tests for whitespace handling, break behavior, bidi text, and line walking. |
 | `samples/PretextSamples.Shared` | Shared sample catalog, assets, and data/model layer reused by the sample hosts. |
-| `samples/PretextSamples` | A Uno sample host with layout demos including bubbles, masonry, editorial, and justification views. |
+| `samples/PretextSamples.Uno` | A Uno sample host with layout demos including bubbles, masonry, editorial, and justification views. |
 | `samples/PretextSamples.MacOS` | A native AppKit sample host on `net10.0-macos` using `Pretext.CoreText`. |
 
 ## Published Packages
@@ -100,5 +100,5 @@ You still own:
 
 - Source code and issues: [github.com/wieslawsoltes/PretextSharp](https://github.com/wieslawsoltes/PretextSharp)
 - Shared sample layer: [samples/PretextSamples.Shared](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.Shared)
-- Uno sample host: [samples/PretextSamples](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples)
+- Uno sample host: [samples/PretextSamples.Uno](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.Uno)
 - Native macOS sample host: [samples/PretextSamples.MacOS](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.MacOS)

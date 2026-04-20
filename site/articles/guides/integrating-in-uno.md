@@ -56,8 +56,8 @@ The companion packages in this repository add reusable helpers around the core e
 
 If you want the current Uno integration pattern rather than older experiments, start with:
 
-- `samples/PretextSamples/MainPage.xaml.cs`
-- `samples/PretextSamples/Samples`
+- `samples/PretextSamples.Uno/MainPage.xaml.cs`
+- `samples/PretextSamples.Uno/Samples`
 - `samples/PretextSamples.Shared/Samples`
 
 ## Uno-specific advice

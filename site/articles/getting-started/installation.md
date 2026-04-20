@@ -132,7 +132,7 @@ dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release
 The repository now ships two sample hosts plus a shared sample layer:
 
 - `samples/PretextSamples.Shared` for shared sample data, assets, and models
-- `samples/PretextSamples` for the Uno host
+- `samples/PretextSamples.Uno` for the Uno host
 - `samples/PretextSamples.MacOS` for the native AppKit host using `Pretext.CoreText`
 
 ## Read next

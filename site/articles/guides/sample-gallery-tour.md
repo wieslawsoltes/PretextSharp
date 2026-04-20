@@ -10,7 +10,7 @@ The sample gallery is not just a visual demo. It is a set of concrete integratio
 
 The same sample catalog is presented through:
 
-- `samples/PretextSamples`, the Uno host
+- `samples/PretextSamples.Uno`, the Uno host
 - `samples/PretextSamples.MacOS`, the native AppKit host
 
 Reusable sample data and models live in `samples/PretextSamples.Shared`.

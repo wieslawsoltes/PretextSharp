@@ -11,7 +11,7 @@ The sample story is no longer a single Uno app. The repository now has a shared 
 | Project | Role |
 | --- | --- |
 | `samples/PretextSamples.Shared` | Shared sample catalog, text assets, markdown/chat models, and reusable prepared-layout logic |
-| `samples/PretextSamples` | Uno Platform host that uses `Pretext.Uno` |
+| `samples/PretextSamples.Uno` | Uno Platform host that uses `Pretext.Uno` |
 | `samples/PretextSamples.MacOS` | Native AppKit host on `net10.0-macos` that binds `Pretext` to `Pretext.CoreText` |
 
 None of the sample projects are packable NuGet packages.
@@ -51,7 +51,7 @@ Both hosts still demonstrate the same sample catalog:
 
 1. `samples/PretextSamples.Shared/Samples/SampleCatalog.cs`
 2. shared models and data under `samples/PretextSamples.Shared/Samples`
-3. host-specific views under `samples/PretextSamples/Samples`
+3. host-specific views under `samples/PretextSamples.Uno/Samples`
 4. native AppKit pages under `samples/PretextSamples.MacOS/Pages`
 
 ## Read next

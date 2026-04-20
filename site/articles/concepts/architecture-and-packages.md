@@ -18,7 +18,7 @@ The repository has these main parts:
 | `src/Pretext.Uno` | Uno companion library with reusable host controls and render scheduling helpers |
 | `tests/Pretext.Uno.Tests` | Deterministic tests covering segmentation, wrapping, pre-wrap behavior, bidi, and line walking |
 | `samples/PretextSamples.Shared` | Shared sample catalog, assets, and data/model layer reused by the sample hosts |
-| `samples/PretextSamples` | Uno sample host that exercises the library in visually different layouts |
+| `samples/PretextSamples.Uno` | Uno sample host that exercises the library in visually different layouts |
 | `samples/PretextSamples.MacOS` | Native AppKit sample host that binds `Pretext` to CoreText |
 
 ## Package mapping

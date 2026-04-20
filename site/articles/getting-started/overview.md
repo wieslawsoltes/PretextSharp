@@ -39,7 +39,7 @@ The normal workflow is:
 | `src/Pretext.Uno` | You are working on the Uno companion package source in this repository. |
 | `tests/Pretext.Uno.Tests` | You want the deterministic behavior checks and supported-text examples. |
 | `samples/PretextSamples.Shared` | You want the shared sample catalog, assets, and data/model layer. |
-| `samples/PretextSamples` | You want the Uno sample host. |
+| `samples/PretextSamples.Uno` | You want the Uno sample host. |
 | `samples/PretextSamples.MacOS` | You want the native AppKit sample host that binds `Pretext` to CoreText. |
 
 ## The four main API shapes

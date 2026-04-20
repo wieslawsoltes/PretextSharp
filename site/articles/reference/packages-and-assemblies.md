@@ -62,7 +62,7 @@ title: "Packages and Namespace"
 ## Sample project
 
 - `samples/PretextSamples.Shared/PretextSamples.Shared.csproj`
-- `samples/PretextSamples/PretextSamples.csproj`
+- `samples/PretextSamples.Uno/PretextSamples.Uno.csproj`
 - `samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj`
 - together they provide the shared sample layer plus Uno and native macOS hosts
 
