@@ -218,7 +218,7 @@ It brings `Pretext`, `Pretext.Layout`, `Pretext.Contracts`, `Pretext.SkiaSharp`,
 
 The sample hosts share reusable data, prepared-model logic, and sample assets through `samples/PretextSamples.Shared`.
 
-- `samples/PretextSamples` uses Uno Platform and `Pretext.Uno`
+- `samples/PretextSamples.Uno` uses Uno Platform and `Pretext.Uno`
 - `samples/PretextSamples.MacOS` uses native AppKit on `net10.0-macos` and binds `Pretext` explicitly to `Pretext.CoreText`
 
 - Overview
@@ -235,7 +235,7 @@ The sample hosts share reusable data, prepared-model logic, and sample assets th
 Run the Uno host with:
 
 ```bash
-dotnet run --project samples/PretextSamples/PretextSamples.csproj -f net10.0-desktop
+dotnet run --project samples/PretextSamples.Uno/PretextSamples.Uno.csproj -f net10.0-desktop
 ```
 
 Run the native macOS host with:
@@ -305,7 +305,7 @@ src/
 tests/
   Pretext.Uno.Tests/
 samples/
-  PretextSamples/
+  PretextSamples.Uno/
   PretextSamples.Shared/
   PretextSamples.MacOS/
 site/
