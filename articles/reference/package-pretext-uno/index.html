@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Guides | Pretext</title>
+    <title>Package: Pretext.Uno | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Guides | Pretext">
-<meta name="twitter:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta name="twitter:title" content="Package: Pretext.Uno | Pretext">
+<meta name="twitter:description" content="Package: Pretext.Uno Pretext.Uno is the Uno-specific companion package. It no longer owns the platform-neutral layout helpers; those now live in Pretext.Layout. Install it when your application targets Uno Platform you want the reusable Uno-side controls and render scheduling helpers from this repository you want the core engine, helper layer, and first-party backend set brought in transitively What it brings Pretext.Uno depends on:...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Guides | Pretext">
-<meta property="og:title" content="Guides | Pretext">
+<meta name="twitter:image:alt" content="Package: Pretext.Uno | Pretext">
+<meta property="og:title" content="Package: Pretext.Uno | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta property="og:description" content="Package: Pretext.Uno Pretext.Uno is the Uno-specific companion package. It no longer owns the platform-neutral layout helpers; those now live in Pretext.Layout. Install it when your application targets Uno Platform you want the reusable Uno-side controls and render scheduling helpers from this repository you want the core engine, helper layer, and first-party backend set brought in transitively What it brings Pretext.Uno depends on:...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Guides | Pretext">
+<meta property="og:image:alt" content="Package: Pretext.Uno | Pretext">
   </head>
   <body>
 
@@ -98,7 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-10,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -113,8 +113,10 @@
             <a href='/PretextSharp/' class='breadcrumb-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a>  </li>
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
           <li class='breadcrumb-item  active'>
-            Guides  </li>
+            Package: Pretext.Uno  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -141,20 +143,45 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="guides">Guides</h1>
-<p>These pages connect the raw APIs to actual application patterns.</p>
-<h2 id="guides-1">Guides</h2>
+<h1 id="package-pretextuno">Package: Pretext.Uno</h1>
+<p><code>Pretext.Uno</code> is the Uno-specific companion package. It no longer owns the platform-neutral layout helpers; those now live in <code>Pretext.Layout</code>.</p>
+<h2 id="install-it-when">Install it when</h2>
 <ul>
-<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-native-hosts">Using Pretext in Native Hosts</a></li>
+<li>your application targets Uno Platform</li>
+<li>you want the reusable Uno-side controls and render scheduling helpers from this repository</li>
+<li>you want the core engine, helper layer, and first-party backend set brought in transitively</li>
+</ul>
+<h2 id="what-it-brings">What it brings</h2>
+<p><code>Pretext.Uno</code> depends on:</p>
+<ul>
+<li><code>Pretext</code></li>
+<li><code>Pretext.Layout</code></li>
+<li><code>Pretext.DirectWrite</code></li>
+<li><code>Pretext.FreeType</code></li>
+<li><code>Pretext.CoreText</code></li>
+<li><code>Pretext.SkiaSharp</code></li>
+</ul>
+<p>At runtime, <code>Pretext</code> then selects the best supported backend for the current OS.</p>
+<h2 id="public-uno-specific-surface">Public Uno-specific surface</h2>
+<p>The package exposes:</p>
+<ul>
+<li><code>StretchScrollHost</code></li>
+<li><code>UiRenderScheduler</code></li>
+</ul>
+<p>Use <code>StretchScrollHost</code> for sample-style scroll surfaces that need stretched content and viewport calculations. Use <code>UiRenderScheduler</code> when several UI events can trigger a redraw and you want one coalesced dispatch callback.</p>
+<h2 id="what-moved-out">What moved out</h2>
+<p>The wrap and obstacle helpers were extracted into <code>Pretext.Layout</code>, so non-Uno hosts can reuse:</p>
+<ul>
+<li><code>PreparedTextMetrics</code></li>
+<li><code>ColumnFlowLayout</code></li>
+<li><code>ObstacleLayoutHelper</code></li>
+<li>related geometry primitives</li>
+</ul>
+<h2 id="read-next">Read next</h2>
+<ul>
 <li><a href="/PretextSharp/articles/guides/integrating-in-uno">Integrating in Uno</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host">Using Pretext in Any SkiaSharp Host</a></li>
-<li><a href="/PretextSharp/articles/guides/implementing-a-custom-backend">Implementing a Custom Backend</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-hosts-and-shared-assets">Sample Hosts and Shared Assets</a></li>
-<li><a href="/PretextSharp/articles/guides/testing-and-diagnostics">Testing and Diagnostics</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
-<li><a href="/PretextSharp/articles/guides/markdown-chat-virtualization">Markdown Chat Virtualization</a></li>
-<li><a href="/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout">Shrinkwrap and Editorial Layout</a></li>
+<li><a href="/PretextSharp/articles/reference/pretext-uno-helpers">Companion Helpers</a></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext-layout">Package: Pretext.Layout</a></li>
 </ul>
 
       </div>

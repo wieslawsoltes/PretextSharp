@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Guides | Pretext</title>
+    <title>Package: Pretext.FreeType | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Guides | Pretext">
-<meta name="twitter:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta name="twitter:title" content="Package: Pretext.FreeType | Pretext">
+<meta name="twitter:description" content="Package: Pretext.FreeType Pretext.FreeType is the first-party Linux-native measurement backend built on FreeType and Fontconfig. Install it when your host runs on Linux and you want host-native font lookup and text metrics you want Pretext to prefer a Linux-native backend instead of SkiaSharp Runtime behavior The package advertises FreeTypeTextMeasurerFactory to the core engine. Name: FreeType IsSupported: true on Linux Priority: 100 When it is referenced in a Linux process, auto-discovery prefers...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Guides | Pretext">
-<meta property="og:title" content="Guides | Pretext">
+<meta name="twitter:image:alt" content="Package: Pretext.FreeType | Pretext">
+<meta property="og:title" content="Package: Pretext.FreeType | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta property="og:description" content="Package: Pretext.FreeType Pretext.FreeType is the first-party Linux-native measurement backend built on FreeType and Fontconfig. Install it when your host runs on Linux and you want host-native font lookup and text metrics you want Pretext to prefer a Linux-native backend instead of SkiaSharp Runtime behavior The package advertises FreeTypeTextMeasurerFactory to the core engine. Name: FreeType IsSupported: true on Linux Priority: 100 When it is referenced in a Linux process, auto-discovery prefers...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Guides | Pretext">
+<meta property="og:image:alt" content="Package: Pretext.FreeType | Pretext">
   </head>
   <body>
 
@@ -98,7 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-7,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -113,8 +113,10 @@
             <a href='/PretextSharp/' class='breadcrumb-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a>  </li>
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
           <li class='breadcrumb-item  active'>
-            Guides  </li>
+            Package: Pretext.FreeType  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -141,20 +143,36 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="guides">Guides</h1>
-<p>These pages connect the raw APIs to actual application patterns.</p>
-<h2 id="guides-1">Guides</h2>
+<h1 id="package-pretextfreetype">Package: Pretext.FreeType</h1>
+<p><code>Pretext.FreeType</code> is the first-party Linux-native measurement backend built on FreeType and Fontconfig.</p>
+<h2 id="install-it-when">Install it when</h2>
+<ul>
+<li>your host runs on Linux and you want host-native font lookup and text metrics</li>
+<li>you want <code>Pretext</code> to prefer a Linux-native backend instead of SkiaSharp</li>
+</ul>
+<h2 id="runtime-behavior">Runtime behavior</h2>
+<p>The package advertises <code>FreeTypeTextMeasurerFactory</code> to the core engine.</p>
+<ul>
+<li><code>Name</code>: <code>FreeType</code></li>
+<li><code>IsSupported</code>: <code>true</code> on Linux</li>
+<li><code>Priority</code>: <code>100</code></li>
+</ul>
+<p>When it is referenced in a Linux process, auto-discovery prefers it over <code>Pretext.SkiaSharp</code>.</p>
+<h2 id="relationship-to-the-rest-of-the-stack">Relationship to the rest of the stack</h2>
+<ul>
+<li>depends on <code>Pretext.Contracts</code></li>
+<li>is independent from Uno Platform</li>
+<li>works as a backend for custom or native Linux hosts</li>
+</ul>
+<h2 id="typical-hosts">Typical hosts</h2>
+<ul>
+<li>GTK, Avalonia, or custom Linux desktop surfaces using host-native text measurement</li>
+<li>export or layout tooling that should follow Linux font discovery rules</li>
+</ul>
+<h2 id="read-next">Read next</h2>
 <ul>
 <li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
 <li><a href="/PretextSharp/articles/guides/using-pretext-in-native-hosts">Using Pretext in Native Hosts</a></li>
-<li><a href="/PretextSharp/articles/guides/integrating-in-uno">Integrating in Uno</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host">Using Pretext in Any SkiaSharp Host</a></li>
-<li><a href="/PretextSharp/articles/guides/implementing-a-custom-backend">Implementing a Custom Backend</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-hosts-and-shared-assets">Sample Hosts and Shared Assets</a></li>
-<li><a href="/PretextSharp/articles/guides/testing-and-diagnostics">Testing and Diagnostics</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
-<li><a href="/PretextSharp/articles/guides/markdown-chat-virtualization">Markdown Chat Virtualization</a></li>
-<li><a href="/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout">Shrinkwrap and Editorial Layout</a></li>
 </ul>
 
       </div>

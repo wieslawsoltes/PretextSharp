@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Guides | Pretext</title>
+    <title>Implementing a Custom Backend | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Guides | Pretext">
-<meta name="twitter:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta name="twitter:title" content="Implementing a Custom Backend | Pretext">
+<meta name="twitter:description" content="Implementing a Custom Backend Pretext.Contracts makes the measurement layer pluggable. A custom backend only needs to measure text widths for a parsed font descriptor and advertise a factory to the core engine. When a custom backend makes sense you want to bind Pretext to another renderer or platform text API you need application-specific measurement behavior in tests you want to ship a backend package independently from the main repository...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Guides | Pretext">
-<meta property="og:title" content="Guides | Pretext">
+<meta name="twitter:image:alt" content="Implementing a Custom Backend | Pretext">
+<meta property="og:title" content="Implementing a Custom Backend | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta property="og:description" content="Implementing a Custom Backend Pretext.Contracts makes the measurement layer pluggable. A custom backend only needs to measure text widths for a parsed font descriptor and advertise a factory to the core engine. When a custom backend makes sense you want to bind Pretext to another renderer or platform text API you need application-specific measurement behavior in tests you want to ship a backend package independently from the main repository...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Guides | Pretext">
+<meta property="og:image:alt" content="Implementing a Custom Backend | Pretext">
   </head>
   <body>
 
@@ -98,7 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-6,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -113,8 +113,10 @@
             <a href='/PretextSharp/' class='breadcrumb-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a>  </li>
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/guides/' class='breadcrumb-link  '>Guides</a>  </li>
           <li class='breadcrumb-item  active'>
-            Guides  </li>
+            Implementing a Custom Backend  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -141,20 +143,79 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="guides">Guides</h1>
-<p>These pages connect the raw APIs to actual application patterns.</p>
-<h2 id="guides-1">Guides</h2>
+<h1 id="implementing-a-custom-backend">Implementing a Custom Backend</h1>
+<p><code>Pretext.Contracts</code> makes the measurement layer pluggable. A custom backend only needs to measure text widths for a parsed font descriptor and advertise a factory to the core engine.</p>
+<h2 id="when-a-custom-backend-makes-sense">When a custom backend makes sense</h2>
 <ul>
+<li>you want to bind <code>Pretext</code> to another renderer or platform text API</li>
+<li>you need application-specific measurement behavior in tests</li>
+<li>you want to ship a backend package independently from the main repository</li>
+</ul>
+<h2 id="minimal-shape">Minimal shape</h2>
+<p>Implement:</p>
+<ul>
+<li><code>IPretextTextMeasurer</code></li>
+<li><code>IPretextTextMeasurerFactory</code></li>
+</ul>
+<p>Advertise the factory at assembly level:</p>
+<pre><code class="language-csharp">[assembly: PretextTextMeasurerFactory(typeof(MyTextMeasurerFactory))]
+</code></pre>
+<h2 id="typical-implementation-flow">Typical implementation flow</h2>
+<ol>
+<li>Parse the incoming font string with <code>PretextFontParser.Parse(font)</code>.</li>
+<li>Map <code>PretextFontDescriptor</code> to the host font API.</li>
+<li>Return a measurer that can report width for arbitrary segment text.</li>
+<li>Set <code>IsSupported</code> according to the current runtime.</li>
+<li>Choose a <code>Priority</code> that makes sense beside the first-party backends.</li>
+</ol>
+<h2 id="example-skeleton">Example skeleton</h2>
+<pre><code class="language-csharp">using Pretext;
+
+public sealed class MyTextMeasurerFactory : IPretextTextMeasurerFactory
+{
+    public string Name =&gt; &quot;MyBackend&quot;;
+
+    public bool IsSupported =&gt; true;
+
+    public int Priority =&gt; 50;
+
+    public IPretextTextMeasurer Create(string font)
+    {
+        var descriptor = PretextFontParser.Parse(font);
+        return new MyTextMeasurer(descriptor);
+    }
+}
+
+public sealed class MyTextMeasurer : IPretextTextMeasurer
+{
+    public MyTextMeasurer(PretextFontDescriptor descriptor)
+    {
+        Descriptor = descriptor;
+    }
+
+    public PretextFontDescriptor Descriptor { get; }
+
+    public double MeasureText(string text)
+    {
+        // Call into the host text API here.
+        throw new NotImplementedException();
+    }
+
+    public void Dispose()
+    {
+    }
+}
+</code></pre>
+<h2 id="priority-guidance">Priority guidance</h2>
+<ul>
+<li>use a priority above <code>0</code> if your backend should beat the SkiaSharp fallback</li>
+<li>use the same top priority as another supported backend only if your app will always configure the backend explicitly</li>
+<li>keep test-only backends explicit rather than relying on discovery</li>
+</ul>
+<h2 id="read-next">Read next</h2>
+<ul>
+<li><a href="/PretextSharp/articles/reference/package-pretext-contracts">Package: Pretext.Contracts</a></li>
 <li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-native-hosts">Using Pretext in Native Hosts</a></li>
-<li><a href="/PretextSharp/articles/guides/integrating-in-uno">Integrating in Uno</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host">Using Pretext in Any SkiaSharp Host</a></li>
-<li><a href="/PretextSharp/articles/guides/implementing-a-custom-backend">Implementing a Custom Backend</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-hosts-and-shared-assets">Sample Hosts and Shared Assets</a></li>
-<li><a href="/PretextSharp/articles/guides/testing-and-diagnostics">Testing and Diagnostics</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
-<li><a href="/PretextSharp/articles/guides/markdown-chat-virtualization">Markdown Chat Virtualization</a></li>
-<li><a href="/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout">Shrinkwrap and Editorial Layout</a></li>
 </ul>
 
       </div>

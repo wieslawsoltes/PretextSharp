@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Guides | Pretext</title>
+    <title>Package: Pretext.Contracts | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Guides | Pretext">
-<meta name="twitter:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta name="twitter:title" content="Package: Pretext.Contracts | Pretext">
+<meta name="twitter:description" content="Package: Pretext.Contracts Pretext.Contracts is the backend seam for Pretext. It contains the public interfaces and shared font-string parsing helpers used by first-party backends and custom integrations. Install it when you are implementing your own measurement backend you want to ship a backend package independently from the core engine you want the shared CSS-like font parser used by the first-party backends Public surface The package exposes:...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Guides | Pretext">
-<meta property="og:title" content="Guides | Pretext">
+<meta name="twitter:image:alt" content="Package: Pretext.Contracts | Pretext">
+<meta property="og:title" content="Package: Pretext.Contracts | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta property="og:description" content="Package: Pretext.Contracts Pretext.Contracts is the backend seam for Pretext. It contains the public interfaces and shared font-string parsing helpers used by first-party backends and custom integrations. Install it when you are implementing your own measurement backend you want to ship a backend package independently from the core engine you want the shared CSS-like font parser used by the first-party backends Public surface The package exposes:...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Guides | Pretext">
+<meta property="og:image:alt" content="Package: Pretext.Contracts | Pretext">
   </head>
   <body>
 
@@ -98,7 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-4,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -113,8 +113,10 @@
             <a href='/PretextSharp/' class='breadcrumb-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a>  </li>
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
           <li class='breadcrumb-item  active'>
-            Guides  </li>
+            Package: Pretext.Contracts  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -141,20 +143,54 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="guides">Guides</h1>
-<p>These pages connect the raw APIs to actual application patterns.</p>
-<h2 id="guides-1">Guides</h2>
+<h1 id="package-pretextcontracts">Package: Pretext.Contracts</h1>
+<p><code>Pretext.Contracts</code> is the backend seam for <code>Pretext</code>. It contains the public interfaces and shared font-string parsing helpers used by first-party backends and custom integrations.</p>
+<h2 id="install-it-when">Install it when</h2>
 <ul>
-<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-native-hosts">Using Pretext in Native Hosts</a></li>
-<li><a href="/PretextSharp/articles/guides/integrating-in-uno">Integrating in Uno</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host">Using Pretext in Any SkiaSharp Host</a></li>
+<li>you are implementing your own measurement backend</li>
+<li>you want to ship a backend package independently from the core engine</li>
+<li>you want the shared CSS-like font parser used by the first-party backends</li>
+</ul>
+<h2 id="public-surface">Public surface</h2>
+<p>The package exposes:</p>
+<ul>
+<li><code>IPretextTextMeasurer</code></li>
+<li><code>IPretextTextMeasurerFactory</code></li>
+<li><code>PretextTextMeasurerFactoryAttribute</code></li>
+<li><code>PretextFontDescriptor</code></li>
+<li><code>PretextFontParser</code></li>
+</ul>
+<h2 id="backend-contract-shape">Backend contract shape</h2>
+<p><code>IPretextTextMeasurerFactory</code> advertises:</p>
+<ul>
+<li><code>Name</code></li>
+<li><code>IsSupported</code></li>
+<li><code>Priority</code></li>
+<li><code>Create(string font)</code></li>
+</ul>
+<p><code>IPretextTextMeasurer</code> is intentionally small: it measures text width for the prepared segments that the core engine hands to it.</p>
+<h2 id="shared-font-parsing">Shared font parsing</h2>
+<p>The first-party backends all parse the same CSS-like subset:</p>
+<ul>
+<li>size in <code>px</code></li>
+<li>optional numeric weight or <code>bold</code></li>
+<li>optional <code>italic</code> or <code>oblique</code></li>
+<li>family list where the first family wins</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><code>16px Inter</code></li>
+<li><code>italic 16px Georgia</code></li>
+<li><code>700 18px &quot;IBM Plex Sans&quot;</code></li>
+</ul>
+<p><code>PretextFontParser.MapGenericFamily(...)</code> also helps backend authors map <code>system-ui</code>, <code>sans-serif</code>, <code>serif</code>, and <code>monospace</code> to host-specific fallback families.</p>
+<h2 id="discovery-advertisement">Discovery advertisement</h2>
+<p>Backends advertise their factory with an assembly-level <code>PretextTextMeasurerFactoryAttribute</code>. <code>Pretext</code> scans loaded and probeable <code>Pretext*.dll</code> assemblies for those attributes during runtime discovery.</p>
+<h2 id="read-next">Read next</h2>
+<ul>
+<li><a href="/PretextSharp/articles/reference/package-pretext">Package: Pretext</a></li>
 <li><a href="/PretextSharp/articles/guides/implementing-a-custom-backend">Implementing a Custom Backend</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-hosts-and-shared-assets">Sample Hosts and Shared Assets</a></li>
-<li><a href="/PretextSharp/articles/guides/testing-and-diagnostics">Testing and Diagnostics</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
-<li><a href="/PretextSharp/articles/guides/markdown-chat-virtualization">Markdown Chat Virtualization</a></li>
-<li><a href="/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout">Shrinkwrap and Editorial Layout</a></li>
+<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
 </ul>
 
       </div>

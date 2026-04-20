@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Shrinkwrap and Editorial Layout | Pretext">
-<meta name="twitter:description" content="Shrinkwrap and Editorial Layout Two recurring patterns in the sample app are worth copying into your own code. Shrinkwrap Use WalkLineRanges or LayoutWithLines to find the exact width of the longest line, then size the host element to that width instead of relying on default control measurement. This pattern is useful for: chips chat bubbles badges masonry cards Typical flow: PrepareWithSegments once walk lines at a candidate width compute MaxLineWidth...">
+<meta name="twitter:description" content="Shrinkwrap and Editorial Layout Two recurring patterns in the sample hosts are worth copying into your own code. Shrinkwrap Use WalkLineRanges or LayoutWithLines to find the exact width of the longest line, then size the host element to that width instead of relying on default control measurement. This pattern is useful for: chips chat bubbles badges masonry cards Typical flow: PrepareWithSegments once walk lines at a candidate width compute MaxLineWidth...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Shrinkwrap and Editorial Layout | Pretext">
 <meta property="og:title" content="Shrinkwrap and Editorial Layout | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Shrinkwrap and Editorial Layout Two recurring patterns in the sample app are worth copying into your own code. Shrinkwrap Use WalkLineRanges or LayoutWithLines to find the exact width of the longest line, then size the host element to that width instead of relying on default control measurement. This pattern is useful for: chips chat bubbles badges masonry cards Typical flow: PrepareWithSegments once walk lines at a candidate width compute MaxLineWidth...">
+<meta property="og:description" content="Shrinkwrap and Editorial Layout Two recurring patterns in the sample hosts are worth copying into your own code. Shrinkwrap Use WalkLineRanges or LayoutWithLines to find the exact width of the longest line, then size the host element to that width instead of relying on default control measurement. This pattern is useful for: chips chat bubbles badges masonry cards Typical flow: PrepareWithSegments once walk lines at a candidate width compute MaxLineWidth...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Shrinkwrap and Editorial Layout | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -98,23 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
-            <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/' class='menu-link  '>Overview</a></span>  </li>
-            <li id='menu-item-docs-2' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/integrating-in-uno/' class='menu-link  '>Integrating in Uno</a></span>  </li>
-            <li id='menu-item-docs-3' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host/' class='menu-link  '>Using Pretext in Any SkiaSharp Host</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/testing-and-diagnostics/' class='menu-link  '>Testing and Diagnostics</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/sample-gallery-tour/' class='menu-link  '>Sample Gallery Tour</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/markdown-chat-virtualization/' class='menu-link  '>Markdown Chat Virtualization</a></span>  </li>
-            <li id='menu-item-docs-7' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout/' class='menu-link  '>Shrinkwrap and Editorial Layout</a></span>  </li>
-          </ol>
-
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-11,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -160,7 +144,7 @@
         </div>
 <!-- lunet:summarize -->
 <h1 id="shrinkwrap-and-editorial-layout">Shrinkwrap and Editorial Layout</h1>
-<p>Two recurring patterns in the sample app are worth copying into your own code.</p>
+<p>Two recurring patterns in the sample hosts are worth copying into your own code.</p>
 <h2 id="shrinkwrap">Shrinkwrap</h2>
 <p>Use <code>WalkLineRanges</code> or <code>LayoutWithLines</code> to find the exact width of the longest line, then size the host element to that width instead of relying on default control measurement.</p>
 <p>This pattern is useful for:</p>
@@ -190,7 +174,7 @@
 <h2 id="why-these-patterns-matter">Why these patterns matter</h2>
 <p>Both patterns depend on the same property of <code>Pretext</code>: width-dependent layout is cheap after preparation, so you can build higher-level algorithms without reparsing the paragraph.</p>
 <h2 id="related-helpers">Related helpers</h2>
-<p>In the Uno companion package, these helpers support the same patterns:</p>
+<p>In <code>Pretext.Layout</code>, these helpers support the same patterns:</p>
 <ul>
 <li><code>PreparedTextMetrics</code></li>
 <li><code>ColumnFlowLayout</code></li>

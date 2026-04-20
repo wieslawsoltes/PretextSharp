@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Installation | Pretext">
-<meta name="twitter:description" content="Installation Install the package that matches the layer you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; The core package is enough when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own SkiaSharp drawing code use the engine outside Uno entirely The core Pretext package targets: netstandard2.0...">
+<meta name="twitter:description" content="Installation Install the package set that matches the layer and backend you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; Add Pretext plus one or more backends when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own native or SkiaSharp drawing code use the engine outside Uno...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Installation | Pretext">
 <meta property="og:title" content="Installation | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Installation Install the package that matches the layer you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; The core package is enough when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own SkiaSharp drawing code use the engine outside Uno entirely The core Pretext package targets: netstandard2.0...">
+<meta property="og:description" content="Installation Install the package set that matches the layer and backend you need. Core engine dotnet add package Pretext Then import the core namespace: using Pretext; Add Pretext plus one or more backends when you want to: prepare text once and reuse it across many width probes compute line counts or line strings in a custom control drive your own native or SkiaSharp drawing code use the engine outside Uno...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Installation | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -110,7 +110,7 @@
             <li id='menu-item-docs-5' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/choosing-an-api/' class='menu-link  '>Choosing an API</a></span>  </li>
             <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/quickstart-workflows/' class='menu-link  '>Quickstart: Sample App Tour</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/quickstart-workflows/' class='menu-link  '>Quickstart: Sample Hosts</a></span>  </li>
           </ol>
 
         </div>
@@ -158,20 +158,57 @@
         </div>
 <!-- lunet:summarize -->
 <h1 id="installation">Installation</h1>
-<p>Install the package that matches the layer you need.</p>
+<p>Install the package set that matches the layer and backend you need.</p>
 <h2 id="core-engine">Core engine</h2>
 <pre><code class="language-bash">dotnet add package Pretext
 </code></pre>
 <p>Then import the core namespace:</p>
 <pre><code class="language-csharp">using Pretext;
 </code></pre>
-<p>The core package is enough when you want to:</p>
+<p>Add <code>Pretext</code> plus one or more backends when you want to:</p>
 <ul>
 <li>prepare text once and reuse it across many width probes</li>
 <li>compute line counts or line strings in a custom control</li>
-<li>drive your own SkiaSharp drawing code</li>
+<li>drive your own native or SkiaSharp drawing code</li>
 <li>use the engine outside Uno entirely</li>
 </ul>
+<p>Recommended pairings:</p>
+<table class="table">
+<thead>
+<tr>
+<th>Host</th>
+<th>Packages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows-native</td>
+<td><code>Pretext</code> + <code>Pretext.DirectWrite</code></td>
+</tr>
+<tr>
+<td>Linux-native</td>
+<td><code>Pretext</code> + <code>Pretext.FreeType</code></td>
+</tr>
+<tr>
+<td>macOS-native</td>
+<td><code>Pretext</code> + <code>Pretext.CoreText</code></td>
+</tr>
+<tr>
+<td>Generic SkiaSharp</td>
+<td><code>Pretext</code> + <code>Pretext.SkiaSharp</code></td>
+</tr>
+<tr>
+<td>Uno app</td>
+<td><code>Pretext.Uno</code></td>
+</tr>
+</tbody>
+</table>
+<p>First-party backend packages:</p>
+<pre><code class="language-bash">dotnet add package Pretext.DirectWrite   # Windows
+dotnet add package Pretext.FreeType      # Linux
+dotnet add package Pretext.CoreText      # macOS
+dotnet add package Pretext.SkiaSharp     # portable fallback / Skia hosts
+</code></pre>
 <p>The core <code>Pretext</code> package targets:</p>
 <ul>
 <li><code>netstandard2.0</code></li>
@@ -180,24 +217,35 @@
 <li><code>net8.0</code></li>
 <li><code>net10.0</code></li>
 </ul>
-<h2 id="uno-companion">Uno companion</h2>
-<pre><code class="language-bash">dotnet add package Pretext.Uno
+<p><code>Pretext.Contracts</code> is available when you want to implement a custom measurement backend instead of using one of the first-party backends.</p>
+<h2 id="platform-neutral-helper-package">Platform-neutral helper package</h2>
+<pre><code class="language-bash">dotnet add package Pretext.Layout
 </code></pre>
-<p><code>Pretext.Uno</code> depends on <code>Pretext</code>, so the core engine is brought in transitively. The companion package itself remains <code>net10.0-desktop</code>. Import the core namespace and whichever companion namespaces you want:</p>
-<pre><code class="language-csharp">using Pretext;
-using Pretext.Uno.Controls;
-using Pretext.Uno.Layout;
+<p>Import the helper namespace when you want the wrap-metric and obstacle-layout utilities without any Uno dependency:</p>
+<pre><code class="language-csharp">using Pretext.Layout;
 </code></pre>
-<p>Use the companion package when you want the reusable Uno-side helpers from this repository:</p>
+<p>Use <code>Pretext.Layout</code> when you want:</p>
 <ul>
-<li><code>StretchScrollHost</code></li>
-<li><code>UiRenderScheduler</code></li>
 <li><code>PreparedTextMetrics</code></li>
 <li><code>ColumnFlowLayout</code></li>
 <li><code>ObstacleLayoutHelper</code></li>
+<li>geometry primitives such as <code>RectObstacle</code>, <code>CircleObstacle</code>, and <code>Interval</code></li>
+</ul>
+<h2 id="uno-companion">Uno companion</h2>
+<pre><code class="language-bash">dotnet add package Pretext.Uno
+</code></pre>
+<p><code>Pretext.Uno</code> depends on <code>Pretext</code>, <code>Pretext.Layout</code>, and the first-party backend packages, so the core engine, helper layer, and host-native/portable backend set are brought in transitively. The companion package itself remains <code>net10.0-desktop</code>. Backend discovery then prefers the native backend for the current OS and falls back to <code>Pretext.SkiaSharp</code> when needed. Import the core namespace and whichever companion namespaces you want:</p>
+<pre><code class="language-csharp">using Pretext;
+using Pretext.Layout;
+using Pretext.Uno.Controls;
+</code></pre>
+<p>Use the companion package when you want the reusable Uno-side controls from this repository:</p>
+<ul>
+<li><code>StretchScrollHost</code></li>
+<li><code>UiRenderScheduler</code></li>
 </ul>
 <h2 id="font-string-format">Font string format</h2>
-<p>Every preparation entry point accepts a <code>font</code> string. <code>Pretext</code> parses a CSS-like subset:</p>
+<p>Every preparation entry point accepts a <code>font</code> string. First-party backends share the same CSS-like parser from <code>Pretext.Contracts</code>:</p>
 <ul>
 <li>a size in <code>px</code>, for example <code>16px</code></li>
 <li>an optional weight, for example <code>700 16px Inter</code></li>
@@ -214,14 +262,26 @@ using Pretext.Uno.Layout;
 <h2 id="build-the-repo">Build the repo</h2>
 <pre><code class="language-bash">dotnet build PretextSamples.slnx
 dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
+dotnet pack src/Pretext.Contracts/Pretext.Contracts.csproj -c Release
 dotnet pack src/Pretext/Pretext.csproj -c Release
+dotnet pack src/Pretext.Layout/Pretext.Layout.csproj -c Release
+dotnet pack src/Pretext.DirectWrite/Pretext.DirectWrite.csproj -c Release
+dotnet pack src/Pretext.FreeType/Pretext.FreeType.csproj -c Release
+dotnet pack src/Pretext.CoreText/Pretext.CoreText.csproj -c Release
+dotnet pack src/Pretext.SkiaSharp/Pretext.SkiaSharp.csproj -c Release
 dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release
 </code></pre>
 <h2 id="sample-app">Sample app</h2>
-<p>The interactive demos live in <code>samples/PretextSamples</code>. Use that app when you want to see how the library behaves in real layouts before integrating it into your own UI.</p>
+<p>The repository now ships two sample hosts plus a shared sample layer:</p>
+<ul>
+<li><code>samples/PretextSamples.Shared</code> for shared sample data, assets, and models</li>
+<li><code>samples/PretextSamples.Uno</code> for the Uno host</li>
+<li><code>samples/PretextSamples.MacOS</code> for the native AppKit host using <code>Pretext.CoreText</code></li>
+</ul>
 <h2 id="read-next">Read next</h2>
 <ul>
 <li><a href="/PretextSharp/articles/getting-started/quickstart-prepare-and-layout">Quickstart: Prepare and Layout</a></li>
+<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
 <li><a href="/PretextSharp/articles/getting-started/choosing-an-api">Choosing an API</a></li>
 <li><a href="/PretextSharp/articles/concepts/font-strings-and-measurement">Font Strings and Measurement</a></li>
 </ul>

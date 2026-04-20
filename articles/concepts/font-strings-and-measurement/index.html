@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Font Strings and Measurement | Pretext">
-<meta name="twitter:description" content="Font Strings and Measurement Every preparation API takes a font string. The parser accepts a CSS-like subset and maps it into the SkiaSharp font state used for measurement. Accepted format The parser looks for: a size in px an optional weight before the size optional italic or oblique a comma-separated family list after the size Examples: &quot;16px Inter&quot; &quot;700 18px \&quot;IBM Plex Sans\&quot;&quot; &quot;italic 16px Georgia&quot; &quot;600 15px system-ui&quot; &quot;16px...">
+<meta name="twitter:description" content="Font Strings and Measurement Every preparation API takes a font string. The active measurement backend decides how to interpret that string, but the first-party backends share one parser from Pretext.Contracts. Accepted format in the first-party backends The parser looks for: a size in px an optional weight before the size optional italic or oblique a comma-separated family list after the size Examples: &quot;16px Inter&quot; &quot;700 18px \&quot;IBM Plex Sans\&quot;&quot; &quot;italic...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Font Strings and Measurement | Pretext">
 <meta property="og:title" content="Font Strings and Measurement | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Font Strings and Measurement Every preparation API takes a font string. The parser accepts a CSS-like subset and maps it into the SkiaSharp font state used for measurement. Accepted format The parser looks for: a size in px an optional weight before the size optional italic or oblique a comma-separated family list after the size Examples: &quot;16px Inter&quot; &quot;700 18px \&quot;IBM Plex Sans\&quot;&quot; &quot;italic 16px Georgia&quot; &quot;600 15px system-ui&quot; &quot;16px...">
+<meta property="og:description" content="Font Strings and Measurement Every preparation API takes a font string. The active measurement backend decides how to interpret that string, but the first-party backends share one parser from Pretext.Contracts. Accepted format in the first-party backends The parser looks for: a size in px an optional weight before the size optional italic or oblique a comma-separated family list after the size Examples: &quot;16px Inter&quot; &quot;700 18px \&quot;IBM Plex Sans\&quot;&quot; &quot;italic...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Font Strings and Measurement | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -160,8 +160,8 @@
         </div>
 <!-- lunet:summarize -->
 <h1 id="font-strings-and-measurement">Font Strings and Measurement</h1>
-<p>Every preparation API takes a <code>font</code> string. The parser accepts a CSS-like subset and maps it into the SkiaSharp font state used for measurement.</p>
-<h2 id="accepted-format">Accepted format</h2>
+<p>Every preparation API takes a <code>font</code> string. The active measurement backend decides how to interpret that string, but the first-party backends share one parser from <code>Pretext.Contracts</code>.</p>
+<h2 id="accepted-format-in-the-first-party-backends">Accepted format in the first-party backends</h2>
 <p>The parser looks for:</p>
 <ul>
 <li>a size in <code>px</code></li>
@@ -191,7 +191,7 @@
 </tr>
 <tr>
 <td>numeric weight such as <code>500</code> or <code>700</code></td>
-<td>mapped to normal, medium, or bold Skia font weight</td>
+<td>mapped to backend-specific weight values</td>
 </tr>
 <tr>
 <td><code>italic</code> or <code>oblique</code></td>
@@ -200,7 +200,7 @@
 </tbody>
 </table>
 <h2 id="family-fallback-rules">Family fallback rules</h2>
-<p>If the primary family is a generic CSS family, <code>Pretext</code> maps it to a concrete desktop fallback:</p>
+<p>If the primary family is a generic CSS family, the first-party backends map it to a concrete platform fallback:</p>
 <table class="table">
 <thead>
 <tr>
@@ -211,19 +211,19 @@
 <tbody>
 <tr>
 <td><code>sans-serif</code>, <code>system-ui</code></td>
-<td><code>Arial</code></td>
+<td>backend-specific sans-serif fallback</td>
 </tr>
 <tr>
 <td><code>serif</code></td>
-<td><code>Times New Roman</code></td>
+<td>backend-specific serif fallback</td>
 </tr>
 <tr>
 <td><code>monospace</code>, <code>ui-monospace</code></td>
-<td><code>Menlo</code></td>
+<td>backend-specific monospace fallback</td>
 </tr>
 </tbody>
 </table>
-<p>If the parser cannot find a valid size, it falls back to <code>16px Arial</code>.</p>
+<p>If the parser cannot find a valid size, it falls back to <code>16px</code> with the backend's default sans-serif family.</p>
 <h2 id="what-is-not-parsed">What is not parsed</h2>
 <ul>
 <li><code>%</code>, <code>em</code>, <code>rem</code>, and other non-pixel units</li>
@@ -233,12 +233,19 @@
 </ul>
 <p>If a <code>/line-height</code> segment appears after the size, it is ignored by the parser. You still pass line height explicitly to layout methods.</p>
 <h2 id="measurement-model">Measurement model</h2>
-<p><code>Pretext</code> measures through SkiaSharp and stores:</p>
+<p><code>Pretext</code> stores:</p>
 <ul>
 <li>width of each prepared segment</li>
 <li>discretionary hyphen width</li>
 <li>tab stop advance, based on eight space widths</li>
 <li>per-grapheme break widths for breakable runs</li>
+</ul>
+<p>When you use one of the first-party backends, widths come from that backend's native or renderer-specific text stack:</p>
+<ul>
+<li><code>Pretext.DirectWrite</code> on Windows</li>
+<li><code>Pretext.FreeType</code> on Linux</li>
+<li><code>Pretext.CoreText</code> on macOS</li>
+<li><code>Pretext.SkiaSharp</code> as the portable fallback</li>
 </ul>
 <p>Because line height is caller-supplied, you stay in control of:</p>
 <ul>

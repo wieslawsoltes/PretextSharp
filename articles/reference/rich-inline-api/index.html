@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -98,27 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
-            <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/' class='menu-link  '>Overview</a></span>  </li>
-            <li id='menu-item-docs-2' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/packages-and-assemblies/' class='menu-link  '>Packages and Namespace</a></span>  </li>
-            <li id='menu-item-docs-3' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/public-types-and-operations/' class='menu-link  '>Public Types and Operations</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/prepared-text-types/' class='menu-link  '>Prepared Text Types</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/rich-inline-api/' class='menu-link  '>Rich Inline API</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/pretext-uno-helpers/' class='menu-link  '>Pretext.Uno Helpers</a></span>  </li>
-            <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/scope-and-limitations/' class='menu-link  '>Scope and Limitations</a></span>  </li>
-            <li id='menu-item-docs-8' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/lunet-docs-pipeline/' class='menu-link  '>Lunet Docs Pipeline</a></span>  </li>
-            <li id='menu-item-docs-9' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/license/' class='menu-link  '>License</a></span>  </li>
-          </ol>
-
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-13,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -272,8 +252,8 @@ PretextLayout.WalkRichInlineLineRanges(prepared, 180, range =&gt;
 <p>That keeps the expensive step, text materialization, off the hot path until you actually need visible fragment text.</p>
 <h2 id="samples">Samples</h2>
 <ul>
-<li><code>Rich Text</code> in <code>samples/PretextSamples</code> uses the rich-inline helper for chips, links, and code spans.</li>
-<li><code>Markdown Chat</code> uses the same helper as the paragraph leaf inside a higher-level block layout model.</li>
+<li><code>Rich Text</code> in <code>samples/PretextSamples.Uno</code> uses the rich-inline helper for chips, links, and code spans.</li>
+<li><code>Markdown Chat</code> uses the same helper as the paragraph leaf inside a higher-level block layout model, with shared data/models in <code>samples/PretextSamples.Shared</code>.</li>
 </ul>
 
       </div>

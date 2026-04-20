@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Guides | Pretext</title>
+    <title>Package: Pretext | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Guides | Pretext">
-<meta name="twitter:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta name="twitter:title" content="Package: Pretext | Pretext">
+<meta name="twitter:description" content="Package: Pretext Pretext is the backend-agnostic engine package. It owns preparation, segmentation, bidi handling, break analysis, and the line-fitting APIs that the rest of the repository builds on. Install it when you want deterministic text preparation and line layout without taking a UI framework dependency you are building your own control, canvas, export pipeline, or layout engine you want to pair the core engine with one or more first-party or...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Guides | Pretext">
-<meta property="og:title" content="Guides | Pretext">
+<meta name="twitter:image:alt" content="Package: Pretext | Pretext">
+<meta property="og:title" content="Package: Pretext | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta property="og:description" content="Package: Pretext Pretext is the backend-agnostic engine package. It owns preparation, segmentation, bidi handling, break analysis, and the line-fitting APIs that the rest of the repository builds on. Install it when you want deterministic text preparation and line layout without taking a UI framework dependency you are building your own control, canvas, export pipeline, or layout engine you want to pair the core engine with one or more first-party or...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Guides | Pretext">
+<meta property="og:image:alt" content="Package: Pretext | Pretext">
   </head>
   <body>
 
@@ -98,7 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-3,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -113,8 +113,10 @@
             <a href='/PretextSharp/' class='breadcrumb-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a>  </li>
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
           <li class='breadcrumb-item  active'>
-            Guides  </li>
+            Package: Pretext  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -141,20 +143,56 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="guides">Guides</h1>
-<p>These pages connect the raw APIs to actual application patterns.</p>
-<h2 id="guides-1">Guides</h2>
+<h1 id="package-pretext">Package: Pretext</h1>
+<p><code>Pretext</code> is the backend-agnostic engine package. It owns preparation, segmentation, bidi handling, break analysis, and the line-fitting APIs that the rest of the repository builds on.</p>
+<h2 id="install-it-when">Install it when</h2>
 <ul>
+<li>you want deterministic text preparation and line layout without taking a UI framework dependency</li>
+<li>you are building your own control, canvas, export pipeline, or layout engine</li>
+<li>you want to pair the core engine with one or more first-party or custom backends</li>
+</ul>
+<h2 id="package-role">Package role</h2>
+<p><code>Pretext</code> owns:</p>
+<ul>
+<li><code>PretextLayout</code></li>
+<li>prepared-text creation with <code>Prepare</code> and <code>PrepareWithSegments</code></li>
+<li>aggregate layout with <code>Layout</code></li>
+<li>materialized lines with <code>LayoutWithLines</code></li>
+<li>streamed layout with <code>LayoutNextLine</code>, <code>LayoutNextLineRange</code>, and <code>WalkLineRanges</code></li>
+<li>rich-inline preparation and streamed materialization</li>
+<li>backend discovery and explicit backend override</li>
+</ul>
+<h2 id="what-it-does-not-own">What it does not own</h2>
+<p><code>Pretext</code> does not draw text. Your host still owns:</p>
+<ul>
+<li>painting and antialiasing</li>
+<li>baseline placement</li>
+<li>line-height policy</li>
+<li>hit testing and selection</li>
+<li>scroll/view invalidation</li>
+</ul>
+<h2 id="package-relationship">Package relationship</h2>
+<p><code>Pretext</code> depends on <code>Pretext.Contracts</code> and expects a text-measurement factory to be available at runtime.</p>
+<p>Typical pairings:</p>
+<ul>
+<li><code>Pretext</code> + <code>Pretext.DirectWrite</code> for Windows-native hosts</li>
+<li><code>Pretext</code> + <code>Pretext.FreeType</code> for Linux-native hosts</li>
+<li><code>Pretext</code> + <code>Pretext.CoreText</code> for macOS-native hosts</li>
+<li><code>Pretext</code> + <code>Pretext.SkiaSharp</code> for portable SkiaSharp hosts or as a fallback</li>
+</ul>
+<h2 id="key-runtime-behavior">Key runtime behavior</h2>
+<p>If you do not call <code>PretextLayout.SetTextMeasurerFactory(...)</code>, the engine discovers factories from referenced <code>Pretext*.dll</code> assemblies, filters them by <code>IsSupported</code>, then picks the supported factory with the highest <code>Priority</code>.</p>
+<p>That means:</p>
+<ul>
+<li>host-native backends win on their matching OS</li>
+<li><code>Pretext.SkiaSharp</code> stays available as the low-priority portable fallback</li>
+<li>custom or test backends can still be selected explicitly</li>
+</ul>
+<h2 id="read-next">Read next</h2>
+<ul>
+<li><a href="/PretextSharp/articles/reference/package-pretext-contracts">Package: Pretext.Contracts</a></li>
 <li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-native-hosts">Using Pretext in Native Hosts</a></li>
-<li><a href="/PretextSharp/articles/guides/integrating-in-uno">Integrating in Uno</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host">Using Pretext in Any SkiaSharp Host</a></li>
-<li><a href="/PretextSharp/articles/guides/implementing-a-custom-backend">Implementing a Custom Backend</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-hosts-and-shared-assets">Sample Hosts and Shared Assets</a></li>
-<li><a href="/PretextSharp/articles/guides/testing-and-diagnostics">Testing and Diagnostics</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
-<li><a href="/PretextSharp/articles/guides/markdown-chat-virtualization">Markdown Chat Virtualization</a></li>
-<li><a href="/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout">Shrinkwrap and Editorial Layout</a></li>
+<li><a href="/PretextSharp/articles/reference/public-types-and-operations">Public Types and Operations</a></li>
 </ul>
 
       </div>

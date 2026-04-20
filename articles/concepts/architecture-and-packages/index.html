@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Architecture and Packages | Pretext">
-<meta name="twitter:description" content="Architecture and Packages The repository has four main parts: Path Role src/Pretext Packable library with the preparation, measurement, bidi, and layout pipeline src/Pretext.Uno Uno companion library with reusable host controls and obstacle-aware flow/layout helpers tests/Pretext.Uno.Tests Deterministic tests covering segmentation, wrapping, pre-wrap behavior, bidi, and line walking samples/PretextSamples Uno sample app that exercises the library in visually different layouts Package mapping...">
+<meta name="twitter:description" content="Architecture and Packages The repository has these main parts: Path Role src/Pretext.Contracts Packable contract library for backend implementations src/Pretext Packable library with the preparation, measurement, bidi, and layout pipeline src/Pretext.Layout Packable platform-neutral wrap and obstacle-layout helper library src/Pretext.DirectWrite Packable Windows DirectWrite measurement backend src/Pretext.FreeType Packable Linux FreeType + Fontconfig measurement backend src/Pretext.CoreText Packable macOS CoreText measurement backend src/Pretext.SkiaSharp...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Architecture and Packages | Pretext">
 <meta property="og:title" content="Architecture and Packages | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Architecture and Packages The repository has four main parts: Path Role src/Pretext Packable library with the preparation, measurement, bidi, and layout pipeline src/Pretext.Uno Uno companion library with reusable host controls and obstacle-aware flow/layout helpers tests/Pretext.Uno.Tests Deterministic tests covering segmentation, wrapping, pre-wrap behavior, bidi, and line walking samples/PretextSamples Uno sample app that exercises the library in visually different layouts Package mapping...">
+<meta property="og:description" content="Architecture and Packages The repository has these main parts: Path Role src/Pretext.Contracts Packable contract library for backend implementations src/Pretext Packable library with the preparation, measurement, bidi, and layout pipeline src/Pretext.Layout Packable platform-neutral wrap and obstacle-layout helper library src/Pretext.DirectWrite Packable Windows DirectWrite measurement backend src/Pretext.FreeType Packable Linux FreeType + Fontconfig measurement backend src/Pretext.CoreText Packable macOS CoreText measurement backend src/Pretext.SkiaSharp...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Architecture and Packages | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -160,7 +160,7 @@
         </div>
 <!-- lunet:summarize -->
 <h1 id="architecture-and-packages">Architecture and Packages</h1>
-<p>The repository has four main parts:</p>
+<p>The repository has these main parts:</p>
 <table class="table">
 <thead>
 <tr>
@@ -170,34 +170,72 @@
 </thead>
 <tbody>
 <tr>
+<td><code>src/Pretext.Contracts</code></td>
+<td>Packable contract library for backend implementations</td>
+</tr>
+<tr>
 <td><code>src/Pretext</code></td>
 <td>Packable library with the preparation, measurement, bidi, and layout pipeline</td>
 </tr>
 <tr>
+<td><code>src/Pretext.Layout</code></td>
+<td>Packable platform-neutral wrap and obstacle-layout helper library</td>
+</tr>
+<tr>
+<td><code>src/Pretext.DirectWrite</code></td>
+<td>Packable Windows DirectWrite measurement backend</td>
+</tr>
+<tr>
+<td><code>src/Pretext.FreeType</code></td>
+<td>Packable Linux FreeType + Fontconfig measurement backend</td>
+</tr>
+<tr>
+<td><code>src/Pretext.CoreText</code></td>
+<td>Packable macOS CoreText measurement backend</td>
+</tr>
+<tr>
+<td><code>src/Pretext.SkiaSharp</code></td>
+<td>Packable SkiaSharp measurement backend</td>
+</tr>
+<tr>
 <td><code>src/Pretext.Uno</code></td>
-<td>Uno companion library with reusable host controls and obstacle-aware flow/layout helpers</td>
+<td>Uno companion library with reusable host controls and render scheduling helpers</td>
 </tr>
 <tr>
 <td><code>tests/Pretext.Uno.Tests</code></td>
 <td>Deterministic tests covering segmentation, wrapping, pre-wrap behavior, bidi, and line walking</td>
 </tr>
 <tr>
-<td><code>samples/PretextSamples</code></td>
-<td>Uno sample app that exercises the library in visually different layouts</td>
+<td><code>samples/PretextSamples.Shared</code></td>
+<td>Shared sample catalog, assets, and data/model layer reused by the sample hosts</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.Uno</code></td>
+<td>Uno sample host that exercises the library in visually different layouts</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.MacOS</code></td>
+<td>Native AppKit sample host that binds <code>Pretext</code> to CoreText</td>
 </tr>
 </tbody>
 </table>
 <h2 id="package-mapping">Package mapping</h2>
 <ul>
 <li><code>Pretext</code> publishes the core engine from <code>src/Pretext</code> and exposes the <code>Pretext</code> namespace.</li>
-<li><code>Pretext.Uno</code> publishes the Uno-specific controls and helpers from <code>src/Pretext.Uno</code>.</li>
-<li>The sample app references the same core and Uno-layer APIs that ship in <code>Pretext</code> and <code>Pretext.Uno</code>.</li>
+<li><code>Pretext.Contracts</code> publishes the public contracts for custom measurement backends.</li>
+<li><code>Pretext.Layout</code> publishes the platform-neutral helper layer built on top of <code>Pretext</code>.</li>
+<li><code>Pretext.DirectWrite</code> publishes the first-party Windows-native backend.</li>
+<li><code>Pretext.FreeType</code> publishes the first-party Linux-native backend.</li>
+<li><code>Pretext.CoreText</code> publishes the first-party macOS-native backend.</li>
+<li><code>Pretext.SkiaSharp</code> publishes the first-party SkiaSharp backend.</li>
+<li><code>Pretext.Uno</code> publishes the Uno-specific controls from <code>src/Pretext.Uno</code>.</li>
+<li>The sample hosts reference the same core, backend, and Uno-layer APIs that ship in the published packages.</li>
 </ul>
 <h2 id="pipeline-shape">Pipeline shape</h2>
 <p>At a high level the library does this:</p>
 <ol>
 <li>Analyze text into tokens and segments.</li>
-<li>Measure those segments against a font string.</li>
+<li>Measure those segments through the configured backend against a font string.</li>
 <li>Store break opportunities and derived widths.</li>
 <li>Walk lines repeatedly against different widths.</li>
 </ol>
@@ -208,10 +246,22 @@
 <li>token and segment analysis</li>
 <li>whitespace normalization</li>
 <li>classification into <code>SegmentBreakKind</code></li>
-<li>measurement through SkiaSharp</li>
+<li>backend selection and measurement caching</li>
 <li>line fitting, cursor advancement, and materialized line text</li>
 <li>locale-aware segmentation when ICU is available on desktop targets</li>
 <li>segment bidi level computation for mixed-direction text</li>
+</ul>
+<p><code>Pretext.Contracts</code> is responsible for:</p>
+<ul>
+<li>defining the measurement contracts</li>
+<li>parsing the shared CSS-like font string used by the first-party backends</li>
+<li>exposing the backend advertisement attribute used for discovery</li>
+</ul>
+<p>First-party backend packages are responsible for:</p>
+<ul>
+<li>creating native or renderer-specific font objects</li>
+<li>mapping the shared font descriptor into backend-specific weight/slant/family values</li>
+<li>returning measured widths through the <code>Pretext.Contracts</code> interfaces</li>
 </ul>
 <p>Your host UI is responsible for:</p>
 <ul>
@@ -228,6 +278,8 @@
 <li>width-only changes do not require reanalysis</li>
 <li>you can switch between aggregate, materialized, and streaming APIs without changing the prepared data</li>
 <li>custom containers can reuse the same prepared text as ordinary controls</li>
+<li>apps can reference multiple backends while the engine auto-selects the best supported one for the current OS</li>
+<li>apps can reuse <code>Pretext.Layout</code> without taking a dependency on Uno Platform</li>
 </ul>
 
       </div>

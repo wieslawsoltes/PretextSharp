@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Pretext | Pretext">
-<meta name="twitter:description" content="Pretext Pretext is a deterministic text preparation and line-layout engine for any SkiaSharp-based UI. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow. Start Here API Reference Sample Tour Repository What This Library Does Prepare once, reuse often `Prepare` and `PrepareWithSegments` precompute widths, break opportunities, and whitespace behavior so repeated layout passes stay...">
+<meta name="twitter:description" content="Pretext Pretext is a deterministic text preparation and line-layout engine with pluggable text-measurement backends. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow. Start Here API Reference Sample Tour Repository What This Library Does Prepare once, reuse often `Prepare` and `PrepareWithSegments` precompute widths, break opportunities, and whitespace behavior so repeated layout passes stay...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Pretext | Pretext">
 <meta property="og:title" content="Pretext | Pretext">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Pretext Pretext is a deterministic text preparation and line-layout engine for any SkiaSharp-based UI. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow. Start Here API Reference Sample Tour Repository What This Library Does Prepare once, reuse often `Prepare` and `PrepareWithSegments` precompute widths, break opportunities, and whitespace behavior so repeated layout passes stay...">
+<meta property="og:description" content="Pretext Pretext is a deterministic text preparation and line-layout engine with pluggable text-measurement backends. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow. Start Here API Reference Sample Tour Repository What This Library Does Prepare once, reuse often `Prepare` and `PrepareWithSegments` precompute widths, break opportunities, and whitespace behavior so repeated layout passes stay...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Pretext | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -92,7 +92,7 @@
 <div class="container">
 <!-- lunet:summarize -->
 <h1 id="pretext">Pretext</h1>
-<p><code>Pretext</code> is a deterministic text preparation and line-layout engine for any SkiaSharp-based UI. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow.</p>
+<p><code>Pretext</code> is a deterministic text preparation and line-layout engine with pluggable text-measurement backends. It prepares text once, exposes segment and break metadata, and lets you compute line counts, materialized lines, or streamed line geometry without relying on control reflow.</p>
 <div class="d-flex flex-wrap gap-3 mt-4 mb-4">
   <a class="btn btn-primary btn-lg" href="articles/getting-started/overview"><i class="bi bi-rocket-takeoff" aria-hidden="true"></i> Start Here</a>
   <a class="btn btn-outline-secondary btn-lg" href="articles/reference/public-types-and-operations"><i class="bi bi-journal-code" aria-hidden="true"></i> API Reference</a>
@@ -124,8 +124,8 @@
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Getting Started</h2><p>Install the packages, learn the font string contract, and build the first useful `Prepare` + `Layout` flow.</p><a href="articles/getting-started" class="btn btn-sm btn-primary">Open section</a></div></div></div>
   <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Concepts</h2><p>Understand the prepared-text lifecycle, whitespace modes, break kinds, locale-aware segmentation, bidi, and line fitting.</p><a href="articles/concepts" class="btn btn-sm btn-primary">Open section</a></div></div></div>
-  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Guides</h2><p>Integrate `Pretext` into Uno or any SkiaSharp-based host, and reuse the sample app patterns for shrinkwrap, editorial, and obstacle-aware layouts.</p><a href="articles/guides" class="btn btn-sm btn-primary">Open section</a></div></div></div>
-  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Reference</h2><p>Browse every public type and operation, the `Pretext.Uno` companion helpers, platform notes, and repository structure.</p><a href="articles/reference" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Guides</h2><p>Integrate `Pretext` into Uno, native Windows/Linux/macOS hosts, or any SkiaSharp-based renderer, then reuse the shared sample-host patterns for shrinkwrap, editorial, and obstacle-aware layouts.</p><a href="articles/guides" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Reference</h2><p>Browse every public type and operation, the package-by-package reference pages, platform notes, and repository structure.</p><a href="articles/reference" class="btn btn-sm btn-primary">Open section</a></div></div></div>
 </div>
 <h2 id="repository-layout">Repository Layout</h2>
 <table class="table">
@@ -141,16 +141,48 @@
 <td>The packable library project containing <code>PretextLayout</code> and the text preparation/layout pipeline.</td>
 </tr>
 <tr>
+<td><code>src/Pretext.Contracts</code></td>
+<td>Shared backend contracts and first-party font-string parsing helpers.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.Layout</code></td>
+<td>Platform-neutral wrap and obstacle-layout helpers built on top of <code>Pretext</code>.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.DirectWrite</code></td>
+<td>Windows DirectWrite measurement backend.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.FreeType</code></td>
+<td>Linux FreeType + Fontconfig measurement backend.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.CoreText</code></td>
+<td>macOS CoreText measurement backend.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.SkiaSharp</code></td>
+<td>Portable SkiaSharp measurement backend and fallback.</td>
+</tr>
+<tr>
 <td><code>src/Pretext.Uno</code></td>
-<td>The source for the <code>Pretext.Uno</code> package, with Uno-specific reusable controls and layout helpers.</td>
+<td>The source for the <code>Pretext.Uno</code> package, with Uno-specific reusable controls and render scheduling helpers.</td>
 </tr>
 <tr>
 <td><code>tests/Pretext.Uno.Tests</code></td>
 <td>Deterministic parity tests for whitespace handling, break behavior, bidi text, and line walking.</td>
 </tr>
 <tr>
-<td><code>samples/PretextSamples</code></td>
-<td>A Uno sample app with layout demos including bubbles, masonry, editorial, and justification views.</td>
+<td><code>samples/PretextSamples.Shared</code></td>
+<td>Shared sample catalog, assets, and data/model layer reused by the sample hosts.</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.Uno</code></td>
+<td>A Uno sample host with layout demos including bubbles, masonry, editorial, and justification views.</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.MacOS</code></td>
+<td>A native AppKit sample host on <code>net10.0-macos</code> using <code>Pretext.CoreText</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -165,11 +197,35 @@
 <tbody>
 <tr>
 <td><code>Pretext</code></td>
-<td>Core SkiaSharp-based text preparation and layout engine.</td>
+<td>Backend-agnostic text preparation and layout engine.</td>
+</tr>
+<tr>
+<td><code>Pretext.Contracts</code></td>
+<td>Public backend contracts and shared font parsing.</td>
+</tr>
+<tr>
+<td><code>Pretext.Layout</code></td>
+<td>Platform-neutral wrap and obstacle-layout helpers.</td>
+</tr>
+<tr>
+<td><code>Pretext.DirectWrite</code></td>
+<td>Windows-native DirectWrite backend.</td>
+</tr>
+<tr>
+<td><code>Pretext.FreeType</code></td>
+<td>Linux-native FreeType + Fontconfig backend.</td>
+</tr>
+<tr>
+<td><code>Pretext.CoreText</code></td>
+<td>macOS-native CoreText backend.</td>
+</tr>
+<tr>
+<td><code>Pretext.SkiaSharp</code></td>
+<td>Portable SkiaSharp backend and fallback.</td>
 </tr>
 <tr>
 <td><code>Pretext.Uno</code></td>
-<td>Uno-specific controls and helpers layered on top of <code>Pretext</code>.</td>
+<td>Uno-specific controls layered on top of <code>Pretext</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -177,8 +233,12 @@
 <ul>
 <li><a href="/PretextSharp/articles/getting-started/overview">Getting Started Overview</a></li>
 <li><a href="/PretextSharp/articles/getting-started/installation">Install Packages</a></li>
+<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
 <li><a href="/PretextSharp/articles/getting-started/quickstart-prepare-and-layout">Quickstart: Prepare and Layout</a></li>
 <li><a href="/PretextSharp/articles/getting-started/choosing-an-api">Choosing an API</a></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext">Package: Pretext</a></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext-layout">Package: Pretext.Layout</a></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext-uno">Package: Pretext.Uno</a></li>
 <li><a href="/PretextSharp/articles/concepts/prepared-text-lifecycle">Prepared Text Lifecycle</a></li>
 <li><a href="/PretextSharp/articles/concepts/font-strings-and-measurement">Font Strings and Measurement</a></li>
 <li><a href="/PretextSharp/articles/reference/public-types-and-operations">Reference: Public Types and Operations</a></li>
@@ -190,7 +250,9 @@
 <h2 id="repository">Repository</h2>
 <ul>
 <li>Source code and issues: <a href="https://github.com/wieslawsoltes/PretextSharp">github.com/wieslawsoltes/PretextSharp</a></li>
-<li>Sample app: <a href="https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples">samples/PretextSamples</a></li>
+<li>Shared sample layer: <a href="https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.Shared">samples/PretextSamples.Shared</a></li>
+<li>Uno sample host: <a href="https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.Uno">samples/PretextSamples.Uno</a></li>
+<li>Native macOS sample host: <a href="https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.MacOS">samples/PretextSamples.MacOS</a></li>
 </ul>
 
 </div>

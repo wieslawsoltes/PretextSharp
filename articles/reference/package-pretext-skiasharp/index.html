@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Guides | Pretext</title>
+    <title>Package: Pretext.SkiaSharp | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Guides | Pretext">
-<meta name="twitter:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta name="twitter:title" content="Package: Pretext.SkiaSharp | Pretext">
+<meta name="twitter:description" content="Package: Pretext.SkiaSharp Pretext.SkiaSharp is the first-party portable backend for SkiaSharp-based hosts and the fallback backend when no host-native backend applies. Install it when your app already uses SkiaSharp for drawing you want a portable measurement backend that works across OSes you want a fallback backend even when native backends are also referenced Runtime behavior The package advertises SkiaSharpTextMeasurerFactory to the core engine. Name: SkiaSharp IsSupported...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Guides | Pretext">
-<meta property="og:title" content="Guides | Pretext">
+<meta name="twitter:image:alt" content="Package: Pretext.SkiaSharp | Pretext">
+<meta property="og:title" content="Package: Pretext.SkiaSharp | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Guides These pages connect the raw APIs to actual application patterns. Guides Backend Discovery and Overrides Using Pretext in Native Hosts Integrating in Uno Using Pretext in Any SkiaSharp Host Implementing a Custom Backend Sample Hosts and Shared Assets Testing and Diagnostics Sample Gallery Tour Markdown Chat Virtualization Shrinkwrap and Editorial Layout Copyright © 2026, Wieslaw Soltes aka wieslawsoltes - Content licensed under the Creative Commons CC BY 2.5 |...">
+<meta property="og:description" content="Package: Pretext.SkiaSharp Pretext.SkiaSharp is the first-party portable backend for SkiaSharp-based hosts and the fallback backend when no host-native backend applies. Install it when your app already uses SkiaSharp for drawing you want a portable measurement backend that works across OSes you want a fallback backend even when native backends are also referenced Runtime behavior The package advertises SkiaSharpTextMeasurerFactory to the core engine. Name: SkiaSharp IsSupported...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Guides | Pretext">
+<meta property="og:image:alt" content="Package: Pretext.SkiaSharp | Pretext">
   </head>
   <body>
 
@@ -98,7 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-9,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -113,8 +113,10 @@
             <a href='/PretextSharp/' class='breadcrumb-link  '><i class='bi bi-house-door' aria-hidden='true'></i> Home</a>  </li>
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/' class='breadcrumb-link  '><i class='bi bi-book' aria-hidden='true'></i> Docs</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
           <li class='breadcrumb-item  active'>
-            Guides  </li>
+            Package: Pretext.SkiaSharp  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -141,20 +143,38 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="guides">Guides</h1>
-<p>These pages connect the raw APIs to actual application patterns.</p>
-<h2 id="guides-1">Guides</h2>
+<h1 id="package-pretextskiasharp">Package: Pretext.SkiaSharp</h1>
+<p><code>Pretext.SkiaSharp</code> is the first-party portable backend for SkiaSharp-based hosts and the fallback backend when no host-native backend applies.</p>
+<h2 id="install-it-when">Install it when</h2>
 <ul>
-<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
-<li><a href="/PretextSharp/articles/guides/using-pretext-in-native-hosts">Using Pretext in Native Hosts</a></li>
-<li><a href="/PretextSharp/articles/guides/integrating-in-uno">Integrating in Uno</a></li>
+<li>your app already uses SkiaSharp for drawing</li>
+<li>you want a portable measurement backend that works across OSes</li>
+<li>you want a fallback backend even when native backends are also referenced</li>
+</ul>
+<h2 id="runtime-behavior">Runtime behavior</h2>
+<p>The package advertises <code>SkiaSharpTextMeasurerFactory</code> to the core engine.</p>
+<ul>
+<li><code>Name</code>: <code>SkiaSharp</code></li>
+<li><code>IsSupported</code>: always <code>true</code></li>
+<li><code>Priority</code>: <code>0</code></li>
+</ul>
+<p>That intentionally makes it the portable fallback rather than the preferred backend on Windows, Linux, or macOS when one of the native backends is also present.</p>
+<h2 id="typical-hosts">Typical hosts</h2>
+<ul>
+<li><code>SKCanvasView</code> or <code>SKGLView</code> controls</li>
+<li>SkiaSharp-based desktop applications</li>
+<li>reporting or export flows that already measure and draw through SkiaSharp</li>
+</ul>
+<h2 id="relationship-to-other-packages">Relationship to other packages</h2>
+<ul>
+<li>depends on <code>Pretext.Contracts</code> and <code>SkiaSharp</code></li>
+<li>can be used by itself with <code>Pretext</code></li>
+<li>is brought in transitively by <code>Pretext.Uno</code></li>
+</ul>
+<h2 id="read-next">Read next</h2>
+<ul>
 <li><a href="/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host">Using Pretext in Any SkiaSharp Host</a></li>
-<li><a href="/PretextSharp/articles/guides/implementing-a-custom-backend">Implementing a Custom Backend</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-hosts-and-shared-assets">Sample Hosts and Shared Assets</a></li>
-<li><a href="/PretextSharp/articles/guides/testing-and-diagnostics">Testing and Diagnostics</a></li>
-<li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
-<li><a href="/PretextSharp/articles/guides/markdown-chat-virtualization">Markdown Chat Virtualization</a></li>
-<li><a href="/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout">Shrinkwrap and Editorial Layout</a></li>
+<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
 </ul>
 
       </div>

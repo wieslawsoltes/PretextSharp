@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Getting Started Overview | Pretext">
-<meta name="twitter:description" content="Getting Started Overview Pretext is a text preparation and line-layout engine for any SkiaSharp-based UI that needs deterministic wrapping and visibility rules without delegating everything to a control-specific text stack. What to expect Pretext is built around one idea: expensive text analysis should happen once, and width-dependent layout should be cheap and repeatable after that. The normal workflow is: Convert raw text into a prepared object with...">
+<meta name="twitter:description" content="Getting Started Overview Pretext is a text preparation and line-layout engine with pluggable text-measurement backends for hosts that need deterministic wrapping and visibility rules without delegating everything to a control-specific text stack. What to expect Pretext is built around one idea: expensive text analysis should happen once, and width-dependent layout should be cheap and repeatable after that. The normal workflow is: Convert raw text into a prepared object with...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Getting Started Overview | Pretext">
 <meta property="og:title" content="Getting Started Overview | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Getting Started Overview Pretext is a text preparation and line-layout engine for any SkiaSharp-based UI that needs deterministic wrapping and visibility rules without delegating everything to a control-specific text stack. What to expect Pretext is built around one idea: expensive text analysis should happen once, and width-dependent layout should be cheap and repeatable after that. The normal workflow is: Convert raw text into a prepared object with...">
+<meta property="og:description" content="Getting Started Overview Pretext is a text preparation and line-layout engine with pluggable text-measurement backends for hosts that need deterministic wrapping and visibility rules without delegating everything to a control-specific text stack. What to expect Pretext is built around one idea: expensive text analysis should happen once, and width-dependent layout should be cheap and repeatable after that. The normal workflow is: Convert raw text into a prepared object with...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Getting Started Overview | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -110,7 +110,7 @@
             <li id='menu-item-docs-5' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/choosing-an-api/' class='menu-link  '>Choosing an API</a></span>  </li>
             <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/quickstart-workflows/' class='menu-link  '>Quickstart: Sample App Tour</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/quickstart-workflows/' class='menu-link  '>Quickstart: Sample Hosts</a></span>  </li>
           </ol>
 
         </div>
@@ -158,7 +158,7 @@
         </div>
 <!-- lunet:summarize -->
 <h1 id="getting-started-overview">Getting Started Overview</h1>
-<p><code>Pretext</code> is a text preparation and line-layout engine for any SkiaSharp-based UI that needs deterministic wrapping and visibility rules without delegating everything to a control-specific text stack.</p>
+<p><code>Pretext</code> is a text preparation and line-layout engine with pluggable text-measurement backends for hosts that need deterministic wrapping and visibility rules without delegating everything to a control-specific text stack.</p>
 <h2 id="what-to-expect">What to expect</h2>
 <p><code>Pretext</code> is built around one idea: expensive text analysis should happen once, and width-dependent layout should be cheap and repeatable after that.</p>
 <p>The normal workflow is:</p>
@@ -179,15 +179,63 @@
 <tbody>
 <tr>
 <td><code>Pretext</code></td>
-<td>You want the reusable layout engine in any SkiaSharp-based UI, under the <code>Pretext</code> namespace.</td>
+<td>You want the reusable layout engine under the <code>Pretext</code> namespace.</td>
+</tr>
+<tr>
+<td><code>Pretext.Contracts</code></td>
+<td>You are implementing or documenting a measurement backend.</td>
+</tr>
+<tr>
+<td><code>Pretext.Layout</code></td>
+<td>You want platform-neutral wrap and obstacle-layout helpers on top of <code>Pretext</code>.</td>
+</tr>
+<tr>
+<td><code>Pretext.DirectWrite</code></td>
+<td>You want the first-party Windows-native DirectWrite measurement backend.</td>
+</tr>
+<tr>
+<td><code>Pretext.FreeType</code></td>
+<td>You want the first-party Linux-native FreeType + Fontconfig measurement backend.</td>
+</tr>
+<tr>
+<td><code>Pretext.CoreText</code></td>
+<td>You want the first-party macOS-native CoreText measurement backend.</td>
+</tr>
+<tr>
+<td><code>Pretext.SkiaSharp</code></td>
+<td>You want the first-party portable SkiaSharp backend or a cross-platform fallback.</td>
 </tr>
 <tr>
 <td><code>Pretext.Uno</code></td>
-<td>You want Uno-specific controls and layout helpers layered on top of <code>Pretext</code>.</td>
+<td>You want Uno-specific controls layered on top of <code>Pretext</code>.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.Contracts</code></td>
+<td>You are working on backend contracts or building a custom integration.</td>
 </tr>
 <tr>
 <td><code>src/Pretext</code></td>
 <td>You are working on the core package source in this repository.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.Layout</code></td>
+<td>You are working on the platform-neutral helper package source.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.DirectWrite</code></td>
+<td>You are working on the Windows DirectWrite backend source.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.FreeType</code></td>
+<td>You are working on the Linux FreeType backend source.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.CoreText</code></td>
+<td>You are working on the macOS CoreText backend source.</td>
+</tr>
+<tr>
+<td><code>src/Pretext.SkiaSharp</code></td>
+<td>You are working on the SkiaSharp backend source in this repository.</td>
 </tr>
 <tr>
 <td><code>src/Pretext.Uno</code></td>
@@ -198,8 +246,16 @@
 <td>You want the deterministic behavior checks and supported-text examples.</td>
 </tr>
 <tr>
-<td><code>samples/PretextSamples</code></td>
-<td>You want a reference Uno app that shows the library in real layouts.</td>
+<td><code>samples/PretextSamples.Shared</code></td>
+<td>You want the shared sample catalog, assets, and data/model layer.</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.Uno</code></td>
+<td>You want the Uno sample host.</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.MacOS</code></td>
+<td>You want the native AppKit sample host that binds <code>Pretext</code> to CoreText.</td>
 </tr>
 </tbody>
 </table>
@@ -250,6 +306,7 @@
 <ul>
 <li><a href="/PretextSharp/articles/getting-started/installation">Installation</a> for packages, namespaces, and build commands</li>
 <li><a href="/PretextSharp/articles/getting-started/quickstart-prepare-and-layout">Quickstart: Prepare and Layout</a> for the first usable flow</li>
+<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a> for runtime backend selection</li>
 <li><a href="/PretextSharp/articles/getting-started/choosing-an-api">Choosing an API</a> for a decision table based on output needs and allocation budget</li>
 </ul>
 

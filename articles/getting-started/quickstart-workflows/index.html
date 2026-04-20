@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Quickstart: Sample App Tour | Pretext</title>
+    <title>Quickstart: Sample Hosts | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Quickstart: Sample App Tour | Pretext">
-<meta name="twitter:description" content="Quickstart: Sample App Tour The sample app is the fastest way to understand what the library is good at. Sample menu Overview: high-level intro page Accordion: variable-height sections driven by line counts Bubbles: shrinkwrapped chat bubbles Masonry: card sizing in a masonry layout Rich Text: mixed formatting and inline composition Dynamic Layout: layout reacting to width changes Editorial Engine: page-like placement with constraints Justification Comparison: greedy vs more advanced line...">
+<meta name="twitter:title" content="Quickstart: Sample Hosts | Pretext">
+<meta name="twitter:description" content="Quickstart: Sample Hosts The sample projects are the fastest way to understand how the new package split is meant to be used in real hosts. Project layout Project Purpose samples/PretextSamples.Shared Shared sample data, markdown/rich-text models, and catalog definitions samples/PretextSamples.Uno Uno host using Pretext.Uno samples/PretextSamples.MacOS Native AppKit host using Pretext + Pretext.CoreText Shared sample menu Overview: high-level intro page Accordion: variable-height sections driven by line counts...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Quickstart: Sample App Tour | Pretext">
-<meta property="og:title" content="Quickstart: Sample App Tour | Pretext">
+<meta name="twitter:image:alt" content="Quickstart: Sample Hosts | Pretext">
+<meta property="og:title" content="Quickstart: Sample Hosts | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Quickstart: Sample App Tour The sample app is the fastest way to understand what the library is good at. Sample menu Overview: high-level intro page Accordion: variable-height sections driven by line counts Bubbles: shrinkwrapped chat bubbles Masonry: card sizing in a masonry layout Rich Text: mixed formatting and inline composition Dynamic Layout: layout reacting to width changes Editorial Engine: page-like placement with constraints Justification Comparison: greedy vs more advanced line...">
+<meta property="og:description" content="Quickstart: Sample Hosts The sample projects are the fastest way to understand how the new package split is meant to be used in real hosts. Project layout Project Purpose samples/PretextSamples.Shared Shared sample data, markdown/rich-text models, and catalog definitions samples/PretextSamples.Uno Uno host using Pretext.Uno samples/PretextSamples.MacOS Native AppKit host using Pretext + Pretext.CoreText Shared sample menu Overview: high-level intro page Accordion: variable-height sections driven by line counts...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Quickstart: Sample App Tour | Pretext">
+<meta property="og:image:alt" content="Quickstart: Sample Hosts | Pretext">
   </head>
   <body>
 
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -110,7 +110,7 @@
             <li id='menu-item-docs-5' class='menu-item '>
               <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/choosing-an-api/' class='menu-link  '>Choosing an API</a></span>  </li>
             <li id='menu-item-docs-6' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/quickstart-workflows/' class='menu-link  '>Quickstart: Sample App Tour</a></span>  </li>
+              <span class='menu-item-row'><a href='/PretextSharp/articles/getting-started/quickstart-workflows/' class='menu-link  '>Quickstart: Sample Hosts</a></span>  </li>
           </ol>
 
         </div>
@@ -130,7 +130,7 @@
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/getting-started/' class='breadcrumb-link  '>Getting Started</a>  </li>
           <li class='breadcrumb-item  active'>
-            Quickstart: Sample App Tour  </li>
+            Quickstart: Sample Hosts  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -157,15 +157,39 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="quickstart-sample-app-tour">Quickstart: Sample App Tour</h1>
-<p>The sample app is the fastest way to understand what the library is good at.</p>
-<h2 id="sample-menu">Sample menu</h2>
+<h1 id="quickstart-sample-hosts">Quickstart: Sample Hosts</h1>
+<p>The sample projects are the fastest way to understand how the new package split is meant to be used in real hosts.</p>
+<h2 id="project-layout">Project layout</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Project</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>samples/PretextSamples.Shared</code></td>
+<td>Shared sample data, markdown/rich-text models, and catalog definitions</td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.Uno</code></td>
+<td>Uno host using <code>Pretext.Uno</code></td>
+</tr>
+<tr>
+<td><code>samples/PretextSamples.MacOS</code></td>
+<td>Native AppKit host using <code>Pretext</code> + <code>Pretext.CoreText</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="shared-sample-menu">Shared sample menu</h2>
 <ul>
 <li><code>Overview</code>: high-level intro page</li>
 <li><code>Accordion</code>: variable-height sections driven by line counts</li>
 <li><code>Bubbles</code>: shrinkwrapped chat bubbles</li>
 <li><code>Masonry</code>: card sizing in a masonry layout</li>
 <li><code>Rich Text</code>: mixed formatting and inline composition</li>
+<li><code>Markdown Chat</code>: virtualized markdown conversation</li>
 <li><code>Dynamic Layout</code>: layout reacting to width changes</li>
 <li><code>Editorial Engine</code>: page-like placement with constraints</li>
 <li><code>Justification Comparison</code>: greedy vs more advanced line fitting</li>
@@ -203,6 +227,11 @@
 <td><code>LayoutNextLine</code></td>
 </tr>
 <tr>
+<td><code>Markdown Chat</code></td>
+<td>Exact-height prediction and virtualization for rich message blocks</td>
+<td><code>PrepareRichInline</code>, <code>MeasureRichInlineStats</code>, <code>MeasureLineStats</code></td>
+</tr>
+<tr>
 <td><code>Dynamic Layout</code></td>
 <td>Reusing prepared text while width changes</td>
 <td><code>PrepareWithSegments</code>, <code>WalkLineRanges</code>, <code>LayoutNextLine</code></td>
@@ -217,13 +246,26 @@
 <td>Comparing line-fitting strategies on the same prepared data</td>
 <td><code>PrepareWithSegments</code>, <code>WalkLineRanges</code>, <code>LayoutNextLine</code></td>
 </tr>
+<tr>
+<td><code>Variable ASCII</code></td>
+<td>Width-sensitive rendering derived from real measured glyph runs</td>
+<td><code>PrepareWithSegments</code>, <code>LayoutWithLines</code></td>
+</tr>
 </tbody>
 </table>
-<h2 id="how-to-use-it">How to use it</h2>
-<p>Start in <code>samples/PretextSamples/MainPage.xaml.cs</code> and then inspect the individual sample views in <code>samples/PretextSamples/Samples</code>. Those files show how the layout APIs are used in real panels and drawing code rather than in isolated snippets.</p>
+<h2 id="how-to-read-the-hosts">How to read the hosts</h2>
+<p>Start from the shared layer and then branch into the host you care about:</p>
+<ol>
+<li><code>samples/PretextSamples.Shared/Samples/SampleCatalog.cs</code></li>
+<li>shared models under <code>samples/PretextSamples.Shared/Samples</code></li>
+<li>Uno views in <code>samples/PretextSamples.Uno/Samples</code></li>
+<li>native AppKit pages in <code>samples/PretextSamples.MacOS/Pages</code></li>
+</ol>
+<p>That reading order separates reusable layout/data logic from host-specific UI code.</p>
 <h2 id="read-next">Read next</h2>
 <ul>
 <li><a href="/PretextSharp/articles/guides/sample-gallery-tour">Sample Gallery Tour</a></li>
+<li><a href="/PretextSharp/articles/guides/sample-hosts-and-shared-assets">Sample Hosts and Shared Assets</a></li>
 <li><a href="/PretextSharp/articles/guides/integrating-in-uno">Integrating in Uno</a></li>
 </ul>
 

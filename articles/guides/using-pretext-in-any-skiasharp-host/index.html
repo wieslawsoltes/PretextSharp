@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Using Pretext in Any SkiaSharp Host | Pretext">
-<meta name="twitter:description" content="Using Pretext in Any SkiaSharp Host The core Pretext package does not depend on Uno. If your host can measure and draw text through SkiaSharp, the integration pattern stays the same. Generic host pattern Prepare text when content or font changes. Keep the prepared object in control or view-model state. Re-run layout when available width changes. Draw the resulting lines with your host's SkiaSharp surface. Minimal drawing example...">
+<meta name="twitter:description" content="Using Pretext in Any SkiaSharp Host The core Pretext package does not depend on Uno or a specific renderer. In a generic SkiaSharp host, add Pretext.SkiaSharp so the engine can discover the first-party SkiaSharp measurement backend automatically. dotnet add package Pretext dotnet add package Pretext.SkiaSharp Generic host pattern Prepare text when content or font changes. Keep the prepared object in control or view-model state. Re-run layout when available width changes....">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Using Pretext in Any SkiaSharp Host | Pretext">
 <meta property="og:title" content="Using Pretext in Any SkiaSharp Host | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Using Pretext in Any SkiaSharp Host The core Pretext package does not depend on Uno. If your host can measure and draw text through SkiaSharp, the integration pattern stays the same. Generic host pattern Prepare text when content or font changes. Keep the prepared object in control or view-model state. Re-run layout when available width changes. Draw the resulting lines with your host's SkiaSharp surface. Minimal drawing example...">
+<meta property="og:description" content="Using Pretext in Any SkiaSharp Host The core Pretext package does not depend on Uno or a specific renderer. In a generic SkiaSharp host, add Pretext.SkiaSharp so the engine can discover the first-party SkiaSharp measurement backend automatically. dotnet add package Pretext dotnet add package Pretext.SkiaSharp Generic host pattern Prepare text when content or font changes. Keep the prepared object in control or view-model state. Re-run layout when available width changes....">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Using Pretext in Any SkiaSharp Host | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -98,23 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
-            <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/' class='menu-link  '>Overview</a></span>  </li>
-            <li id='menu-item-docs-2' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/integrating-in-uno/' class='menu-link  '>Integrating in Uno</a></span>  </li>
-            <li id='menu-item-docs-3' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host/' class='menu-link  '>Using Pretext in Any SkiaSharp Host</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/testing-and-diagnostics/' class='menu-link  '>Testing and Diagnostics</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/sample-gallery-tour/' class='menu-link  '>Sample Gallery Tour</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/markdown-chat-virtualization/' class='menu-link  '>Markdown Chat Virtualization</a></span>  </li>
-            <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout/' class='menu-link  '>Shrinkwrap and Editorial Layout</a></span>  </li>
-          </ol>
-
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-5,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -160,7 +144,10 @@
         </div>
 <!-- lunet:summarize -->
 <h1 id="using-pretext-in-any-skiasharp-host">Using Pretext in Any SkiaSharp Host</h1>
-<p>The core <code>Pretext</code> package does not depend on Uno. If your host can measure and draw text through SkiaSharp, the integration pattern stays the same.</p>
+<p>The core <code>Pretext</code> package does not depend on Uno or a specific renderer. In a generic SkiaSharp host, add <code>Pretext.SkiaSharp</code> so the engine can discover the first-party SkiaSharp measurement backend automatically.</p>
+<pre><code class="language-bash">dotnet add package Pretext
+dotnet add package Pretext.SkiaSharp
+</code></pre>
 <h2 id="generic-host-pattern">Generic host pattern</h2>
 <ol>
 <li>Prepare text when content or font changes.</li>
@@ -168,6 +155,7 @@
 <li>Re-run layout when available width changes.</li>
 <li>Draw the resulting lines with your host's SkiaSharp surface.</li>
 </ol>
+<p>If the same application also references native backends, call <code>PretextLayout.SetTextMeasurerFactory(new SkiaSharpTextMeasurerFactory())</code> when the SkiaSharp backend should remain the source of truth.</p>
 <h2 id="minimal-drawing-example">Minimal drawing example</h2>
 <pre><code class="language-csharp">using Pretext;
 using SkiaSharp;
@@ -214,6 +202,11 @@ foreach (var line in lines.Lines)
 <li>desktop editors or note surfaces built directly on SkiaSharp</li>
 <li>design tools that need repeated text measurement during resize</li>
 <li>reporting or export pipelines that place text into rectangles manually</li>
+</ul>
+<h2 id="read-next">Read next</h2>
+<ul>
+<li><a href="/PretextSharp/articles/guides/backend-discovery-and-overrides">Backend Discovery and Overrides</a></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext-skiasharp">Package: Pretext.SkiaSharp</a></li>
 </ul>
 
       </div>

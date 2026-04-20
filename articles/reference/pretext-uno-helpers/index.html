@@ -6,21 +6,21 @@
     <meta name="generator" content="lunet 1.0.10.0">
     <script>(function(){const root=document.documentElement;const key=root.getAttribute("data-lunet-theme-storage-key")||"lunet-theme";const fallback=root.getAttribute("data-lunet-theme-mode")||"system";let stored=null;try{stored=localStorage.getItem(key);}catch(_){stored=null;}const mode=(stored==="light"||stored==="dark"||stored==="system")?stored:fallback;const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;const resolved=mode==="system"?(prefersDark?"dark":"light"):mode;root.setAttribute("data-lunet-theme-mode",mode);root.setAttribute("data-bs-theme",resolved);}());</script>
     <link rel='icon' href='/PretextSharp/favicon.ico' sizes='32x32'>
-    <title>Pretext.Uno Helpers | Pretext</title>
+    <title>Companion Helpers | Pretext</title>
     <link rel="stylesheet" href="/PretextSharp/css/lite.css">
     <script src="/PretextSharp/js/lite-defer.js" defer></script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
-<meta name="twitter:title" content="Pretext.Uno Helpers | Pretext">
-<meta name="twitter:description" content="Pretext.Uno Helpers Pretext.Uno is the companion package that adds reusable Uno-side helpers on top of the core Pretext engine. Controls StretchScrollHost A simple page-level container that: wraps content in a ScrollViewer stretches the child width to the host width exposes ContentBackground and ContentPadding can compute local viewport bounds for a target element This is useful for sample-like pages or long document surfaces that need viewport-relative calculations....">
+<meta name="twitter:title" content="Companion Helpers | Pretext">
+<meta name="twitter:description" content="Companion Helpers The companion surface is now split across two packages: Pretext.Layout for platform-neutral wrap and obstacle-layout helpers Pretext.Uno for Uno-specific controls and render scheduling Pretext.Layout Pretext.Layout builds on the core Pretext engine without taking any Uno Platform dependency. Data types WrapMetrics Aggregate metrics for a wrapped text block: LineCount Height MaxLineWidth PositionedLine Represents one laid-out line placed into a coordinate system:...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta name="twitter:image:alt" content="Pretext.Uno Helpers | Pretext">
-<meta property="og:title" content="Pretext.Uno Helpers | Pretext">
+<meta name="twitter:image:alt" content="Companion Helpers | Pretext">
+<meta property="og:title" content="Companion Helpers | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Pretext.Uno Helpers Pretext.Uno is the companion package that adds reusable Uno-side helpers on top of the core Pretext engine. Controls StretchScrollHost A simple page-level container that: wraps content in a ScrollViewer stretches the child width to the host width exposes ContentBackground and ContentPadding can compute local viewport bounds for a target element This is useful for sample-like pages or long document surfaces that need viewport-relative calculations....">
+<meta property="og:description" content="Companion Helpers The companion surface is now split across two packages: Pretext.Layout for platform-neutral wrap and obstacle-layout helpers Pretext.Uno for Uno-specific controls and render scheduling Pretext.Layout Pretext.Layout builds on the core Pretext engine without taking any Uno Platform dependency. Data types WrapMetrics Aggregate metrics for a wrapped text block: LineCount Height MaxLineWidth PositionedLine Represents one laid-out line placed into a coordinate system:...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
-<meta property="og:image:alt" content="Pretext.Uno Helpers | Pretext">
+<meta property="og:image:alt" content="Companion Helpers | Pretext">
   </head>
   <body>
 
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -98,27 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
-            <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/' class='menu-link  '>Overview</a></span>  </li>
-            <li id='menu-item-docs-2' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/packages-and-assemblies/' class='menu-link  '>Packages and Namespace</a></span>  </li>
-            <li id='menu-item-docs-3' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/public-types-and-operations/' class='menu-link  '>Public Types and Operations</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/prepared-text-types/' class='menu-link  '>Prepared Text Types</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/rich-inline-api/' class='menu-link  '>Rich Inline API</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/pretext-uno-helpers/' class='menu-link  '>Pretext.Uno Helpers</a></span>  </li>
-            <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/scope-and-limitations/' class='menu-link  '>Scope and Limitations</a></span>  </li>
-            <li id='menu-item-docs-8' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/lunet-docs-pipeline/' class='menu-link  '>Lunet Docs Pipeline</a></span>  </li>
-            <li id='menu-item-docs-9' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/license/' class='menu-link  '>License</a></span>  </li>
-          </ol>
-
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-14,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -136,7 +116,7 @@
           <li class='breadcrumb-item '>
             <a href='/PretextSharp/articles/reference/' class='breadcrumb-link  '>Reference</a>  </li>
           <li class='breadcrumb-item  active'>
-            Pretext.Uno Helpers  </li>
+            Companion Helpers  </li>
         </ol>
 
         <p id="lunet-results"></p>
@@ -163,9 +143,52 @@
           </button>
         </div>
 <!-- lunet:summarize -->
-<h1 id="pretextuno-helpers">Pretext.Uno Helpers</h1>
-<p><code>Pretext.Uno</code> is the companion package that adds reusable Uno-side helpers on top of the core <code>Pretext</code> engine.</p>
-<h2 id="controls">Controls</h2>
+<h1 id="companion-helpers">Companion Helpers</h1>
+<p>The companion surface is now split across two packages:</p>
+<ul>
+<li><code>Pretext.Layout</code> for platform-neutral wrap and obstacle-layout helpers</li>
+<li><code>Pretext.Uno</code> for Uno-specific controls and render scheduling</li>
+</ul>
+<h2 id="pretextlayout"><code>Pretext.Layout</code></h2>
+<p><code>Pretext.Layout</code> builds on the core <code>Pretext</code> engine without taking any Uno Platform dependency.</p>
+<h3 id="data-types">Data types</h3>
+<h4 id="wrapmetrics"><code>WrapMetrics</code></h4>
+<p>Aggregate metrics for a wrapped text block:</p>
+<ul>
+<li><code>LineCount</code></li>
+<li><code>Height</code></li>
+<li><code>MaxLineWidth</code></li>
+</ul>
+<h4 id="positionedline"><code>PositionedLine</code></h4>
+<p>Represents one laid-out line placed into a coordinate system:</p>
+<ul>
+<li><code>Text</code></li>
+<li><code>X</code></li>
+<li><code>Y</code></li>
+<li><code>Width</code></li>
+</ul>
+<h4 id="obstacle-primitives">Obstacle primitives</h4>
+<ul>
+<li><code>RectObstacle</code></li>
+<li><code>CircleObstacle</code></li>
+<li><code>Interval</code></li>
+</ul>
+<p>These are the geometric primitives used by the obstacle-aware helpers.</p>
+<h3 id="helper-types">Helper types</h3>
+<h4 id="preparedtextmetrics"><code>PreparedTextMetrics</code></h4>
+<p>Utility methods for common wrap calculations:</p>
+<ul>
+<li><code>MeasureMaxLineWidth</code></li>
+<li><code>CollectWrapMetrics</code></li>
+<li><code>FindTightWrapMetrics</code></li>
+<li><code>IsEnd</code></li>
+</ul>
+<h4 id="columnflowlayout"><code>ColumnFlowLayout</code></h4>
+<p>Flows prepared text through rectangular columns while respecting rectangular and circular obstacles.</p>
+<h4 id="obstaclelayouthelper"><code>ObstacleLayoutHelper</code></h4>
+<p>Lower-level helper methods for carving intervals and selecting usable slots around obstacles.</p>
+<h2 id="pretextuno"><code>Pretext.Uno</code></h2>
+<p><code>Pretext.Uno</code> now focuses on the Uno-specific pieces.</p>
 <h3 id="stretchscrollhost"><code>StretchScrollHost</code></h3>
 <p>A simple page-level container that:</p>
 <ul>
@@ -183,44 +206,13 @@
 <li>you want to avoid stacking redundant render passes</li>
 <li>your custom surface already owns a render action</li>
 </ul>
-<h2 id="layout-types">Layout types</h2>
-<h3 id="wrapmetrics"><code>WrapMetrics</code></h3>
-<p>Aggregate metrics for a wrapped text block:</p>
+<h2 id="when-to-use-which-package">When to use which package</h2>
+<p>Use <code>Pretext.Layout</code> when you want the helper patterns from the sample hosts without taking a UI framework dependency. Add <code>Pretext.Uno</code> only when your application already targets Uno and wants the reusable Uno controls as well.</p>
+<p>See the dedicated package pages for installation and dependency details:</p>
 <ul>
-<li><code>LineCount</code></li>
-<li><code>Height</code></li>
-<li><code>MaxLineWidth</code></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext-layout">Package: Pretext.Layout</a></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext-uno">Package: Pretext.Uno</a></li>
 </ul>
-<h3 id="positionedline"><code>PositionedLine</code></h3>
-<p>Represents one laid-out line placed into a coordinate system:</p>
-<ul>
-<li><code>Text</code></li>
-<li><code>X</code></li>
-<li><code>Y</code></li>
-<li><code>Width</code></li>
-</ul>
-<h3 id="obstacle-primitives">Obstacle primitives</h3>
-<ul>
-<li><code>RectObstacle</code></li>
-<li><code>CircleObstacle</code></li>
-<li><code>Interval</code></li>
-</ul>
-<p>These are the geometric primitives used by the obstacle-aware helpers.</p>
-<h2 id="layout-helpers">Layout helpers</h2>
-<h3 id="preparedtextmetrics"><code>PreparedTextMetrics</code></h3>
-<p>Utility methods for common wrap calculations:</p>
-<ul>
-<li><code>MeasureMaxLineWidth</code></li>
-<li><code>CollectWrapMetrics</code></li>
-<li><code>FindTightWrapMetrics</code></li>
-<li><code>IsEnd</code></li>
-</ul>
-<h3 id="columnflowlayout"><code>ColumnFlowLayout</code></h3>
-<p>Flows prepared text through rectangular columns while respecting rectangular and circular obstacles.</p>
-<h3 id="obstaclelayouthelper"><code>ObstacleLayoutHelper</code></h3>
-<p>Lower-level helper methods for carving intervals and selecting usable slots around obstacles.</p>
-<h2 id="when-to-use-the-companion-package">When to use the companion package</h2>
-<p>Use <code>Pretext.Uno</code> when your application already targets Uno and wants to reuse the same helper patterns as the sample app. If you only need the text preparation and layout engine, stay on the core <code>Pretext</code> package.</p>
 
       </div>
   </div>

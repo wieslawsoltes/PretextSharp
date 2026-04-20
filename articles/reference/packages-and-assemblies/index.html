@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Packages and Namespace | Pretext">
-<meta name="twitter:description" content="Packages and Namespace Published packages Pretext source: src/Pretext/Pretext.csproj primary namespace: Pretext target frameworks: netstandard2.0, net461, net6.0, net8.0, net10.0 contains the core preparation, measurement, bidi, and line-layout pipeline Pretext.Uno source: src/Pretext.Uno/Pretext.Uno.csproj primary namespaces: Pretext.Uno.Controls, Pretext.Uno.Layout target framework: net10.0-desktop contains reusable Uno host controls and obstacle-aware text-flow helpers layered on top of the core...">
+<meta name="twitter:description" content="Packages and Namespace Published packages Pretext source: src/Pretext/Pretext.csproj primary namespace: Pretext target frameworks: netstandard2.0, net461, net6.0, net8.0, net10.0 contains the core preparation, bidi, and line-layout pipeline plus backend selection Pretext.Contracts source: src/Pretext.Contracts/Pretext.Contracts.csproj primary namespace: Pretext target frameworks: netstandard2.0, net461, net6.0, net8.0, net10.0 contains the public backend contracts used by Pretext and backend packages...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Packages and Namespace | Pretext">
 <meta property="og:title" content="Packages and Namespace | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Packages and Namespace Published packages Pretext source: src/Pretext/Pretext.csproj primary namespace: Pretext target frameworks: netstandard2.0, net461, net6.0, net8.0, net10.0 contains the core preparation, measurement, bidi, and line-layout pipeline Pretext.Uno source: src/Pretext.Uno/Pretext.Uno.csproj primary namespaces: Pretext.Uno.Controls, Pretext.Uno.Layout target framework: net10.0-desktop contains reusable Uno host controls and obstacle-aware text-flow helpers layered on top of the core...">
+<meta property="og:description" content="Packages and Namespace Published packages Pretext source: src/Pretext/Pretext.csproj primary namespace: Pretext target frameworks: netstandard2.0, net461, net6.0, net8.0, net10.0 contains the core preparation, bidi, and line-layout pipeline plus backend selection Pretext.Contracts source: src/Pretext.Contracts/Pretext.Contracts.csproj primary namespace: Pretext target frameworks: netstandard2.0, net461, net6.0, net8.0, net10.0 contains the public backend contracts used by Pretext and backend packages...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Packages and Namespace | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -98,27 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
-            <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/' class='menu-link  '>Overview</a></span>  </li>
-            <li id='menu-item-docs-2' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/packages-and-assemblies/' class='menu-link  '>Packages and Namespace</a></span>  </li>
-            <li id='menu-item-docs-3' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/public-types-and-operations/' class='menu-link  '>Public Types and Operations</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/prepared-text-types/' class='menu-link  '>Prepared Text Types</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/rich-inline-api/' class='menu-link  '>Rich Inline API</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/pretext-uno-helpers/' class='menu-link  '>Pretext.Uno Helpers</a></span>  </li>
-            <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/scope-and-limitations/' class='menu-link  '>Scope and Limitations</a></span>  </li>
-            <li id='menu-item-docs-8' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/lunet-docs-pipeline/' class='menu-link  '>Lunet Docs Pipeline</a></span>  </li>
-            <li id='menu-item-docs-9' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/reference/license/' class='menu-link  '>License</a></span>  </li>
-          </ol>
-
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.8f81b62efa4c52c3df00a9f412aa868f.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-2,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -171,15 +151,63 @@
 <li>source: <code>src/Pretext/Pretext.csproj</code></li>
 <li>primary namespace: <code>Pretext</code></li>
 <li>target frameworks: <code>netstandard2.0</code>, <code>net461</code>, <code>net6.0</code>, <code>net8.0</code>, <code>net10.0</code></li>
-<li>contains the core preparation, measurement, bidi, and line-layout pipeline</li>
+<li>contains the core preparation, bidi, and line-layout pipeline plus backend selection</li>
+</ul>
+</li>
+<li><p><code>Pretext.Contracts</code></p>
+<ul>
+<li>source: <code>src/Pretext.Contracts/Pretext.Contracts.csproj</code></li>
+<li>primary namespace: <code>Pretext</code></li>
+<li>target frameworks: <code>netstandard2.0</code>, <code>net461</code>, <code>net6.0</code>, <code>net8.0</code>, <code>net10.0</code></li>
+<li>contains the public backend contracts used by <code>Pretext</code> and backend packages</li>
+</ul>
+</li>
+<li><p><code>Pretext.Layout</code></p>
+<ul>
+<li>source: <code>src/Pretext.Layout/Pretext.Layout.csproj</code></li>
+<li>primary namespace: <code>Pretext.Layout</code></li>
+<li>target frameworks: <code>netstandard2.0</code>, <code>net461</code>, <code>net6.0</code>, <code>net8.0</code>, <code>net10.0</code></li>
+<li>contains platform-neutral wrap metrics, column-flow, and obstacle-layout helpers</li>
+</ul>
+</li>
+<li><p><code>Pretext.DirectWrite</code></p>
+<ul>
+<li>source: <code>src/Pretext.DirectWrite/Pretext.DirectWrite.csproj</code></li>
+<li>primary namespace: <code>Pretext.DirectWrite</code></li>
+<li>target frameworks: <code>netstandard2.0</code>, <code>net461</code>, <code>net6.0</code>, <code>net8.0</code>, <code>net10.0</code></li>
+<li>contains the first-party Windows DirectWrite text-measurement backend</li>
+</ul>
+</li>
+<li><p><code>Pretext.FreeType</code></p>
+<ul>
+<li>source: <code>src/Pretext.FreeType/Pretext.FreeType.csproj</code></li>
+<li>primary namespace: <code>Pretext.FreeType</code></li>
+<li>target frameworks: <code>netstandard2.0</code>, <code>net461</code>, <code>net6.0</code>, <code>net8.0</code>, <code>net10.0</code></li>
+<li>contains the first-party Linux FreeType + Fontconfig text-measurement backend</li>
+</ul>
+</li>
+<li><p><code>Pretext.CoreText</code></p>
+<ul>
+<li>source: <code>src/Pretext.CoreText/Pretext.CoreText.csproj</code></li>
+<li>primary namespace: <code>Pretext.CoreText</code></li>
+<li>target frameworks: <code>netstandard2.0</code>, <code>net461</code>, <code>net6.0</code>, <code>net8.0</code>, <code>net10.0</code></li>
+<li>contains the first-party macOS CoreText text-measurement backend</li>
+</ul>
+</li>
+<li><p><code>Pretext.SkiaSharp</code></p>
+<ul>
+<li>source: <code>src/Pretext.SkiaSharp/Pretext.SkiaSharp.csproj</code></li>
+<li>primary namespace: <code>Pretext.SkiaSharp</code></li>
+<li>target frameworks: <code>netstandard2.0</code>, <code>net461</code>, <code>net6.0</code>, <code>net8.0</code>, <code>net10.0</code></li>
+<li>contains the portable SkiaSharp text-measurement backend and fallback</li>
 </ul>
 </li>
 <li><p><code>Pretext.Uno</code></p>
 <ul>
 <li>source: <code>src/Pretext.Uno/Pretext.Uno.csproj</code></li>
-<li>primary namespaces: <code>Pretext.Uno.Controls</code>, <code>Pretext.Uno.Layout</code></li>
+<li>primary namespace: <code>Pretext.Uno.Controls</code></li>
 <li>target framework: <code>net10.0-desktop</code></li>
-<li>contains reusable Uno host controls and obstacle-aware text-flow helpers layered on top of the core <code>Pretext</code> namespace</li>
+<li>contains reusable Uno host controls layered on top of the core <code>Pretext</code> namespace and <code>Pretext.Layout</code></li>
 </ul>
 </li>
 </ul>
@@ -190,8 +218,10 @@
 </ul>
 <h2 id="sample-project">Sample project</h2>
 <ul>
-<li><code>samples/PretextSamples/PretextSamples.csproj</code></li>
-<li>hosts a Uno UI that demonstrates the library in multiple layout scenarios</li>
+<li><code>samples/PretextSamples.Shared/PretextSamples.Shared.csproj</code></li>
+<li><code>samples/PretextSamples.Uno/PretextSamples.Uno.csproj</code></li>
+<li><code>samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj</code></li>
+<li>together they provide the shared sample layer plus Uno and native macOS hosts</li>
 </ul>
 <h2 id="core-entry-point">Core entry point</h2>
 <p>The public API is centered on <code>PretextLayout</code> and the data types around it:</p>
@@ -206,17 +236,22 @@
 <h2 id="relationship-between-the-packages">Relationship between the packages</h2>
 <p>The packages are layered:</p>
 <ol>
-<li><code>Pretext</code> is the engine. It is reusable anywhere SkiaSharp is available.</li>
-<li><code>Pretext.Uno</code> is a host-specific companion layer. It depends on <code>Pretext</code>.</li>
+<li><code>Pretext</code> is the engine. It is reusable with any measurement backend that implements <code>Pretext.Contracts</code>.</li>
+<li><code>Pretext.Contracts</code> defines the public backend seam for custom measurement integrations.</li>
+<li><code>Pretext.Layout</code> is the platform-neutral helper layer for wrap metrics and obstacle-aware flows.</li>
+<li><code>Pretext.DirectWrite</code>, <code>Pretext.FreeType</code>, and <code>Pretext.CoreText</code> are the first-party host-native backends.</li>
+<li><code>Pretext.SkiaSharp</code> is the portable first-party fallback backend.</li>
+<li><code>Pretext.Uno</code> is a host-specific companion layer. It depends on <code>Pretext</code>, <code>Pretext.Layout</code>, and the first-party backend packages.</li>
 </ol>
+<p>For package-specific installation and usage details, continue into the dedicated package pages in this section.</p>
 <p>If you are documenting or reviewing behavior, treat the core package as the source of truth for:</p>
 <ul>
 <li>segmentation</li>
-<li>measurement</li>
+<li>backend-independent layout behavior</li>
 <li>wrapping</li>
 <li>streamed line walking</li>
 </ul>
-<p>Treat <code>Pretext.Uno</code> as a convenience package for host integration and advanced layout helpers.</p>
+<p>Treat <code>Pretext.Layout</code> as the reusable helper package for higher-level layout workflows, and <code>Pretext.Uno</code> as the convenience package for Uno-specific host integration.</p>
 
       </div>
   </div>

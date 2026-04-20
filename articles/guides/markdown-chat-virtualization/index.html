@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -98,23 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
-            <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/' class='menu-link  '>Overview</a></span>  </li>
-            <li id='menu-item-docs-2' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/integrating-in-uno/' class='menu-link  '>Integrating in Uno</a></span>  </li>
-            <li id='menu-item-docs-3' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host/' class='menu-link  '>Using Pretext in Any SkiaSharp Host</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/testing-and-diagnostics/' class='menu-link  '>Testing and Diagnostics</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/sample-gallery-tour/' class='menu-link  '>Sample Gallery Tour</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/markdown-chat-virtualization/' class='menu-link  '>Markdown Chat Virtualization</a></span>  </li>
-            <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout/' class='menu-link  '>Shrinkwrap and Editorial Layout</a></span>  </li>
-          </ol>
-
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-10,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -223,9 +207,10 @@
 <p>This is the important architectural point: <code>Pretext</code> stays the paragraph leaf, while the sample owns the higher-level block layout rules.</p>
 <h2 id="files-to-read">Files to read</h2>
 <ul>
-<li><code>samples/PretextSamples/Samples/MarkdownChatData.cs</code></li>
-<li><code>samples/PretextSamples/Samples/MarkdownChatModel.cs</code></li>
-<li><code>samples/PretextSamples/Samples/MarkdownChatSampleView.cs</code></li>
+<li><code>samples/PretextSamples.Shared/Samples/MarkdownChatData.cs</code></li>
+<li><code>samples/PretextSamples.Shared/Samples/MarkdownChatModel.cs</code></li>
+<li><code>samples/PretextSamples.Uno/Samples/MarkdownChatSampleView.cs</code></li>
+<li><code>samples/PretextSamples.MacOS/Pages/MarkdownChatPageView.cs</code></li>
 </ul>
 <h2 id="takeaway">Takeaway</h2>
 <p>If your application can convert rich content into deterministic block and inline templates, <code>Pretext</code> gives you the measurement pieces needed to virtualize large scroll surfaces without waiting for a live layout pass.</p>

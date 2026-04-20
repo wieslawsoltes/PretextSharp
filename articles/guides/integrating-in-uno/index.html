@@ -12,13 +12,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wieslawsoltes">
 <meta name="twitter:title" content="Integrating in Uno | Pretext">
-<meta name="twitter:description" content="Integrating in Uno The common integration pattern is: Prepare content when the text or font changes. Reuse the prepared object during measure or arrange. Recompute only the line walk when available width changes. Typical spots to call it Custom panels MeasureOverride Drawing code for chips, bubbles, and cards Responsive layouts that need minimum width or exact line counts Example pattern private PreparedTextWithSegments? _prepared; void UpdateText(string text, string font) { _prepared...">
+<meta name="twitter:description" content="Integrating in Uno For Uno applications, Pretext.Uno is now the convenience package. It brings the core engine, Pretext.Layout, and the first-party backend set transitively. The common integration pattern is: Prepare content when the text or font changes. Reuse the prepared object during measure or arrange. Recompute only the line walk when available width changes. Typical spots to call it Custom panels MeasureOverride Drawing code for chips, bubbles, and cards...">
 <meta name="twitter:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta name="twitter:image:alt" content="Integrating in Uno | Pretext">
 <meta property="og:title" content="Integrating in Uno | Pretext">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wieslawsoltes.github.io/PretextSharp">
-<meta property="og:description" content="Integrating in Uno The common integration pattern is: Prepare content when the text or font changes. Reuse the prepared object during measure or arrange. Recompute only the line walk when available width changes. Typical spots to call it Custom panels MeasureOverride Drawing code for chips, bubbles, and cards Responsive layouts that need minimum width or exact line counts Example pattern private PreparedTextWithSegments? _prepared; void UpdateText(string text, string font) { _prepared...">
+<meta property="og:description" content="Integrating in Uno For Uno applications, Pretext.Uno is now the convenience package. It brings the core engine, Pretext.Layout, and the first-party backend set transitively. The common integration pattern is: Prepare content when the text or font changes. Reuse the prepared object during measure or arrange. Recompute only the line walk when available width changes. Typical spots to call it Custom panels MeasureOverride Drawing code for chips, bubbles, and cards...">
 <meta property="og:image" content="https://wieslawsoltes.github.io/PretextSharp/images/logo.svg">
 <meta property="og:image:alt" content="Integrating in Uno | Pretext">
   </head>
@@ -81,7 +81,7 @@
   <li id='nav-item-home2-1' class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp' class='nav-link  btn btn-info'><i class='bi bi-github'></i> GitHub</a></span>  </li>
   <li id='nav-item-home2-2' class='nav-item '>
-    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
+    <span class='nav-item-row'><a href='https://github.com/wieslawsoltes/PretextSharp/tree/main/samples' class='nav-link  btn btn-outline-secondary'><i class='bi bi-layout-text-window-reverse'></i> Samples</a></span>  </li>
 </ol>
           </div>
         </div>
@@ -98,23 +98,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#docs-sidebar-menu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <ol id='menu-id-docs-0' class='menu menu-level0 show '>
-            <li id='menu-item-docs-1' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/' class='menu-link  '>Overview</a></span>  </li>
-            <li id='menu-item-docs-2' class='menu-item  active'>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/integrating-in-uno/' class='menu-link  '>Integrating in Uno</a></span>  </li>
-            <li id='menu-item-docs-3' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/using-pretext-in-any-skiasharp-host/' class='menu-link  '>Using Pretext in Any SkiaSharp Host</a></span>  </li>
-            <li id='menu-item-docs-4' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/testing-and-diagnostics/' class='menu-link  '>Testing and Diagnostics</a></span>  </li>
-            <li id='menu-item-docs-5' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/sample-gallery-tour/' class='menu-link  '>Sample Gallery Tour</a></span>  </li>
-            <li id='menu-item-docs-6' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/markdown-chat-virtualization/' class='menu-link  '>Markdown Chat Virtualization</a></span>  </li>
-            <li id='menu-item-docs-7' class='menu-item '>
-              <span class='menu-item-row'><a href='/PretextSharp/articles/guides/shrinkwrap-and-editorial-layout/' class='menu-link  '>Shrinkwrap and Editorial Layout</a></span>  </li>
-          </ol>
-
+          <div class='lunet-menu-async' data-lunet-menu-partial='/PretextSharp/partials/menus/menu-docs.d2283c184b11664d471e9ac8553f4008.html' data-lunet-menu-open='menu-id-docs-0' data-lunet-menu-active='menu-item-docs-4,menu-item-docs-0'><div class='menu-loading text-body-secondary small'>Loading menu…</div></div>
         </div>
       </nav>
       <!-- Right sidebar (TOC) - collapsible on mobile, visible sidebar on xxl+ -->
@@ -160,6 +144,7 @@
         </div>
 <!-- lunet:summarize -->
 <h1 id="integrating-in-uno">Integrating in Uno</h1>
+<p>For Uno applications, <code>Pretext.Uno</code> is now the convenience package. It brings the core engine, <code>Pretext.Layout</code>, and the first-party backend set transitively.</p>
 <p>The common integration pattern is:</p>
 <ol>
 <li>Prepare content when the text or font changes.</li>
@@ -193,14 +178,21 @@ Size MeasureBubble(double maxWidth, double lineHeight, Thickness padding)
 }
 </code></pre>
 <h2 id="companion-helpers">Companion helpers</h2>
-<p>The <code>Pretext.Uno</code> package in this repository adds reusable helpers around the core engine:</p>
+<p>The companion packages in this repository add reusable helpers around the core engine:</p>
 <ul>
 <li><code>StretchScrollHost</code> for page-like scrollable samples and viewport calculations</li>
 <li><code>UiRenderScheduler</code> for coalesced redraw scheduling on <code>DispatcherQueue</code></li>
 <li><code>PreparedTextMetrics</code> for wrap metrics and tight-width calculations</li>
 <li><code>ColumnFlowLayout</code> and <code>ObstacleLayoutHelper</code> for flowing lines into constrained regions</li>
 </ul>
-<p>Use them when they match your layout model, but keep the core <code>Pretext</code> API as the main dependency.</p>
+<p><code>StretchScrollHost</code> and <code>UiRenderScheduler</code> live in <code>Pretext.Uno</code>. The layout helpers now live in <code>Pretext.Layout</code>, which <code>Pretext.Uno</code> brings transitively for Uno apps. Use them when they match your layout model, but keep the core <code>Pretext</code> API as the main dependency.</p>
+<h2 id="what-to-inspect-in-this-repository">What to inspect in this repository</h2>
+<p>If you want the current Uno integration pattern rather than older experiments, start with:</p>
+<ul>
+<li><code>samples/PretextSamples.Uno/MainPage.xaml.cs</code></li>
+<li><code>samples/PretextSamples.Uno/Samples</code></li>
+<li><code>samples/PretextSamples.Shared/Samples</code></li>
+</ul>
 <h2 id="uno-specific-advice">Uno-specific advice</h2>
 <ul>
 <li>Prepare text in view-model or control state, not inside every render callback.</li>
@@ -209,7 +201,11 @@ Size MeasureBubble(double maxWidth, double lineHeight, Thickness padding)
 <li>Use <code>Layout</code> in measurement passes and <code>LayoutWithLines</code> or <code>LayoutNextLine</code> only when rendering needs richer output.</li>
 </ul>
 <h2 id="further-reading">Further reading</h2>
-<p>For broader Uno renderer context, see <a href="https://platform.uno/docs/articles/how-uno-works.html">How Uno Platform Works</a>.</p>
+<ul>
+<li><a href="/PretextSharp/articles/reference/package-pretext-uno">Package: Pretext.Uno</a></li>
+<li><a href="/PretextSharp/articles/reference/package-pretext-layout">Package: Pretext.Layout</a></li>
+<li>For broader Uno renderer context, see <a href="https://platform.uno/docs/articles/how-uno-works.html">How Uno Platform Works</a>.</li>
+</ul>
 
       </div>
   </div>
