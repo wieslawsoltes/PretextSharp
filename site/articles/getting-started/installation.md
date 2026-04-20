@@ -25,6 +25,16 @@ Add `Pretext` plus one or more backends when you want to:
 - drive your own native or SkiaSharp drawing code
 - use the engine outside Uno entirely
 
+Recommended pairings:
+
+| Host | Packages |
+| --- | --- |
+| Windows-native | `Pretext` + `Pretext.DirectWrite` |
+| Linux-native | `Pretext` + `Pretext.FreeType` |
+| macOS-native | `Pretext` + `Pretext.CoreText` |
+| Generic SkiaSharp | `Pretext` + `Pretext.SkiaSharp` |
+| Uno app | `Pretext.Uno` |
+
 First-party backend packages:
 
 ```bash
@@ -119,10 +129,15 @@ dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release
 
 ## Sample app
 
-The interactive demos live in `samples/PretextSamples`. Use that app when you want to see how the library behaves in real layouts before integrating it into your own UI.
+The repository now ships two sample hosts plus a shared sample layer:
+
+- `samples/PretextSamples.Shared` for shared sample data, assets, and models
+- `samples/PretextSamples` for the Uno host
+- `samples/PretextSamples.MacOS` for the native AppKit host using `Pretext.CoreText`
 
 ## Read next
 
 - [Quickstart: Prepare and Layout](quickstart-prepare-and-layout)
+- [Backend Discovery and Overrides](../guides/backend-discovery-and-overrides)
 - [Choosing an API](choosing-an-api)
 - [Font Strings and Measurement](../concepts/font-strings-and-measurement)

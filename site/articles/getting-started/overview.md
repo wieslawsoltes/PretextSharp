@@ -22,6 +22,7 @@ The normal workflow is:
 | Item | Use it when |
 | --- | --- |
 | `Pretext` | You want the reusable layout engine under the `Pretext` namespace. |
+| `Pretext.Contracts` | You are implementing or documenting a measurement backend. |
 | `Pretext.Layout` | You want platform-neutral wrap and obstacle-layout helpers on top of `Pretext`. |
 | `Pretext.DirectWrite` | You want the first-party Windows-native DirectWrite measurement backend. |
 | `Pretext.FreeType` | You want the first-party Linux-native FreeType + Fontconfig measurement backend. |
@@ -37,7 +38,9 @@ The normal workflow is:
 | `src/Pretext.SkiaSharp` | You are working on the SkiaSharp backend source in this repository. |
 | `src/Pretext.Uno` | You are working on the Uno companion package source in this repository. |
 | `tests/Pretext.Uno.Tests` | You want the deterministic behavior checks and supported-text examples. |
-| `samples/PretextSamples` | You want a reference Uno app that shows the library in real layouts. |
+| `samples/PretextSamples.Shared` | You want the shared sample catalog, assets, and data/model layer. |
+| `samples/PretextSamples` | You want the Uno sample host. |
+| `samples/PretextSamples.MacOS` | You want the native AppKit sample host that binds `Pretext` to CoreText. |
 
 ## The four main API shapes
 
@@ -62,4 +65,5 @@ The normal workflow is:
 
 - [Installation](installation) for packages, namespaces, and build commands
 - [Quickstart: Prepare and Layout](quickstart-prepare-and-layout) for the first usable flow
+- [Backend Discovery and Overrides](../guides/backend-discovery-and-overrides) for runtime backend selection
 - [Choosing an API](choosing-an-api) for a decision table based on output needs and allocation budget

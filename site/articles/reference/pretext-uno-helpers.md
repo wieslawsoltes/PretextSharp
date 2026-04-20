@@ -86,4 +86,9 @@ Use it when:
 
 ## When to use which package
 
-Use `Pretext.Layout` when you want the helper patterns from the sample app without taking a UI framework dependency. Add `Pretext.Uno` only when your application already targets Uno and wants the reusable Uno controls as well.
+Use `Pretext.Layout` when you want the helper patterns from the sample hosts without taking a UI framework dependency. Add `Pretext.Uno` only when your application already targets Uno and wants the reusable Uno controls as well.
+
+See the dedicated package pages for installation and dependency details:
+
+- [Package: Pretext.Layout](package-pretext-layout)
+- [Package: Pretext.Uno](package-pretext-uno)

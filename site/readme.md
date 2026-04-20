@@ -44,8 +44,8 @@ You still own:
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Getting Started</h2><p>Install the packages, learn the font string contract, and build the first useful `Prepare` + `Layout` flow.</p><a href="articles/getting-started" class="btn btn-sm btn-primary">Open section</a></div></div></div>
   <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Concepts</h2><p>Understand the prepared-text lifecycle, whitespace modes, break kinds, locale-aware segmentation, bidi, and line fitting.</p><a href="articles/concepts" class="btn btn-sm btn-primary">Open section</a></div></div></div>
-  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Guides</h2><p>Integrate `Pretext` into Uno, native Windows/Linux/macOS hosts, or any SkiaSharp-based renderer, then reuse the sample app patterns for shrinkwrap, editorial, and obstacle-aware layouts.</p><a href="articles/guides" class="btn btn-sm btn-primary">Open section</a></div></div></div>
-  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Reference</h2><p>Browse every public type and operation, the companion helper packages, platform notes, and repository structure.</p><a href="articles/reference" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Guides</h2><p>Integrate `Pretext` into Uno, native Windows/Linux/macOS hosts, or any SkiaSharp-based renderer, then reuse the shared sample-host patterns for shrinkwrap, editorial, and obstacle-aware layouts.</p><a href="articles/guides" class="btn btn-sm btn-primary">Open section</a></div></div></div>
+  <div class="col"><div class="card h-100"><div class="card-body"><h2 class="h4">Reference</h2><p>Browse every public type and operation, the package-by-package reference pages, platform notes, and repository structure.</p><a href="articles/reference" class="btn btn-sm btn-primary">Open section</a></div></div></div>
 </div>
 
 ## Repository Layout
@@ -58,9 +58,12 @@ You still own:
 | `src/Pretext.DirectWrite` | Windows DirectWrite measurement backend. |
 | `src/Pretext.FreeType` | Linux FreeType + Fontconfig measurement backend. |
 | `src/Pretext.CoreText` | macOS CoreText measurement backend. |
+| `src/Pretext.SkiaSharp` | Portable SkiaSharp measurement backend and fallback. |
 | `src/Pretext.Uno` | The source for the `Pretext.Uno` package, with Uno-specific reusable controls and render scheduling helpers. |
 | `tests/Pretext.Uno.Tests` | Deterministic parity tests for whitespace handling, break behavior, bidi text, and line walking. |
-| `samples/PretextSamples` | A Uno sample app with layout demos including bubbles, masonry, editorial, and justification views. |
+| `samples/PretextSamples.Shared` | Shared sample catalog, assets, and data/model layer reused by the sample hosts. |
+| `samples/PretextSamples` | A Uno sample host with layout demos including bubbles, masonry, editorial, and justification views. |
+| `samples/PretextSamples.MacOS` | A native AppKit sample host on `net10.0-macos` using `Pretext.CoreText`. |
 
 ## Published Packages
 
@@ -79,8 +82,12 @@ You still own:
 
 - [Getting Started Overview](articles/getting-started/overview)
 - [Install Packages](articles/getting-started/installation)
+- [Backend Discovery and Overrides](articles/guides/backend-discovery-and-overrides)
 - [Quickstart: Prepare and Layout](articles/getting-started/quickstart-prepare-and-layout)
 - [Choosing an API](articles/getting-started/choosing-an-api)
+- [Package: Pretext](articles/reference/package-pretext)
+- [Package: Pretext.Layout](articles/reference/package-pretext-layout)
+- [Package: Pretext.Uno](articles/reference/package-pretext-uno)
 - [Prepared Text Lifecycle](articles/concepts/prepared-text-lifecycle)
 - [Font Strings and Measurement](articles/concepts/font-strings-and-measurement)
 - [Reference: Public Types and Operations](articles/reference/public-types-and-operations)
@@ -92,4 +99,6 @@ You still own:
 ## Repository
 
 - Source code and issues: [github.com/wieslawsoltes/PretextSharp](https://github.com/wieslawsoltes/PretextSharp)
-- Sample app: [samples/PretextSamples](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples)
+- Shared sample layer: [samples/PretextSamples.Shared](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.Shared)
+- Uno sample host: [samples/PretextSamples](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples)
+- Native macOS sample host: [samples/PretextSamples.MacOS](https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples.MacOS)

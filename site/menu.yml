@@ -4,4 +4,4 @@ home:
 
 home2:
   - {url: "https://github.com/wieslawsoltes/PretextSharp", title: "<i class='bi bi-github'></i> GitHub", link_class: "btn btn-info"}
-  - {url: "https://github.com/wieslawsoltes/PretextSharp/tree/main/samples/PretextSamples", title: "<i class='bi bi-layout-text-window-reverse'></i> Samples", link_class: "btn btn-outline-secondary"}
+  - {url: "https://github.com/wieslawsoltes/PretextSharp/tree/main/samples", title: "<i class='bi bi-layout-text-window-reverse'></i> Samples", link_class: "btn btn-outline-secondary"}

@@ -61,8 +61,10 @@ title: "Packages and Namespace"
 
 ## Sample project
 
+- `samples/PretextSamples.Shared/PretextSamples.Shared.csproj`
 - `samples/PretextSamples/PretextSamples.csproj`
-- hosts a Uno UI that demonstrates the library in multiple layout scenarios
+- `samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj`
+- together they provide the shared sample layer plus Uno and native macOS hosts
 
 ## Core entry point
 
@@ -85,6 +87,8 @@ The packages are layered:
 4. `Pretext.DirectWrite`, `Pretext.FreeType`, and `Pretext.CoreText` are the first-party host-native backends.
 5. `Pretext.SkiaSharp` is the portable first-party fallback backend.
 6. `Pretext.Uno` is a host-specific companion layer. It depends on `Pretext`, `Pretext.Layout`, and the first-party backend packages.
+
+For package-specific installation and usage details, continue into the dedicated package pages in this section.
 
 If you are documenting or reviewing behavior, treat the core package as the source of truth for:
 

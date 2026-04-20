@@ -78,4 +78,4 @@ That keeps the expensive step, text materialization, off the hot path until you 
 ## Samples
 
 - `Rich Text` in `samples/PretextSamples` uses the rich-inline helper for chips, links, and code spans.
-- `Markdown Chat` uses the same helper as the paragraph leaf inside a higher-level block layout model.
+- `Markdown Chat` uses the same helper as the paragraph leaf inside a higher-level block layout model, with shared data/models in `samples/PretextSamples.Shared`.

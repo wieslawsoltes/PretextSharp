@@ -4,7 +4,16 @@ title: "Sample Gallery Tour"
 
 # Sample Gallery Tour
 
-The sample gallery is not just a visual demo. It is a set of concrete integration patterns for the core and Uno companion APIs.
+The sample gallery is not just a visual demo. It is a set of concrete integration patterns for the core engine, the `Pretext.Layout` helper layer, and the two sample hosts.
+
+## Hosts
+
+The same sample catalog is presented through:
+
+- `samples/PretextSamples`, the Uno host
+- `samples/PretextSamples.MacOS`, the native AppKit host
+
+Reusable sample data and models live in `samples/PretextSamples.Shared`.
 
 ## Overview sample
 
@@ -56,7 +65,7 @@ When you open a sample view, ask four questions:
 4. Which inputs only force a relayout?
 
 That pattern generalizes better than the exact UI design of the sample.
-The sample app is intentionally diverse. It demonstrates that the same core APIs can support very different layout styles.
+The sample hosts are intentionally diverse. They demonstrate that the same core APIs can support very different layout styles.
 
 ## Layout-focused samples
 
@@ -75,4 +84,4 @@ The sample app is intentionally diverse. It demonstrates that the same core APIs
 
 ## Where to read next
 
-Start with `samples/PretextSamples/MainPage.xaml.cs`, then move into `Samples/SampleInfrastructure.cs` and the individual sample views.
+Start with `samples/PretextSamples.Shared/Samples/SampleCatalog.cs`, then move into the host-specific views for the platform you care about.

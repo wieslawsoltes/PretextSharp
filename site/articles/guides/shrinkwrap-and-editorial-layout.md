@@ -4,7 +4,7 @@ title: "Shrinkwrap and Editorial Layout"
 
 # Shrinkwrap and Editorial Layout
 
-Two recurring patterns in the sample app are worth copying into your own code.
+Two recurring patterns in the sample hosts are worth copying into your own code.
 
 ## Shrinkwrap
 

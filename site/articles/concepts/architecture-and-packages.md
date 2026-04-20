@@ -17,7 +17,9 @@ The repository has these main parts:
 | `src/Pretext.SkiaSharp` | Packable SkiaSharp measurement backend |
 | `src/Pretext.Uno` | Uno companion library with reusable host controls and render scheduling helpers |
 | `tests/Pretext.Uno.Tests` | Deterministic tests covering segmentation, wrapping, pre-wrap behavior, bidi, and line walking |
-| `samples/PretextSamples` | Uno sample app that exercises the library in visually different layouts |
+| `samples/PretextSamples.Shared` | Shared sample catalog, assets, and data/model layer reused by the sample hosts |
+| `samples/PretextSamples` | Uno sample host that exercises the library in visually different layouts |
+| `samples/PretextSamples.MacOS` | Native AppKit sample host that binds `Pretext` to CoreText |
 
 ## Package mapping
 
@@ -29,7 +31,7 @@ The repository has these main parts:
 - `Pretext.CoreText` publishes the first-party macOS-native backend.
 - `Pretext.SkiaSharp` publishes the first-party SkiaSharp backend.
 - `Pretext.Uno` publishes the Uno-specific controls from `src/Pretext.Uno`.
-- The sample app references the same core, backend, and Uno-layer APIs that ship in the published packages.
+- The sample hosts reference the same core, backend, and Uno-layer APIs that ship in the published packages.
 
 ## Pipeline shape
 

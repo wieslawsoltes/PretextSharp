@@ -18,6 +18,8 @@ dotnet add package Pretext.SkiaSharp
 3. Re-run layout when available width changes.
 4. Draw the resulting lines with your host's SkiaSharp surface.
 
+If the same application also references native backends, call `PretextLayout.SetTextMeasurerFactory(new SkiaSharpTextMeasurerFactory())` when the SkiaSharp backend should remain the source of truth.
+
 ## Minimal drawing example
 
 ```csharp
@@ -69,3 +71,8 @@ Use `LayoutNextLine` instead of `LayoutWithLines` when:
 - desktop editors or note surfaces built directly on SkiaSharp
 - design tools that need repeated text measurement during resize
 - reporting or export pipelines that place text into rectangles manually
+
+## Read next
+
+- [Backend Discovery and Overrides](backend-discovery-and-overrides)
+- [Package: Pretext.SkiaSharp](../reference/package-pretext-skiasharp)

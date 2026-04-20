@@ -4,6 +4,8 @@ title: "Integrating in Uno"
 
 # Integrating in Uno
 
+For Uno applications, `Pretext.Uno` is now the convenience package. It brings the core engine, `Pretext.Layout`, and the first-party backend set transitively.
+
 The common integration pattern is:
 
 1. Prepare content when the text or font changes.
@@ -50,6 +52,14 @@ The companion packages in this repository add reusable helpers around the core e
 
 `StretchScrollHost` and `UiRenderScheduler` live in `Pretext.Uno`. The layout helpers now live in `Pretext.Layout`, which `Pretext.Uno` brings transitively for Uno apps. Use them when they match your layout model, but keep the core `Pretext` API as the main dependency.
 
+## What to inspect in this repository
+
+If you want the current Uno integration pattern rather than older experiments, start with:
+
+- `samples/PretextSamples/MainPage.xaml.cs`
+- `samples/PretextSamples/Samples`
+- `samples/PretextSamples.Shared/Samples`
+
 ## Uno-specific advice
 
 - Prepare text in view-model or control state, not inside every render callback.
@@ -59,4 +69,6 @@ The companion packages in this repository add reusable helpers around the core e
 
 ## Further reading
 
-For broader Uno renderer context, see [How Uno Platform Works](https://platform.uno/docs/articles/how-uno-works.html).
+- [Package: Pretext.Uno](../reference/package-pretext-uno)
+- [Package: Pretext.Layout](../reference/package-pretext-layout)
+- For broader Uno renderer context, see [How Uno Platform Works](https://platform.uno/docs/articles/how-uno-works.html).
