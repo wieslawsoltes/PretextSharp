@@ -82,16 +82,9 @@ jobs:
           fi
           echo "value=${version}" >> "${GITHUB_OUTPUT}"
 
-      - name: Restore
-        run: |
-          dotnet restore src/Pretext/Pretext.csproj
-          dotnet restore src/Pretext.Uno/Pretext.Uno.csproj
-
-      - name: Pack Pretext
-        run: dotnet pack src/Pretext/Pretext.csproj -c Release --no-restore -o ./artifacts/packages /p:Version=${{ steps.version.outputs.value }}
-
-      - name: Pack Pretext.Uno
-        run: dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release --no-restore -o ./artifacts/packages /p:Version=${{ steps.version.outputs.value }}
+      - name: Pack packages
+        shell: bash
+        run: bash ./pack-packages.sh --version "${{ steps.version.outputs.value }}"
 
       - name: Upload packages
         uses: actions/upload-artifact@v4

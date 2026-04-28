@@ -100,16 +100,9 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore
-        run: |
-          dotnet restore src/Pretext/Pretext.csproj
-          dotnet restore src/Pretext.Uno/Pretext.Uno.csproj
-
-      - name: Pack Pretext
-        run: dotnet pack src/Pretext/Pretext.csproj -c Release --no-restore -o ./artifacts/packages /p:VersionSuffix=ci.${{ github.run_number }}
-
-      - name: Pack Pretext.Uno
-        run: dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release --no-restore -o ./artifacts/packages /p:VersionSuffix=ci.${{ github.run_number }}
+      - name: Pack packages
+        shell: bash
+        run: bash ./pack-packages.sh --version-suffix "ci.${{ github.run_number }}"
 
       - name: Upload preview packages
         uses: actions/upload-artifact@v4
