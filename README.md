@@ -263,14 +263,7 @@ For the current documentation map covering package selection, backend discovery,
 dotnet build PretextSamples.slnx
 dotnet build samples/PretextSamples.MacOS/PretextSamples.MacOS.csproj
 dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
-dotnet pack src/Pretext.Contracts/Pretext.Contracts.csproj -c Release
-dotnet pack src/Pretext/Pretext.csproj -c Release
-dotnet pack src/Pretext.Layout/Pretext.Layout.csproj -c Release
-dotnet pack src/Pretext.DirectWrite/Pretext.DirectWrite.csproj -c Release
-dotnet pack src/Pretext.FreeType/Pretext.FreeType.csproj -c Release
-dotnet pack src/Pretext.CoreText/Pretext.CoreText.csproj -c Release
-dotnet pack src/Pretext.SkiaSharp/Pretext.SkiaSharp.csproj -c Release
-dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release
+bash ./pack-packages.sh
 ```
 
 ## Docs and CI
@@ -279,6 +272,7 @@ The repository includes:
 
 - `ci.yml` for multi-platform build, test, docs validation, and preview package generation
 - `docs.yml` for GitHub Pages deployment
+- `pack-packages.sh` for the shared package restore/pack list used by CI and releases
 - `release.yml` for tag-driven packing, optional NuGet publication, and GitHub release creation
 - a Lunet docs site in `site/`
 

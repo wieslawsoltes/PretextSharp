@@ -117,14 +117,7 @@ Line height is **not** read from the font string. Pass it separately to `Layout`
 ```bash
 dotnet build PretextSamples.slnx
 dotnet test tests/Pretext.Uno.Tests/Pretext.Uno.Tests.csproj
-dotnet pack src/Pretext.Contracts/Pretext.Contracts.csproj -c Release
-dotnet pack src/Pretext/Pretext.csproj -c Release
-dotnet pack src/Pretext.Layout/Pretext.Layout.csproj -c Release
-dotnet pack src/Pretext.DirectWrite/Pretext.DirectWrite.csproj -c Release
-dotnet pack src/Pretext.FreeType/Pretext.FreeType.csproj -c Release
-dotnet pack src/Pretext.CoreText/Pretext.CoreText.csproj -c Release
-dotnet pack src/Pretext.SkiaSharp/Pretext.SkiaSharp.csproj -c Release
-dotnet pack src/Pretext.Uno/Pretext.Uno.csproj -c Release
+bash ./pack-packages.sh
 ```
 
 ## Sample app
