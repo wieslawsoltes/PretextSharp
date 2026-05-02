@@ -314,7 +314,13 @@ public static partial class PretextLayout
                 state.Dispose();
             }
 
+            foreach (var state in ShaperStates.Values)
+            {
+                state.Dispose();
+            }
+
             FontStates.Clear();
+            ShaperStates.Clear();
         }
 
         _cachedEngineProfile = null;
