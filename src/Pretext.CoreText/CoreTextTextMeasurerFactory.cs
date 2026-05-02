@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Pretext.CoreText;
 
-public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
+public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, IPretextTextShaperFactory
 {
     public string Name => "CoreText";
 
@@ -25,9 +25,25 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
         return new CoreTextTextMeasurer(FontSpec.FromDescriptor(PretextFontParser.Parse(font)));
     }
 
-    private sealed class CoreTextTextMeasurer : IPretextTextMeasurer
+    public IPretextTextShaper CreateShaper(string font)
+    {
+        if (font is null)
+        {
+            throw new ArgumentNullException(nameof(font));
+        }
+
+        if (!IsSupported)
+        {
+            throw new PlatformNotSupportedException("CoreText is only available on macOS.");
+        }
+
+        return new CoreTextTextMeasurer(FontSpec.FromDescriptor(PretextFontParser.Parse(font)));
+    }
+
+    private sealed class CoreTextTextMeasurer : IPretextTextMeasurer, IPretextTextShaper
     {
         private IntPtr _font;
+        private readonly string _fontIdentity;
 
         public CoreTextTextMeasurer(FontSpec fontSpec)
         {
@@ -36,6 +52,8 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
             {
                 throw new InvalidOperationException("Failed to create a CoreText font.");
             }
+
+            _fontIdentity = CoreTextRuntime.GetFontIdentity(_font) ?? fontSpec.Family;
         }
 
         public double MeasureText(string text)
@@ -46,6 +64,21 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
             }
 
             return CoreTextRuntime.MeasureText(_font, text);
+        }
+
+        public PretextShapedRun ShapeText(string text, PretextShapeOptions? options = null)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return new PretextShapedRun(
+                    PretextGlyphRunKind.Shaped,
+                    Array.Empty<PretextShapedGlyph>(),
+                    new[] { new PretextShapedFontRun(0, _fontIdentity, 0, 0) },
+                    0,
+                    0);
+            }
+
+            return CoreTextRuntime.ShapeText(_font, _fontIdentity, text);
         }
 
         public void Dispose()
@@ -169,6 +202,92 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
             return MeasureWithGlyphAdvances(font, text);
         }
 
+        public static PretextShapedRun ShapeText(IntPtr font, string fallbackFontIdentity, string text)
+        {
+            EnsureInitialized();
+
+            if (font == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("Cannot shape text without a CoreText font.");
+            }
+
+            var cfText = CreateString(text);
+            if (cfText == IntPtr.Zero)
+            {
+                return new PretextShapedRun(
+                    PretextGlyphRunKind.Shaped,
+                    Array.Empty<PretextShapedGlyph>(),
+                    new[] { new PretextShapedFontRun(0, fallbackFontIdentity, 0, 0) },
+                    0,
+                    0);
+            }
+
+            IntPtr attributes = IntPtr.Zero;
+            IntPtr attributedString = IntPtr.Zero;
+            IntPtr line = IntPtr.Zero;
+
+            try
+            {
+                attributes = CFDictionaryCreate(
+                    IntPtr.Zero,
+                    new[] { s_ctFontAttributeName },
+                    new[] { font },
+                    (nint)1,
+                    s_cfTypeDictionaryKeyCallBacks,
+                    s_cfTypeDictionaryValueCallBacks);
+                if (attributes == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("Failed to create CoreText shaping attributes.");
+                }
+
+                attributedString = CFAttributedStringCreate(IntPtr.Zero, cfText, attributes);
+                if (attributedString == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("Failed to create CoreText attributed string.");
+                }
+
+                line = CTLineCreateWithAttributedString(attributedString);
+                if (line == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("Failed to create CoreText line.");
+                }
+
+                return ShapeLine(line, fallbackFontIdentity);
+            }
+            finally
+            {
+                Release(line);
+                Release(attributedString);
+                Release(attributes);
+                Release(cfText);
+            }
+        }
+
+        public static string? GetFontIdentity(IntPtr font)
+        {
+            EnsureInitialized();
+
+            if (font == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var value = CTFontCopyPostScriptName(font);
+            if (value == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            try
+            {
+                return ToString(value);
+            }
+            finally
+            {
+                Release(value);
+            }
+        }
+
         public static void Release(IntPtr handle)
         {
             if (handle != IntPtr.Zero)
@@ -275,6 +394,90 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
             }
 
             return width;
+        }
+
+        private static PretextShapedRun ShapeLine(IntPtr line, string fallbackFontIdentity)
+        {
+            var glyphRuns = CTLineGetGlyphRuns(line);
+            if (glyphRuns == IntPtr.Zero)
+            {
+                return new PretextShapedRun(
+                    PretextGlyphRunKind.Shaped,
+                    Array.Empty<PretextShapedGlyph>(),
+                    new[] { new PretextShapedFontRun(0, fallbackFontIdentity, 0, 0) },
+                    0,
+                    0);
+            }
+
+            var runCount = CFArrayGetCount(glyphRuns);
+            var shapedGlyphs = new List<PretextShapedGlyph>();
+            var fontRuns = new List<PretextShapedFontRun>();
+
+            for (nint runIndex = 0; runIndex < runCount; runIndex++)
+            {
+                var run = CFArrayGetValueAtIndex(glyphRuns, runIndex);
+                if (run == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                var glyphCount = CTRunGetGlyphCount(run);
+                if (glyphCount <= 0 || glyphCount > int.MaxValue)
+                {
+                    continue;
+                }
+
+                var length = checked((int)glyphCount);
+                var glyphs = new ushort[length];
+                var positions = new CGPoint[length];
+                var advances = new CGSize[length];
+                var stringIndices = new nint[length];
+                var range = new CFRange(0, glyphCount);
+
+                CTRunGetGlyphs(run, range, glyphs);
+                CTRunGetPositions(run, range, positions);
+                CTRunGetAdvances(run, range, advances);
+                CTRunGetStringIndices(run, range, stringIndices);
+
+                var fontRunIndex = fontRuns.Count;
+                var firstGlyphIndex = shapedGlyphs.Count;
+                var fontIdentity = GetRunFontIdentity(run) ?? fallbackFontIdentity;
+                for (var index = 0; index < length; index++)
+                {
+                    shapedGlyphs.Add(new PretextShapedGlyph(
+                        glyphs[index],
+                        checked((int)stringIndices[index]),
+                        positions[index].X,
+                        positions[index].Y,
+                        advances[index].Width,
+                        advances[index].Height,
+                        0,
+                        0,
+                        fontRunIndex));
+                }
+
+                fontRuns.Add(new PretextShapedFontRun(fontRunIndex, fontIdentity, firstGlyphIndex, length));
+            }
+
+            var width = CTLineGetTypographicBounds(line, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            return new PretextShapedRun(PretextGlyphRunKind.Shaped, shapedGlyphs, fontRuns, width, 0);
+        }
+
+        private static string? GetRunFontIdentity(IntPtr run)
+        {
+            if (s_ctFontAttributeName == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var attributes = CTRunGetAttributes(run);
+            if (attributes == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var runFont = CFDictionaryGetValue(attributes, s_ctFontAttributeName);
+            return runFont == IntPtr.Zero ? null : GetFontIdentity(runFont);
         }
 
         private static IntPtr TryCreateStyledFont(IntPtr baseFont, FontSpec spec)
@@ -417,6 +620,24 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
                 : CFStringCreateWithCharacters(IntPtr.Zero, value, (nint)value.Length);
         }
 
+        private static string? ToString(IntPtr value)
+        {
+            if (value == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var length = CFStringGetLength(value);
+            if (length <= 0 || length > int.MaxValue)
+            {
+                return string.Empty;
+            }
+
+            var buffer = new char[checked((int)length)];
+            CFStringGetCharacters(value, new CFRange(0, length), buffer);
+            return new string(buffer);
+        }
+
         private static void EnsureInitialized()
         {
             if (s_initializationAttempted)
@@ -463,6 +684,12 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
         private static extern IntPtr CFStringCreateWithCharacters(IntPtr allocator, string chars, nint numChars);
 
         [DllImport(CoreFoundationLibrary)]
+        private static extern nint CFStringGetLength(IntPtr value);
+
+        [DllImport(CoreFoundationLibrary)]
+        private static extern void CFStringGetCharacters(IntPtr value, CFRange range, char[] buffer);
+
+        [DllImport(CoreFoundationLibrary)]
         private static extern IntPtr CFNumberCreate(IntPtr allocator, int type, ref double value);
 
         [DllImport(CoreFoundationLibrary)]
@@ -478,6 +705,15 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
         private static extern IntPtr CFAttributedStringCreate(IntPtr allocator, IntPtr value, IntPtr attributes);
 
         [DllImport(CoreFoundationLibrary)]
+        private static extern nint CFArrayGetCount(IntPtr array);
+
+        [DllImport(CoreFoundationLibrary)]
+        private static extern IntPtr CFArrayGetValueAtIndex(IntPtr array, nint index);
+
+        [DllImport(CoreFoundationLibrary)]
+        private static extern IntPtr CFDictionaryGetValue(IntPtr dictionary, IntPtr key);
+
+        [DllImport(CoreFoundationLibrary)]
         private static extern void CFRelease(IntPtr handle);
 
         [DllImport(CoreTextLibrary)]
@@ -485,6 +721,9 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
 
         [DllImport(CoreTextLibrary)]
         private static extern IntPtr CTFontCreateCopyWithAttributes(IntPtr font, double size, IntPtr matrix, IntPtr attributes);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern IntPtr CTFontCopyPostScriptName(IntPtr font);
 
         [DllImport(CoreTextLibrary)]
         private static extern IntPtr CTFontDescriptorCreateWithAttributes(IntPtr attributes);
@@ -502,11 +741,60 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory
         [DllImport(CoreTextLibrary)]
         private static extern double CTLineGetTypographicBounds(IntPtr line, IntPtr ascent, IntPtr descent, IntPtr leading);
 
+        [DllImport(CoreTextLibrary)]
+        private static extern IntPtr CTLineGetGlyphRuns(IntPtr line);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern nint CTRunGetGlyphCount(IntPtr run);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern void CTRunGetGlyphs(IntPtr run, CFRange range, ushort[] buffer);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern void CTRunGetPositions(IntPtr run, CFRange range, CGPoint[] buffer);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern void CTRunGetAdvances(IntPtr run, CFRange range, CGSize[] buffer);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern void CTRunGetStringIndices(IntPtr run, CFRange range, nint[] buffer);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern IntPtr CTRunGetAttributes(IntPtr run);
+
         [DllImport(LibSystemLibrary)]
         private static extern IntPtr dlopen(string path, int mode);
 
         [DllImport(LibSystemLibrary)]
         private static extern IntPtr dlsym(IntPtr handle, string symbol);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private readonly struct CFRange
+    {
+        public CFRange(nint location, nint length)
+        {
+            Location = location;
+            Length = length;
+        }
+
+        public nint Location { get; }
+
+        public nint Length { get; }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private readonly struct CGPoint
+    {
+        public CGPoint(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public double X { get; }
+
+        public double Y { get; }
     }
 
     [StructLayout(LayoutKind.Sequential)]
