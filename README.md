@@ -8,7 +8,7 @@
 ![SkiaSharp 3.119.1](https://img.shields.io/badge/SkiaSharp-3.119.1-16A34A)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Universal text preparation and line layout with grapheme-aware wrapping, locale-aware segmentation, bidi support, and pluggable text-measurement backends.
+Universal text preparation and line layout with grapheme-aware wrapping, locale-aware segmentation, bidi support, glyph-run output, and pluggable text-measurement backends.
 
 The core `Pretext` package targets `netstandard2.0`, `net461`, `net6.0`, `net8.0`, and `net10.0`. The `Pretext.Uno` companion package targets `net10.0-desktop`, and the native macOS sample host targets `net10.0-macos`.
 
@@ -35,7 +35,7 @@ Key documentation:
 | Package Name | NuGet | Downloads | Description |
 | --- | --- | --- | --- |
 | `Pretext` | [![NuGet](https://img.shields.io/nuget/v/Pretext.svg)](https://www.nuget.org/packages/Pretext) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.svg)](https://www.nuget.org/packages/Pretext) | Backend-agnostic text preparation and line layout engine. |
-| `Pretext.Contracts` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | Contracts for implementing custom text-measurement backends. |
+| `Pretext.Contracts` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Contracts.svg)](https://www.nuget.org/packages/Pretext.Contracts) | Contracts for implementing custom text-measurement and glyph-output backends. |
 | `Pretext.Layout` | [![NuGet](https://img.shields.io/nuget/v/Pretext.Layout.svg)](https://www.nuget.org/packages/Pretext.Layout) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.Layout.svg)](https://www.nuget.org/packages/Pretext.Layout) | Platform-neutral wrap and obstacle-layout helpers built on top of `Pretext`. |
 | `Pretext.DirectWrite` | [![NuGet](https://img.shields.io/nuget/v/Pretext.DirectWrite.svg)](https://www.nuget.org/packages/Pretext.DirectWrite) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.DirectWrite.svg)](https://www.nuget.org/packages/Pretext.DirectWrite) | First-party DirectWrite backend for Windows hosts. |
 | `Pretext.FreeType` | [![NuGet](https://img.shields.io/nuget/v/Pretext.FreeType.svg)](https://www.nuget.org/packages/Pretext.FreeType) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Pretext.FreeType.svg)](https://www.nuget.org/packages/Pretext.FreeType) | First-party FreeType + Fontconfig backend for Linux hosts. |
@@ -53,6 +53,8 @@ Key documentation:
 - Handle ordinary spaces, preserved spaces, tabs, hard breaks, non-breaking spaces, zero-width breaks, and soft hyphens.
 - Support `WordBreakMode.KeepAll` for CJK-focused no-space wrapping behavior.
 - Build rich inline flows with `PrepareRichInline`, `WalkRichInlineLineRanges`, and `MaterializeRichInlineLineRange`.
+- Produce glyph-run output with `ShapeText` for renderers that need glyph ids, positions, clusters, advances, and font runs.
+- Reuse prepared shaping with `ShapePreparedText` and shaped line materialization APIs for repeated wrapping/rendering passes.
 - Support multilingual text with locale-aware segmentation on desktop targets and bidi-aware segment levels.
 - Keep the core library graphics-backend agnostic through `Pretext.Contracts`.
 - Ship first-party native backends for Windows (`Pretext.DirectWrite`), Linux (`Pretext.FreeType`), and macOS (`Pretext.CoreText`), plus the portable `Pretext.SkiaSharp` fallback backend.
@@ -78,6 +80,12 @@ Key documentation:
 | `WalkRichInlineLineRanges` | Stream rich-inline line ranges without materializing fragment text. |
 | `MaterializeRichInlineLineRange` | Materialize one streamed rich-inline line when you actually need fragment text. |
 | `MeasureRichInlineStats` | Measure rich-inline line count and max line width. |
+| `ShapeText` | Return glyph ids, positions, clusters, advances, and font runs for rendering. |
+| `TryShapeText` | Attempt glyph-run output without throwing when no shaping backend is available. |
+| `ShapePreparedText` | Cache shaping state for a prepared text object and reuse it while materializing shaped lines. |
+| `LayoutNextShapedLine` | Stream shaped line output from prepared shaping state. |
+| `MaterializeShapedLineRange` | Turn a `LayoutLineRange` into cached shaped glyph output. |
+| `MaterializeShapedRichInlineLineRange` | Turn a rich-inline line range into cached shaped glyph output fragments. |
 | `ProfilePrepare` | Measure preparation cost for profiling and diagnostics. |
 | `SetLocale` | Override locale-sensitive segmentation behavior when needed. |
 | `ClearCache` | Reset cached font state and prepared segment text caches. |
@@ -91,6 +99,8 @@ Key documentation:
 | One line at a time in a custom loop | `PrepareWithSegments` + `LayoutNextLine` |
 | Geometry only, fewer allocations | `PrepareWithSegments` + `WalkLineRanges` |
 | Rich inline fragments with atomic chips or badges | `PrepareRichInline` + `WalkRichInlineLineRanges` |
+| Glyph ids and positions for custom rendering | `ShapeText` or `TryShapeText` |
+| Repeated wrapping plus glyph rendering | `PrepareWithSegments` + `ShapePreparedText` + `MaterializeShapedLineRange` |
 | Preparation cost diagnostics | `ProfilePrepare` |
 
 ## Quick Start
@@ -180,6 +190,36 @@ PretextLayout.WalkRichInlineLineRanges(flow, 180, line =>
     Console.WriteLine(string.Join("", materialized.Fragments.Select(f => f.Text)));
 });
 ```
+
+Use glyph-run output when a renderer wants to build its own positioned text blobs instead of calling backend string drawing APIs:
+
+```csharp
+var shaped = PretextLayout.ShapeText("office", "16px Inter");
+
+foreach (var glyph in shaped.Glyphs)
+{
+    Console.WriteLine($"{glyph.GlyphId} at {glyph.X}, cluster {glyph.Cluster}");
+}
+```
+
+`PretextGlyphRunKind.Shaped` means the backend returned platform-shaped glyph positions. The current first-party shaped backends are `Pretext.CoreText` on macOS and `Pretext.FreeType` on Linux through native HarfBuzz. `Pretext.FreeType` falls back to `PretextGlyphRunKind.Mapped` if HarfBuzz is unavailable or the shaped primary-face run contains missing glyphs. `Pretext.SkiaSharp` returns `PretextGlyphRunKind.Mapped`, which is useful for simple glyph rendering but should not be treated as complex-script shaping.
+
+For repeated layout/rendering loops, prepare once and reuse shaped line output by line range:
+
+```csharp
+var prepared = PretextLayout.PrepareWithSegments("office file affine", "16px Inter");
+var shapedPrepared = PretextLayout.ShapePreparedText(prepared);
+var cursor = new LayoutCursor(0, 0);
+
+while (PretextLayout.LayoutNextLineRange(prepared, cursor, 160) is { } line)
+{
+    var shapedLine = PretextLayout.MaterializeShapedLineRange(shapedPrepared, line);
+    RenderGlyphs(shapedLine.ShapedRun.Glyphs);
+    cursor = line.End;
+}
+```
+
+`ShapePreparedText` keeps a prepared-object cache keyed by shaping direction. Whole-segment line ranges can be sliced from the prepared shaped run, while unsafe intra-segment breaks, soft-hyphen lines, and other context-sensitive ranges are shaped from the exact materialized line text and then cached by cursor range.
 
 ## Companion Packages
 

@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Pretext.FreeType;
 
-public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory
+public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory, IPretextTextShaperFactory
 {
     public string Name => "FreeType";
 
@@ -25,7 +25,22 @@ public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory
         return new FreeTypeTextMeasurer(FontSpec.FromDescriptor(PretextFontParser.Parse(font)));
     }
 
-    private sealed class FreeTypeTextMeasurer : IPretextTextMeasurer
+    public IPretextTextShaper CreateShaper(string font)
+    {
+        if (font is null)
+        {
+            throw new ArgumentNullException(nameof(font));
+        }
+
+        if (!IsSupported)
+        {
+            throw new PlatformNotSupportedException("FreeType is only available on Linux.");
+        }
+
+        return new FreeTypeTextMeasurer(FontSpec.FromDescriptor(PretextFontParser.Parse(font)));
+    }
+
+    private sealed class FreeTypeTextMeasurer : IPretextTextMeasurer, IPretextTextShaper
     {
         private readonly FontSpec _fontSpec;
         private readonly FreeTypeFace _primaryFace;
@@ -58,6 +73,28 @@ public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory
             }
 
             return MeasureFallback(text);
+        }
+
+        public PretextShapedRun ShapeText(string text, PretextShapeOptions? options = null)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return new PretextShapedRun(
+                    PretextGlyphRunKind.Shaped,
+                    Array.Empty<PretextShapedGlyph>(),
+                    new[] { new PretextShapedFontRun(0, _primaryFace.Path, 0, 0) },
+                    0,
+                    0);
+            }
+
+            if (HarfBuzzRuntime.TryShapeText(_primaryFace, text, options, out var shapedRun) &&
+                shapedRun is not null &&
+                !shapedRun.HasMissingGlyphs)
+            {
+                return shapedRun;
+            }
+
+            return ShapeFallback(text);
         }
 
         public void Dispose()
@@ -129,6 +166,72 @@ public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory
 
             _fallbackFaces[codePoint] = face;
             return face;
+        }
+
+        private PretextShapedRun ShapeFallback(string text)
+        {
+            var glyphs = new List<PretextShapedGlyph>();
+            var fontRuns = new List<PretextShapedFontRun>();
+            double penX = 0;
+            FreeTypeFace? previousFace = null;
+            uint previousGlyph = 0;
+            FreeTypeFace? activeRunFace = null;
+            var activeRunFirstGlyphIndex = 0;
+            var activeRunGlyphCount = 0;
+            var activeRunIndex = -1;
+
+            void FlushActiveRun()
+            {
+                if (activeRunFace is null || activeRunGlyphCount == 0)
+                {
+                    return;
+                }
+
+                fontRuns.Add(new PretextShapedFontRun(
+                    activeRunIndex,
+                    activeRunFace.Path,
+                    activeRunFirstGlyphIndex,
+                    activeRunGlyphCount));
+            }
+
+            foreach (var codePoint in EnumerateCodePointsWithClusters(text))
+            {
+                var face = ResolveFace(codePoint.Value) ?? _primaryFace;
+                var glyph = face.GetGlyphIndex(codePoint.Value);
+
+                if (!ReferenceEquals(face, activeRunFace))
+                {
+                    FlushActiveRun();
+                    activeRunFace = face;
+                    activeRunFirstGlyphIndex = glyphs.Count;
+                    activeRunGlyphCount = 0;
+                    activeRunIndex = fontRuns.Count;
+                }
+
+                if (previousFace == face && previousGlyph != 0 && glyph != 0)
+                {
+                    penX += face.GetKerning(previousGlyph, glyph);
+                }
+
+                var advance = glyph == 0 ? 0 : face.GetAdvance(glyph);
+                glyphs.Add(new PretextShapedGlyph(
+                    glyph,
+                    codePoint.Cluster,
+                    penX,
+                    0,
+                    advance,
+                    0,
+                    0,
+                    0,
+                    activeRunIndex));
+                activeRunGlyphCount++;
+                penX += advance;
+                previousFace = face;
+                previousGlyph = glyph;
+            }
+
+            FlushActiveRun();
+            return new PretextShapedRun(PretextGlyphRunKind.Mapped, glyphs, fontRuns, penX, 0);
         }
 
         private FreeTypeFace OpenFace(string path)
@@ -437,6 +540,113 @@ public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory
             }
         }
 
+        public static bool TryShapeText(
+            FreeTypeFace face,
+            string text,
+            PretextShapeOptions? options,
+            out PretextShapedRun? shapedRun)
+        {
+            shapedRun = null;
+            if (!IsAvailable || string.IsNullOrEmpty(text))
+            {
+                return false;
+            }
+
+            if (!face.TryGetOrCreateHarfBuzzFont(out var hbFont) || hbFont == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            IntPtr buffer = IntPtr.Zero;
+            try
+            {
+                buffer = HarfBuzzNative.hb_buffer_create();
+                if (buffer == IntPtr.Zero)
+                {
+                    return false;
+                }
+
+                fixed (char* chars = text)
+                {
+                    HarfBuzzNative.hb_buffer_reset(buffer);
+                    HarfBuzzNative.hb_buffer_add_utf16(buffer, (ushort*)chars, text.Length, 0, text.Length);
+                    ApplyDirection(buffer, options);
+                    HarfBuzzNative.hb_buffer_guess_segment_properties(buffer);
+                    HarfBuzzNative.hb_shape(hbFont, buffer, IntPtr.Zero, 0);
+                }
+
+                var glyphInfos = HarfBuzzNative.hb_buffer_get_glyph_infos(buffer, out var glyphCount);
+                var glyphPositions = HarfBuzzNative.hb_buffer_get_glyph_positions(buffer, out var positionCount);
+                if (glyphInfos == null || glyphPositions == null || glyphCount == 0 || glyphCount != positionCount)
+                {
+                    return false;
+                }
+
+                var glyphs = new PretextShapedGlyph[glyphCount];
+                double penX = 0;
+                double penY = 0;
+                for (uint index = 0; index < glyphCount; index++)
+                {
+                    var position = glyphPositions[index];
+                    var xAdvance = position.XAdvance / 64.0;
+                    var yAdvance = position.YAdvance / 64.0;
+                    var xOffset = position.XOffset / 64.0;
+                    var yOffset = position.YOffset / 64.0;
+                    glyphs[index] = new PretextShapedGlyph(
+                        glyphInfos[index].Codepoint,
+                        checked((int)glyphInfos[index].Cluster),
+                        penX + xOffset,
+                        penY + yOffset,
+                        xAdvance,
+                        yAdvance,
+                        xOffset,
+                        yOffset,
+                        0);
+                    penX += xAdvance;
+                    penY += yAdvance;
+                }
+
+                shapedRun = new PretextShapedRun(
+                    PretextGlyphRunKind.Shaped,
+                    glyphs,
+                    new[] { new PretextShapedFontRun(0, face.Path, 0, glyphs.Length) },
+                    penX,
+                    penY);
+                return true;
+            }
+            catch (DllNotFoundException)
+            {
+                s_probeState = -1;
+                return false;
+            }
+            catch (EntryPointNotFoundException)
+            {
+                s_probeState = -1;
+                return false;
+            }
+            finally
+            {
+                if (buffer != IntPtr.Zero)
+                {
+                    HarfBuzzNative.hb_buffer_destroy(buffer);
+                }
+            }
+        }
+
+        private static void ApplyDirection(IntPtr buffer, PretextShapeOptions? options)
+        {
+            if (options is null || options.Direction == PretextTextDirection.Auto)
+            {
+                return;
+            }
+
+            HarfBuzzNative.hb_buffer_set_direction(
+                buffer,
+                options.Direction == PretextTextDirection.RightToLeft
+                    ? hb_direction_t.HB_DIRECTION_RTL
+                    : hb_direction_t.HB_DIRECTION_LTR);
+        }
+
         private static void ProbeAvailability()
         {
             try
@@ -462,6 +672,14 @@ public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory
 
     private static IEnumerable<uint> EnumerateCodePoints(string text)
     {
+        foreach (var codePoint in EnumerateCodePointsWithClusters(text))
+        {
+            yield return codePoint.Value;
+        }
+    }
+
+    private static IEnumerable<CodePointWithCluster> EnumerateCodePointsWithClusters(string text)
+    {
         for (var index = 0; index < text.Length; index++)
         {
             var current = text[index];
@@ -469,12 +687,25 @@ public sealed class FreeTypeTextMeasurerFactory : IPretextTextMeasurerFactory
                 index + 1 < text.Length &&
                 char.IsLowSurrogate(text[index + 1]))
             {
-                yield return (uint)char.ConvertToUtf32(current, text[index + 1]);
+                yield return new CodePointWithCluster((uint)char.ConvertToUtf32(current, text[index + 1]), index);
                 index++;
                 continue;
             }
 
-            yield return current;
+            yield return new CodePointWithCluster(current, index);
         }
+    }
+
+    private readonly struct CodePointWithCluster
+    {
+        public CodePointWithCluster(uint value, int cluster)
+        {
+            Value = value;
+            Cluster = cluster;
+        }
+
+        public uint Value { get; }
+
+        public int Cluster { get; }
     }
 }

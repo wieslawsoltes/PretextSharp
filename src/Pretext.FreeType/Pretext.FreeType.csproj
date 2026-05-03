@@ -8,9 +8,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>Pretext.FreeType</PackageId>
     <Title>Pretext.FreeType</Title>
-    <Description>FreeType and Fontconfig text measurement backend for Pretext on Linux.</Description>
-    <PackageTags>freetype;fontconfig;linux;text-layout;text-measurement;typography;graphics-backend</PackageTags>
-    <PackageReleaseNotes>Initial FreeType backend package for Pretext.</PackageReleaseNotes>
+    <Description>FreeType, Fontconfig, and HarfBuzz text measurement and glyph-output backend for Pretext on Linux.</Description>
+    <PackageTags>freetype;fontconfig;harfbuzz;linux;text-layout;text-measurement;text-shaping;glyphs;typography;graphics-backend</PackageTags>
+    <PackageReleaseNotes>Added HarfBuzz glyph-run output for shaping-capable rendering.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
