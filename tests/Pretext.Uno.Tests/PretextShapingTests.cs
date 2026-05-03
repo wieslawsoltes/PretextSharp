@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Pretext;
+using Pretext.SkiaSharp;
 using Xunit;
 
 namespace Pretext.Tests;
@@ -88,6 +89,19 @@ public sealed class PretextShapingTests : IDisposable
             new PretextShapeOptions { Direction = PretextTextDirection.RightToLeft });
 
         Assert.Equal(PretextTextDirection.RightToLeft, observedDirection);
+    }
+
+    [Fact(DisplayName = "SkiaSharp shaping reports clusters as UTF-16 text indices")]
+    public void SkiaSharpShapeText_ReportsClustersAsUtf16TextIndices()
+    {
+        using var shaper = new SkiaSharpTextMeasurerFactory().CreateShaper(Font);
+
+        var shaped = shaper.ShapeText("a\U0001F600b");
+
+        Assert.True(shaped.Glyphs.Count >= 3);
+        Assert.Equal(0, shaped.Glyphs[0].Cluster);
+        Assert.Equal(1, shaped.Glyphs[1].Cluster);
+        Assert.Equal(3, shaped.Glyphs[2].Cluster);
     }
 
     [Fact(DisplayName = "prepared shaped text reuses full prepared shaping for safe line ranges")]

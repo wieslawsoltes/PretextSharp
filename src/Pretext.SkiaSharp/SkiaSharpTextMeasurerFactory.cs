@@ -80,6 +80,7 @@ public sealed class SkiaSharpTextMeasurerFactory : IPretextTextMeasurerFactory, 
             var positions = new SKPoint[glyphIds.Length];
             _font.GetGlyphPositions(glyphIds, positions, SKPoint.Empty);
             var totalWidth = _font.MeasureText(text);
+            var clusters = GetClusters(text, glyphIds.Length);
             var glyphs = new PretextShapedGlyph[glyphIds.Length];
             for (var index = 0; index < glyphIds.Length; index++)
             {
@@ -87,7 +88,7 @@ public sealed class SkiaSharpTextMeasurerFactory : IPretextTextMeasurerFactory, 
                 var nextX = index + 1 < positions.Length ? positions[index + 1].X : totalWidth;
                 glyphs[index] = new PretextShapedGlyph(
                     glyphIds[index],
-                    GetCluster(text, index),
+                    clusters is null ? index : clusters[index],
                     x,
                     positions[index].Y,
                     nextX - x,
@@ -110,14 +111,36 @@ public sealed class SkiaSharpTextMeasurerFactory : IPretextTextMeasurerFactory, 
             _font.Dispose();
         }
 
-        private static int GetCluster(string text, int glyphIndex)
+        private static int[]? GetClusters(string text, int glyphCount)
         {
-            if (text.Length == 0)
+            if (glyphCount == text.Length)
             {
-                return 0;
+                return null;
             }
 
-            return Math.Min(glyphIndex, text.Length - 1);
+            var clusters = new int[glyphCount];
+            var textIndex = 0;
+            for (var glyphIndex = 0; glyphIndex < glyphCount; glyphIndex++)
+            {
+                clusters[glyphIndex] = Math.Min(textIndex, text.Length - 1);
+                textIndex += GetScalarLength(text, textIndex);
+            }
+
+            return clusters;
+        }
+
+        private static int GetScalarLength(string text, int textIndex)
+        {
+            if (textIndex >= text.Length)
+            {
+                return 1;
+            }
+
+            return textIndex + 1 < text.Length &&
+                   char.IsHighSurrogate(text[textIndex]) &&
+                   char.IsLowSurrogate(text[textIndex + 1])
+                ? 2
+                : 1;
         }
     }
 
