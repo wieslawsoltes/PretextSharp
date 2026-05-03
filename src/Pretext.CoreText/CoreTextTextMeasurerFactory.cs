@@ -78,7 +78,7 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
                     0);
             }
 
-            return CoreTextRuntime.ShapeText(_font, _fontIdentity, text);
+            return CoreTextRuntime.ShapeText(_font, _fontIdentity, text, options);
         }
 
         public void Dispose()
@@ -129,15 +129,21 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
         private const string LibSystemLibrary = "/usr/lib/libSystem.B.dylib";
         private const int RTLD_NOW = 2;
         private const int CFNumberFloat64Type = 13;
+        private const int CTParagraphStyleSpecifierBaseWritingDirection = 13;
+        private const int CTWritingDirectionLeftToRight = 0;
+        private const int CTWritingDirectionRightToLeft = 1;
 
         private static readonly object s_gate = new();
         private static bool s_initializationAttempted;
         private static IntPtr s_ctFontAttributeName;
+        private static IntPtr s_ctParagraphStyleAttributeName;
         private static IntPtr s_ctFontTraitsAttribute;
         private static IntPtr s_ctFontWeightTrait;
         private static IntPtr s_ctFontSlantTrait;
         private static IntPtr s_cfTypeDictionaryKeyCallBacks;
         private static IntPtr s_cfTypeDictionaryValueCallBacks;
+        private static IntPtr s_leftToRightParagraphStyle;
+        private static IntPtr s_rightToLeftParagraphStyle;
 
         public static IntPtr CreateFont(FontSpec spec)
         {
@@ -202,7 +208,11 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
             return MeasureWithGlyphAdvances(font, text);
         }
 
-        public static PretextShapedRun ShapeText(IntPtr font, string fallbackFontIdentity, string text)
+        public static PretextShapedRun ShapeText(
+            IntPtr font,
+            string fallbackFontIdentity,
+            string text,
+            PretextShapeOptions? options)
         {
             EnsureInitialized();
 
@@ -228,11 +238,19 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
 
             try
             {
+                var paragraphStyle = GetParagraphStyle(options);
+                var attributeKeys = paragraphStyle == IntPtr.Zero
+                    ? new[] { s_ctFontAttributeName }
+                    : new[] { s_ctFontAttributeName, s_ctParagraphStyleAttributeName };
+                var attributeValues = paragraphStyle == IntPtr.Zero
+                    ? new[] { font }
+                    : new[] { font, paragraphStyle };
+
                 attributes = CFDictionaryCreate(
                     IntPtr.Zero,
-                    new[] { s_ctFontAttributeName },
-                    new[] { font },
-                    (nint)1,
+                    attributeKeys,
+                    attributeValues,
+                    (nint)attributeKeys.Length,
                     s_cfTypeDictionaryKeyCallBacks,
                     s_cfTypeDictionaryValueCallBacks);
                 if (attributes == IntPtr.Zero)
@@ -261,6 +279,18 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
                 Release(attributes);
                 Release(cfText);
             }
+        }
+
+        private static IntPtr GetParagraphStyle(PretextShapeOptions? options)
+        {
+            if (options is null || options.Direction == PretextTextDirection.Auto)
+            {
+                return IntPtr.Zero;
+            }
+
+            return options.Direction == PretextTextDirection.RightToLeft
+                ? s_rightToLeftParagraphStyle
+                : s_leftToRightParagraphStyle;
         }
 
         public static string? GetFontIdentity(IntPtr font)
@@ -673,11 +703,39 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
                 }
 
                 s_ctFontAttributeName = ReadObjectSymbol(coreText, "kCTFontAttributeName");
+                s_ctParagraphStyleAttributeName = ReadObjectSymbol(coreText, "kCTParagraphStyleAttributeName");
                 s_ctFontTraitsAttribute = ReadObjectSymbol(coreText, "kCTFontTraitsAttribute");
                 s_ctFontWeightTrait = ReadObjectSymbol(coreText, "kCTFontWeightTrait");
                 s_ctFontSlantTrait = ReadObjectSymbol(coreText, "kCTFontSlantTrait");
                 s_cfTypeDictionaryKeyCallBacks = dlsym(coreFoundation, "kCFTypeDictionaryKeyCallBacks");
                 s_cfTypeDictionaryValueCallBacks = dlsym(coreFoundation, "kCFTypeDictionaryValueCallBacks");
+                if (s_ctParagraphStyleAttributeName != IntPtr.Zero)
+                {
+                    s_leftToRightParagraphStyle = CreateParagraphStyle(CTWritingDirectionLeftToRight);
+                    s_rightToLeftParagraphStyle = CreateParagraphStyle(CTWritingDirectionRightToLeft);
+                }
+            }
+        }
+
+        private static IntPtr CreateParagraphStyle(int writingDirection)
+        {
+            var value = Marshal.AllocHGlobal(sizeof(int));
+            try
+            {
+                Marshal.WriteInt32(value, writingDirection);
+                return CTParagraphStyleCreate(
+                    new[]
+                    {
+                        new CTParagraphStyleSetting(
+                            CTParagraphStyleSpecifierBaseWritingDirection,
+                            (nint)sizeof(int),
+                            value)
+                    },
+                    (nint)1);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(value);
             }
         }
 
@@ -746,6 +804,9 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
         private static extern IntPtr CTLineCreateWithAttributedString(IntPtr attributedString);
 
         [DllImport(CoreTextLibrary)]
+        private static extern IntPtr CTParagraphStyleCreate(CTParagraphStyleSetting[] settings, nint settingCount);
+
+        [DllImport(CoreTextLibrary)]
         private static extern double CTLineGetTypographicBounds(IntPtr line, IntPtr ascent, IntPtr descent, IntPtr leading);
 
         [DllImport(CoreTextLibrary)]
@@ -791,6 +852,23 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
         public nint Location { get; }
 
         public nint Length { get; }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private readonly struct CTParagraphStyleSetting
+    {
+        public CTParagraphStyleSetting(int spec, nint valueSize, IntPtr value)
+        {
+            Spec = spec;
+            ValueSize = valueSize;
+            Value = value;
+        }
+
+        public int Spec { get; }
+
+        public nint ValueSize { get; }
+
+        public IntPtr Value { get; }
     }
 
     [StructLayout(LayoutKind.Sequential)]

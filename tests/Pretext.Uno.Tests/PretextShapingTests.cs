@@ -69,6 +69,27 @@ public sealed class PretextShapingTests : IDisposable
         Assert.Equal(3, shapeCalls);
     }
 
+    [Fact(DisplayName = "shape text forwards direction options to configured shaper")]
+    public void ShapeText_ForwardsDirectionOptionsToConfiguredShaper()
+    {
+        PretextTextDirection? observedDirection = null;
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(
+            PretextLayoutParityTests_Accessor.MeasureWidth,
+            shapeTextWithOptions: (text, font, options) =>
+            {
+                observedDirection = options?.Direction;
+                return CreateMappedRun(text, font);
+            }));
+        PretextLayout.ClearCache();
+
+        PretextLayout.ShapeText(
+            "123",
+            Font,
+            new PretextShapeOptions { Direction = PretextTextDirection.RightToLeft });
+
+        Assert.Equal(PretextTextDirection.RightToLeft, observedDirection);
+    }
+
     [Fact(DisplayName = "prepared shaped text reuses full prepared shaping for safe line ranges")]
     public void ShapePreparedText_ReusesFullPreparedShapingForSafeLineRanges()
     {

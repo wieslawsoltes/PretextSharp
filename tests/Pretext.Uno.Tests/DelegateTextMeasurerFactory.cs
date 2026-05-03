@@ -6,6 +6,7 @@ internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory,
 {
     private readonly Func<string, string, double> _measureText;
     private readonly Func<string, string, PretextShapedRun>? _shapeText;
+    private readonly Func<string, string, PretextShapeOptions?, PretextShapedRun>? _shapeTextWithOptions;
 
     public string Name => "Delegate";
 
@@ -15,10 +16,12 @@ internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory,
 
     public DelegateTextMeasurerFactory(
         Func<string, string, double> measureText,
-        Func<string, string, PretextShapedRun>? shapeText = null)
+        Func<string, string, PretextShapedRun>? shapeText = null,
+        Func<string, string, PretextShapeOptions?, PretextShapedRun>? shapeTextWithOptions = null)
     {
         _measureText = measureText ?? throw new ArgumentNullException(nameof(measureText));
         _shapeText = shapeText;
+        _shapeTextWithOptions = shapeTextWithOptions;
     }
 
     public IPretextTextMeasurer Create(string font)
@@ -28,7 +31,7 @@ internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory,
 
     public IPretextTextShaper CreateShaper(string font)
     {
-        return new DelegateTextShaper(font, _shapeText);
+        return new DelegateTextShaper(font, _shapeText, _shapeTextWithOptions);
     }
 
     private sealed class DelegateTextMeasurer : IPretextTextMeasurer
@@ -56,15 +59,25 @@ internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory,
     {
         private readonly string _font;
         private readonly Func<string, string, PretextShapedRun>? _shapeText;
+        private readonly Func<string, string, PretextShapeOptions?, PretextShapedRun>? _shapeTextWithOptions;
 
-        public DelegateTextShaper(string font, Func<string, string, PretextShapedRun>? shapeText)
+        public DelegateTextShaper(
+            string font,
+            Func<string, string, PretextShapedRun>? shapeText,
+            Func<string, string, PretextShapeOptions?, PretextShapedRun>? shapeTextWithOptions)
         {
             _font = font ?? throw new ArgumentNullException(nameof(font));
             _shapeText = shapeText;
+            _shapeTextWithOptions = shapeTextWithOptions;
         }
 
         public PretextShapedRun ShapeText(string text, PretextShapeOptions? options = null)
         {
+            if (_shapeTextWithOptions is not null)
+            {
+                return _shapeTextWithOptions(text, _font, options);
+            }
+
             if (_shapeText is not null)
             {
                 return _shapeText(text, _font);
