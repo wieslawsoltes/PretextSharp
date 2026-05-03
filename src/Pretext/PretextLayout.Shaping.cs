@@ -62,7 +62,7 @@ public static partial class PretextLayout
                 }
 
                 var shapedRun = TrySlicePreparedShapedRun(this, start, end, out var sliced)
-                    ? sliced
+                    ? sliced!
                     : ShapeMaterializedLine(this, start, end);
 
                 _lineRuns[cacheKey] = shapedRun;
@@ -227,7 +227,7 @@ public static partial class PretextLayout
         PreparedTextWithSegments prepared,
         out int[][] graphemeBoundaryTextIndexes)
     {
-        var builder = new System.Text.StringBuilder();
+        var builder = new System.Text.StringBuilder(EstimatePreparedShapingTextCapacity(prepared));
         graphemeBoundaryTextIndexes = new int[prepared.Segments.Count][];
 
         for (var segmentIndex = 0; segmentIndex < prepared.Segments.Count; segmentIndex++)
@@ -263,16 +263,11 @@ public static partial class PretextLayout
         PreparedShapedText prepared,
         LayoutCursor start,
         LayoutCursor end,
-        out PretextShapedRun shapedRun)
+        out PretextShapedRun? shapedRun)
     {
         if (!CanSlicePreparedShapedRun(prepared.Prepared, start, end))
         {
-            shapedRun = new PretextShapedRun(
-                PretextGlyphRunKind.Mapped,
-                Array.Empty<PretextShapedGlyph>(),
-                Array.Empty<PretextShapedFontRun>(),
-                0,
-                0);
+            shapedRun = null;
             return false;
         }
 
@@ -298,11 +293,43 @@ public static partial class PretextLayout
 
         if (cursor.GraphemeIndex <= 0)
         {
-            return true;
+            return !IsInvisibleBreakBoundary(prepared, cursor.SegmentIndex);
         }
 
         var graphemeCount = GetSegmentGraphemes(prepared, cursor.SegmentIndex).Length;
-        return cursor.GraphemeIndex >= graphemeCount;
+        return cursor.GraphemeIndex >= graphemeCount &&
+               !IsInvisibleBreakBoundary(prepared, cursor.SegmentIndex + 1);
+    }
+
+    private static bool IsInvisibleBreakBoundary(PreparedTextWithSegments prepared, int segmentIndex)
+    {
+        return IsInvisibleBreakSegment(prepared, segmentIndex) ||
+               IsInvisibleBreakSegment(prepared, segmentIndex - 1);
+    }
+
+    private static bool IsInvisibleBreakSegment(PreparedTextWithSegments prepared, int segmentIndex)
+    {
+        if ((uint)segmentIndex >= (uint)prepared.KindsInternal.Length)
+        {
+            return false;
+        }
+
+        var kind = prepared.KindsInternal[segmentIndex];
+        return kind is SegmentBreakKind.ZeroWidthBreak or SegmentBreakKind.SoftHyphen or SegmentBreakKind.HardBreak;
+    }
+
+    private static int EstimatePreparedShapingTextCapacity(PreparedTextWithSegments prepared)
+    {
+        var capacity = 0;
+        for (var segmentIndex = 0; segmentIndex < prepared.Segments.Count; segmentIndex++)
+        {
+            if (!IsInvisibleBreakSegment(prepared, segmentIndex))
+            {
+                capacity += prepared.Segments[segmentIndex].Length;
+            }
+        }
+
+        return capacity;
     }
 
     private static int GetPreparedShapingTextIndex(PreparedShapedText prepared, LayoutCursor cursor)

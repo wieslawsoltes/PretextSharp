@@ -148,6 +148,44 @@ public sealed class PretextShapingTests : IDisposable
         Assert.Equal(2, shapedLine.ShapedRun.AdvanceX);
     }
 
+    [Fact(DisplayName = "prepared shaped line reshapes ranges at invisible break boundaries")]
+    public void ShapePreparedText_ReshapesInvisibleBreakBoundaryRanges()
+    {
+        var shapeCalls = 0;
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(
+            PretextLayoutParityTests_Accessor.MeasureWidth,
+            (text, font) =>
+            {
+                shapeCalls++;
+                return text == "fi" ? CreateLigatureRun(font) : CreateMappedRun(text, font);
+            }));
+        PretextLayout.ClearCache();
+
+        var prepared = PretextLayout.PrepareWithSegments(
+            "f\ni",
+            Font,
+            new PrepareOptions(WhiteSpaceMode.PreWrap));
+        var shapedPrepared = PretextLayout.ShapePreparedText(prepared);
+
+        var firstLine = PretextLayout.LayoutNextLineRange(prepared, new LayoutCursor(0, 0), 1000);
+        Assert.NotNull(firstLine);
+        var secondLine = PretextLayout.LayoutNextLineRange(prepared, firstLine!.End, 1000);
+        Assert.NotNull(secondLine);
+
+        var firstText = PretextLayout.MaterializeLineRange(prepared, firstLine).Text;
+        var secondText = PretextLayout.MaterializeLineRange(prepared, secondLine!).Text;
+        var firstShaped = PretextLayout.MaterializeShapedLineRange(shapedPrepared, firstLine);
+        var secondShaped = PretextLayout.MaterializeShapedLineRange(shapedPrepared, secondLine!);
+
+        Assert.Equal("f", firstText);
+        Assert.Equal("i", secondText);
+        Assert.Equal(3, shapeCalls);
+        Assert.Single(firstShaped.ShapedRun.Glyphs);
+        Assert.Single(secondShaped.ShapedRun.Glyphs);
+        Assert.Equal(1, firstShaped.ShapedRun.AdvanceX);
+        Assert.Equal(1, secondShaped.ShapedRun.AdvanceX);
+    }
+
     [Fact(DisplayName = "try shape text returns false when no shaping backend is configured")]
     public void TryShapeText_ReturnsFalseWhenNoShaperIsAvailable()
     {
@@ -260,6 +298,17 @@ public sealed class PretextShapingTests : IDisposable
             glyphs,
             new[] { new PretextShapedFontRun(0, font, 0, glyphs.Length) },
             glyphs.Length,
+            0);
+    }
+
+    private static PretextShapedRun CreateLigatureRun(string font)
+    {
+        var glyph = new PretextShapedGlyph(64257, 0, 0, 0, 2, 0, 0, 0, 0);
+        return new PretextShapedRun(
+            PretextGlyphRunKind.Shaped,
+            new[] { glyph },
+            new[] { new PretextShapedFontRun(0, font, 0, 1) },
+            2,
             0);
     }
 

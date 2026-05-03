@@ -433,6 +433,8 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
                 var advances = new CGSize[length];
                 var stringIndices = new nint[length];
                 var range = new CFRange(0, glyphCount);
+                var stringRange = CTRunGetStringRange(run);
+                var fallbackCluster = ToSafeCluster(stringRange.Location, 0);
 
                 CTRunGetGlyphs(run, range, glyphs);
                 CTRunGetPositions(run, range, positions);
@@ -446,7 +448,7 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
                 {
                     shapedGlyphs.Add(new PretextShapedGlyph(
                         glyphs[index],
-                        checked((int)stringIndices[index]),
+                        ToSafeCluster(stringIndices[index], fallbackCluster),
                         positions[index].X,
                         positions[index].Y,
                         advances[index].Width,
@@ -461,6 +463,11 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
 
             var width = CTLineGetTypographicBounds(line, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
             return new PretextShapedRun(PretextGlyphRunKind.Shaped, shapedGlyphs, fontRuns, width, 0);
+        }
+
+        private static int ToSafeCluster(nint value, int fallback)
+        {
+            return value < 0 || value > int.MaxValue ? fallback : checked((int)value);
         }
 
         private static string? GetRunFontIdentity(IntPtr run)
@@ -758,6 +765,9 @@ public sealed class CoreTextTextMeasurerFactory : IPretextTextMeasurerFactory, I
 
         [DllImport(CoreTextLibrary)]
         private static extern void CTRunGetStringIndices(IntPtr run, CFRange range, nint[] buffer);
+
+        [DllImport(CoreTextLibrary)]
+        private static extern CFRange CTRunGetStringRange(IntPtr run);
 
         [DllImport(CoreTextLibrary)]
         private static extern IntPtr CTRunGetAttributes(IntPtr run);
