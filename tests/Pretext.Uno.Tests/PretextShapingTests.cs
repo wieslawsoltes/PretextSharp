@@ -37,6 +37,117 @@ public sealed class PretextShapingTests : IDisposable
         Assert.False(shaped.HasMissingGlyphs);
     }
 
+    [Fact(DisplayName = "shape text reuses cached shaped output until cache clear")]
+    public void ShapeText_ReusesCachedOutputUntilCacheClear()
+    {
+        var shapeCalls = 0;
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(
+            PretextLayoutParityTests_Accessor.MeasureWidth,
+            (text, font) =>
+            {
+                shapeCalls++;
+                return CreateSingleGlyphRun(font, shapeCalls);
+            }));
+        PretextLayout.ClearCache();
+
+        var first = PretextLayout.ShapeText("abc", Font);
+        var second = PretextLayout.ShapeText("abc", Font);
+        var rtl = PretextLayout.ShapeText(
+            "abc",
+            Font,
+            new PretextShapeOptions { Direction = PretextTextDirection.RightToLeft });
+
+        Assert.Same(first, second);
+        Assert.NotSame(first, rtl);
+        Assert.Equal(2, shapeCalls);
+
+        PretextLayout.ClearCache();
+
+        var afterClear = PretextLayout.ShapeText("abc", Font);
+
+        Assert.NotSame(first, afterClear);
+        Assert.Equal(3, shapeCalls);
+    }
+
+    [Fact(DisplayName = "prepared shaped text reuses full prepared shaping for safe line ranges")]
+    public void ShapePreparedText_ReusesFullPreparedShapingForSafeLineRanges()
+    {
+        var shapeCalls = 0;
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(
+            PretextLayoutParityTests_Accessor.MeasureWidth,
+            (text, font) =>
+            {
+                shapeCalls++;
+                return CreateMappedRun(text, font);
+            }));
+        PretextLayout.ClearCache();
+
+        var prepared = PretextLayout.PrepareWithSegments("hello world", Font);
+        var shapedPrepared = PretextLayout.ShapePreparedText(prepared);
+        var cachedPrepared = PretextLayout.ShapePreparedText(prepared);
+        var line = PretextLayout.LayoutNextLineRange(prepared, new LayoutCursor(0, 0), 1000);
+        Assert.NotNull(line);
+
+        var shapedLine = PretextLayout.MaterializeShapedLineRange(shapedPrepared, line!);
+        var cachedLine = PretextLayout.MaterializeShapedLineRange(cachedPrepared, line!);
+
+        Assert.Same(shapedPrepared, cachedPrepared);
+        Assert.Same(shapedLine.ShapedRun, cachedLine.ShapedRun);
+        Assert.Equal(1, shapeCalls);
+        Assert.Equal(shapedLine.ShapedRun.Glyphs.Count, cachedLine.ShapedRun.Glyphs.Count);
+        Assert.Equal("hello world".Length, shapedLine.ShapedRun.Glyphs.Count);
+    }
+
+    [Fact(DisplayName = "prepared shaped line slices full first segment ranges")]
+    public void ShapePreparedText_SlicesFullFirstSegmentRanges()
+    {
+        var shapeCalls = 0;
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(
+            PretextLayoutParityTests_Accessor.MeasureWidth,
+            (text, font) =>
+            {
+                shapeCalls++;
+                return CreateMappedRun(text, font);
+            }));
+        PretextLayout.ClearCache();
+
+        var prepared = PretextLayout.PrepareWithSegments("abcdef", Font);
+        var shapedPrepared = PretextLayout.ShapePreparedText(prepared);
+        var line = new LayoutLineRange(6, new LayoutCursor(0, 0), new LayoutCursor(0, 6));
+
+        var shapedLine = PretextLayout.MaterializeShapedLineRange(shapedPrepared, line);
+
+        Assert.Equal(1, shapeCalls);
+        Assert.Equal(6, shapedLine.ShapedRun.Glyphs.Count);
+        Assert.Equal(6, shapedLine.ShapedRun.AdvanceX);
+    }
+
+    [Fact(DisplayName = "prepared shaped line reshapes unsafe partial segment ranges")]
+    public void ShapePreparedText_ReshapesUnsafePartialSegmentRanges()
+    {
+        var shapeCalls = 0;
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(
+            PretextLayoutParityTests_Accessor.MeasureWidth,
+            (text, font) =>
+            {
+                shapeCalls++;
+                return CreateMappedRun(text, font);
+            }));
+        PretextLayout.ClearCache();
+
+        var prepared = PretextLayout.PrepareWithSegments("abcdef", Font);
+        var shapedPrepared = PretextLayout.ShapePreparedText(prepared);
+        var partialLine = new LayoutLineRange(2, new LayoutCursor(0, 0), new LayoutCursor(0, 2));
+
+        var shapedLine = PretextLayout.MaterializeShapedLineRange(shapedPrepared, partialLine);
+        var cachedLine = PretextLayout.MaterializeShapedLineRange(shapedPrepared, partialLine);
+
+        Assert.Equal(2, shapeCalls);
+        Assert.Same(shapedLine.ShapedRun, cachedLine.ShapedRun);
+        Assert.Equal(2, shapedLine.ShapedRun.Glyphs.Count);
+        Assert.Equal(2, shapedLine.ShapedRun.AdvanceX);
+    }
+
     [Fact(DisplayName = "try shape text returns false when no shaping backend is configured")]
     public void TryShapeText_ReturnsFalseWhenNoShaperIsAvailable()
     {
@@ -70,6 +181,21 @@ public sealed class PretextShapingTests : IDisposable
         first.Direction = PretextTextDirection.RightToLeft;
 
         Assert.Equal(PretextTextDirection.Auto, PretextShapeOptions.Default.Direction);
+    }
+
+    [Fact(DisplayName = "prepared shape options are returned as snapshots")]
+    public void ShapePreparedText_OptionsAreReturnedAsSnapshots()
+    {
+        var prepared = PretextLayout.PrepareWithSegments("abc", Font);
+        var shapedPrepared = PretextLayout.ShapePreparedText(
+            prepared,
+            new PretextShapeOptions { Direction = PretextTextDirection.LeftToRight });
+
+        var options = shapedPrepared.Options;
+        options.Direction = PretextTextDirection.RightToLeft;
+
+        Assert.Equal(PretextTextDirection.LeftToRight, shapedPrepared.Direction);
+        Assert.Equal(PretextTextDirection.LeftToRight, shapedPrepared.Options.Direction);
     }
 
     [Fact(DisplayName = "shape text auto-discovers a shaping backend for the current OS")]
@@ -108,6 +234,33 @@ public sealed class PretextShapingTests : IDisposable
         }
 
         return "SkiaSharp";
+    }
+
+    private static PretextShapedRun CreateSingleGlyphRun(string font, double advance)
+    {
+        var glyph = new PretextShapedGlyph(1, 0, 0, 0, advance, 0, 0, 0, 0);
+        return new PretextShapedRun(
+            PretextGlyphRunKind.Mapped,
+            new[] { glyph },
+            new[] { new PretextShapedFontRun(0, font, 0, 1) },
+            advance,
+            0);
+    }
+
+    private static PretextShapedRun CreateMappedRun(string text, string font)
+    {
+        var glyphs = new PretextShapedGlyph[text.Length];
+        for (var index = 0; index < text.Length; index++)
+        {
+            glyphs[index] = new PretextShapedGlyph(text[index], index, index, 0, 1, 0, 0, 0, 0);
+        }
+
+        return new PretextShapedRun(
+            PretextGlyphRunKind.Mapped,
+            glyphs,
+            new[] { new PretextShapedFontRun(0, font, 0, glyphs.Length) },
+            glyphs.Length,
+            0);
     }
 
     private sealed class MeasurementOnlyFactory : IPretextTextMeasurerFactory

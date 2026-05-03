@@ -54,6 +54,7 @@ Key documentation:
 - Support `WordBreakMode.KeepAll` for CJK-focused no-space wrapping behavior.
 - Build rich inline flows with `PrepareRichInline`, `WalkRichInlineLineRanges`, and `MaterializeRichInlineLineRange`.
 - Produce glyph-run output with `ShapeText` for renderers that need glyph ids, positions, clusters, advances, and font runs.
+- Reuse prepared shaping with `ShapePreparedText` and shaped line materialization APIs for repeated wrapping/rendering passes.
 - Support multilingual text with locale-aware segmentation on desktop targets and bidi-aware segment levels.
 - Keep the core library graphics-backend agnostic through `Pretext.Contracts`.
 - Ship first-party native backends for Windows (`Pretext.DirectWrite`), Linux (`Pretext.FreeType`), and macOS (`Pretext.CoreText`), plus the portable `Pretext.SkiaSharp` fallback backend.
@@ -81,6 +82,10 @@ Key documentation:
 | `MeasureRichInlineStats` | Measure rich-inline line count and max line width. |
 | `ShapeText` | Return glyph ids, positions, clusters, advances, and font runs for rendering. |
 | `TryShapeText` | Attempt glyph-run output without throwing when no shaping backend is available. |
+| `ShapePreparedText` | Cache shaping state for a prepared text object and reuse it while materializing shaped lines. |
+| `LayoutNextShapedLine` | Stream shaped line output from prepared shaping state. |
+| `MaterializeShapedLineRange` | Turn a `LayoutLineRange` into cached shaped glyph output. |
+| `MaterializeShapedRichInlineLineRange` | Turn a rich-inline line range into cached shaped glyph output fragments. |
 | `ProfilePrepare` | Measure preparation cost for profiling and diagnostics. |
 | `SetLocale` | Override locale-sensitive segmentation behavior when needed. |
 | `ClearCache` | Reset cached font state and prepared segment text caches. |
@@ -95,6 +100,7 @@ Key documentation:
 | Geometry only, fewer allocations | `PrepareWithSegments` + `WalkLineRanges` |
 | Rich inline fragments with atomic chips or badges | `PrepareRichInline` + `WalkRichInlineLineRanges` |
 | Glyph ids and positions for custom rendering | `ShapeText` or `TryShapeText` |
+| Repeated wrapping plus glyph rendering | `PrepareWithSegments` + `ShapePreparedText` + `MaterializeShapedLineRange` |
 | Preparation cost diagnostics | `ProfilePrepare` |
 
 ## Quick Start
@@ -197,6 +203,23 @@ foreach (var glyph in shaped.Glyphs)
 ```
 
 `PretextGlyphRunKind.Shaped` means the backend returned platform-shaped glyph positions. The current first-party shaped backends are `Pretext.CoreText` on macOS and `Pretext.FreeType` on Linux through native HarfBuzz. `Pretext.FreeType` falls back to `PretextGlyphRunKind.Mapped` if HarfBuzz is unavailable or the shaped primary-face run contains missing glyphs. `Pretext.SkiaSharp` returns `PretextGlyphRunKind.Mapped`, which is useful for simple glyph rendering but should not be treated as complex-script shaping.
+
+For repeated layout/rendering loops, prepare once and reuse shaped line output by line range:
+
+```csharp
+var prepared = PretextLayout.PrepareWithSegments("office file affine", "16px Inter");
+var shapedPrepared = PretextLayout.ShapePreparedText(prepared);
+var cursor = new LayoutCursor(0, 0);
+
+while (PretextLayout.LayoutNextLineRange(prepared, cursor, 160) is { } line)
+{
+    var shapedLine = PretextLayout.MaterializeShapedLineRange(shapedPrepared, line);
+    RenderGlyphs(shapedLine.ShapedRun.Glyphs);
+    cursor = line.End;
+}
+```
+
+`ShapePreparedText` keeps a prepared-object cache keyed by shaping direction. Whole-segment line ranges can be sliced from the prepared shaped run, while unsafe intra-segment breaks, soft-hyphen lines, and other context-sensitive ranges are shaped from the exact materialized line text and then cached by cursor range.
 
 ## Companion Packages
 
