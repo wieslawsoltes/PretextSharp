@@ -122,6 +122,27 @@ public sealed class PretextShapingTests : IDisposable
         Assert.Equal(6, shapedLine.ShapedRun.AdvanceX);
     }
 
+    [Fact(DisplayName = "prepared shaped line preserves negative advances when slicing")]
+    public void ShapePreparedText_PreservesNegativeAdvancesWhenSlicing()
+    {
+        PretextLayout.SetTextMeasurerFactory(new DelegateTextMeasurerFactory(
+            PretextLayoutParityTests_Accessor.MeasureWidth,
+            CreateNegativeAdvanceRun));
+        PretextLayout.ClearCache();
+
+        var prepared = PretextLayout.PrepareWithSegments("abc", Font);
+        var shapedPrepared = PretextLayout.ShapePreparedText(
+            prepared,
+            new PretextShapeOptions { Direction = PretextTextDirection.RightToLeft });
+        var line = new LayoutLineRange(3, new LayoutCursor(0, 0), new LayoutCursor(0, 3));
+
+        var shapedLine = PretextLayout.MaterializeShapedLineRange(shapedPrepared, line);
+
+        Assert.Equal(-3, shapedLine.ShapedRun.AdvanceX);
+        Assert.Equal(-6, shapedLine.ShapedRun.AdvanceY);
+        Assert.Equal(3, shapedLine.ShapedRun.Glyphs.Count);
+    }
+
     [Fact(DisplayName = "prepared shaped line reshapes unsafe partial segment ranges")]
     public void ShapePreparedText_ReshapesUnsafePartialSegmentRanges()
     {
@@ -310,6 +331,31 @@ public sealed class PretextShapingTests : IDisposable
             new[] { new PretextShapedFontRun(0, font, 0, 1) },
             2,
             0);
+    }
+
+    private static PretextShapedRun CreateNegativeAdvanceRun(string text, string font)
+    {
+        var glyphs = new PretextShapedGlyph[text.Length];
+        for (var index = 0; index < text.Length; index++)
+        {
+            glyphs[index] = new PretextShapedGlyph(
+                text[index],
+                index,
+                -index,
+                -index * 2,
+                -1,
+                -2,
+                0,
+                0,
+                0);
+        }
+
+        return new PretextShapedRun(
+            PretextGlyphRunKind.Shaped,
+            glyphs,
+            new[] { new PretextShapedFontRun(0, font, 0, glyphs.Length) },
+            -glyphs.Length,
+            -glyphs.Length * 2);
     }
 
     private sealed class MeasurementOnlyFactory : IPretextTextMeasurerFactory

@@ -392,8 +392,11 @@ public static partial class PretextLayout
         var glyphs = new List<PretextShapedGlyph>();
         var fontRunMap = new Dictionary<int, int>();
         var fontRuns = new List<PretextShapedFontRun>();
+        var fontRunGlyphCounts = new List<int>();
         double originX = 0;
         double originY = 0;
+        var advanceX = 0d;
+        var advanceY = 0d;
         var hasOrigin = false;
 
         foreach (var glyph in source.Glyphs)
@@ -416,6 +419,7 @@ public static partial class PretextLayout
                 fontRunMap[glyph.FontRunIndex] = mappedFontRunIndex;
                 var sourceFontRun = FindFontRun(source, glyph.FontRunIndex);
                 fontRuns.Add(new PretextShapedFontRun(mappedFontRunIndex, sourceFontRun.Font, glyphs.Count, 0));
+                fontRunGlyphCounts.Add(0);
             }
 
             glyphs.Add(new PretextShapedGlyph(
@@ -428,6 +432,9 @@ public static partial class PretextLayout
                 glyph.XOffset,
                 glyph.YOffset,
                 mappedFontRunIndex));
+            fontRunGlyphCounts[mappedFontRunIndex]++;
+            advanceX += glyph.XAdvance;
+            advanceY += glyph.YAdvance;
         }
 
         if (glyphs.Count == 0)
@@ -444,16 +451,7 @@ public static partial class PretextLayout
         for (var fontRunIndex = 0; fontRunIndex < fontRuns.Count; fontRunIndex++)
         {
             var fontRun = fontRuns[fontRunIndex];
-            var glyphCount = CountGlyphsForFontRun(glyphs, fontRunIndex);
-            fixedFontRuns[fontRunIndex] = new PretextShapedFontRun(fontRun.Index, fontRun.Font, fontRun.FirstGlyphIndex, glyphCount);
-        }
-
-        var advanceX = 0d;
-        var advanceY = 0d;
-        foreach (var glyph in glyphs)
-        {
-            advanceX = Math.Max(advanceX, glyph.X + glyph.XAdvance);
-            advanceY = Math.Max(advanceY, glyph.Y + glyph.YAdvance);
+            fixedFontRuns[fontRunIndex] = new PretextShapedFontRun(fontRun.Index, fontRun.Font, fontRun.FirstGlyphIndex, fontRunGlyphCounts[fontRunIndex]);
         }
 
         return new PretextShapedRun(source.Kind, glyphs, fixedFontRuns, advanceX, advanceY);
@@ -472,20 +470,6 @@ public static partial class PretextLayout
         return source.FontRuns.Count == 0
             ? new PretextShapedFontRun(0, string.Empty, 0, 0)
             : source.FontRuns[0];
-    }
-
-    private static int CountGlyphsForFontRun(IReadOnlyList<PretextShapedGlyph> glyphs, int fontRunIndex)
-    {
-        var count = 0;
-        for (var index = 0; index < glyphs.Count; index++)
-        {
-            if (glyphs[index].FontRunIndex == fontRunIndex)
-            {
-                count++;
-            }
-        }
-
-        return count;
     }
 
     private sealed class ShaperState : IDisposable
