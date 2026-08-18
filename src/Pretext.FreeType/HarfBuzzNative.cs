@@ -28,6 +28,9 @@ internal static unsafe class HarfBuzzNative
     public static extern void hb_buffer_guess_segment_properties(IntPtr buffer);
 
     [DllImport(HarfBuzzLibrary)]
+    public static extern void hb_buffer_set_direction(IntPtr buffer, hb_direction_t direction);
+
+    [DllImport(HarfBuzzLibrary)]
     public static extern void hb_shape(IntPtr font, IntPtr buffer, IntPtr features, uint featureCount);
 
     [DllImport(HarfBuzzLibrary)]
@@ -35,6 +38,15 @@ internal static unsafe class HarfBuzzNative
 
     [DllImport(HarfBuzzLibrary)]
     public static extern hb_glyph_position_t* hb_buffer_get_glyph_positions(IntPtr buffer, out uint length);
+}
+
+internal enum hb_direction_t
+{
+    HB_DIRECTION_INVALID = 0,
+    HB_DIRECTION_LTR = 4,
+    HB_DIRECTION_RTL = 5,
+    HB_DIRECTION_TTB = 6,
+    HB_DIRECTION_BTT = 7,
 }
 
 [StructLayout(LayoutKind.Sequential)]

@@ -11,12 +11,14 @@ public sealed class PretextBackendDiscoveryTests : IDisposable
     public PretextBackendDiscoveryTests()
     {
         PretextLayout.SetTextMeasurerFactory(null);
+        PretextLayout.SetTextShaperFactory(null);
         PretextLayout.ClearCache();
     }
 
     public void Dispose()
     {
         PretextLayout.SetTextMeasurerFactory(null);
+        PretextLayout.SetTextShaperFactory(null);
         PretextLayout.ClearCache();
     }
 

@@ -7,9 +7,9 @@
     <Nullable>enable</Nullable>
     <PackageId>Pretext.Contracts</PackageId>
     <Title>Pretext.Contracts</Title>
-    <Description>Backend contracts for Pretext text measurement integrations.</Description>
-    <PackageTags>text-layout;text-measurement;contracts;abstractions;typography</PackageTags>
-    <PackageReleaseNotes>Initial public packaging of the Pretext backend contracts.</PackageReleaseNotes>
+    <Description>Backend contracts for Pretext text measurement and glyph-output integrations.</Description>
+    <PackageTags>text-layout;text-measurement;text-shaping;glyphs;contracts;abstractions;typography</PackageTags>
+    <PackageReleaseNotes>Added public glyph-output contracts for shaping-capable backends.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">

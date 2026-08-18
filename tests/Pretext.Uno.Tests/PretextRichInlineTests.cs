@@ -17,6 +17,7 @@ public sealed class PretextRichInlineTests : IDisposable
     public void Dispose()
     {
         PretextLayout.SetTextMeasurerFactory(null);
+        PretextLayout.SetTextShaperFactory(null);
         PretextLayout.ClearCache();
     }
 

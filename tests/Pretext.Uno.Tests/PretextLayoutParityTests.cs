@@ -25,6 +25,7 @@ public sealed partial class PretextLayoutParityTests : IDisposable
     {
         PretextLayout.SetLocale();
         PretextLayout.SetTextMeasurerFactory(null);
+        PretextLayout.SetTextShaperFactory(null);
     }
 
     private static IReadOnlyList<double> RequireBreakableWidths(IReadOnlyList<double>? widths)

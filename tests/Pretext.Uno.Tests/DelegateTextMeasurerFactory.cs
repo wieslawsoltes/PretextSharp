@@ -2,9 +2,11 @@ using Pretext;
 
 namespace Pretext.Tests;
 
-internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory
+internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory, IPretextTextShaperFactory
 {
     private readonly Func<string, string, double> _measureText;
+    private readonly Func<string, string, PretextShapedRun>? _shapeText;
+    private readonly Func<string, string, PretextShapeOptions?, PretextShapedRun>? _shapeTextWithOptions;
 
     public string Name => "Delegate";
 
@@ -12,14 +14,24 @@ internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory
 
     public int Priority => int.MaxValue;
 
-    public DelegateTextMeasurerFactory(Func<string, string, double> measureText)
+    public DelegateTextMeasurerFactory(
+        Func<string, string, double> measureText,
+        Func<string, string, PretextShapedRun>? shapeText = null,
+        Func<string, string, PretextShapeOptions?, PretextShapedRun>? shapeTextWithOptions = null)
     {
         _measureText = measureText ?? throw new ArgumentNullException(nameof(measureText));
+        _shapeText = shapeText;
+        _shapeTextWithOptions = shapeTextWithOptions;
     }
 
     public IPretextTextMeasurer Create(string font)
     {
         return new DelegateTextMeasurer(font, _measureText);
+    }
+
+    public IPretextTextShaper CreateShaper(string font)
+    {
+        return new DelegateTextShaper(font, _shapeText, _shapeTextWithOptions);
     }
 
     private sealed class DelegateTextMeasurer : IPretextTextMeasurer
@@ -36,6 +48,55 @@ internal sealed class DelegateTextMeasurerFactory : IPretextTextMeasurerFactory
         public double MeasureText(string text)
         {
             return string.IsNullOrEmpty(text) ? 0 : _measureText(text, _font);
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    private sealed class DelegateTextShaper : IPretextTextShaper
+    {
+        private readonly string _font;
+        private readonly Func<string, string, PretextShapedRun>? _shapeText;
+        private readonly Func<string, string, PretextShapeOptions?, PretextShapedRun>? _shapeTextWithOptions;
+
+        public DelegateTextShaper(
+            string font,
+            Func<string, string, PretextShapedRun>? shapeText,
+            Func<string, string, PretextShapeOptions?, PretextShapedRun>? shapeTextWithOptions)
+        {
+            _font = font ?? throw new ArgumentNullException(nameof(font));
+            _shapeText = shapeText;
+            _shapeTextWithOptions = shapeTextWithOptions;
+        }
+
+        public PretextShapedRun ShapeText(string text, PretextShapeOptions? options = null)
+        {
+            if (_shapeTextWithOptions is not null)
+            {
+                return _shapeTextWithOptions(text, _font, options);
+            }
+
+            if (_shapeText is not null)
+            {
+                return _shapeText(text, _font);
+            }
+
+            var glyphs = new PretextShapedGlyph[text.Length];
+            double x = 0;
+            for (var index = 0; index < text.Length; index++)
+            {
+                glyphs[index] = new PretextShapedGlyph(text[index], index, x, 0, 1, 0, 0, 0, 0);
+                x++;
+            }
+
+            return new PretextShapedRun(
+                PretextGlyphRunKind.Mapped,
+                glyphs,
+                new[] { new PretextShapedFontRun(0, _font, 0, glyphs.Length) },
+                x,
+                0);
         }
 
         public void Dispose()

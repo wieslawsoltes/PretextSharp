@@ -179,6 +179,7 @@ public static partial class PretextLayout
     private static readonly Dictionary<string, FontState> FontStates = new(StringComparer.Ordinal);
     private static readonly object FontStateGate = new();
     private static ConditionalWeakTable<PreparedTextWithSegments, SegmentTextCache> _segmentTextCaches = new();
+    private static ConditionalWeakTable<PreparedTextWithSegments, PreparedShapedTextCache> _preparedShapedTextCaches = new();
     private static string? _locale;
     private static EngineProfile? _cachedEngineProfile;
 
@@ -314,11 +315,18 @@ public static partial class PretextLayout
                 state.Dispose();
             }
 
+            foreach (var state in ShaperStates.Values)
+            {
+                state.Dispose();
+            }
+
             FontStates.Clear();
+            ShaperStates.Clear();
         }
 
         _cachedEngineProfile = null;
         _segmentTextCaches = new ConditionalWeakTable<PreparedTextWithSegments, SegmentTextCache>();
+        _preparedShapedTextCaches = new ConditionalWeakTable<PreparedTextWithSegments, PreparedShapedTextCache>();
     }
 
     public static void SetLocale(string? locale = null)

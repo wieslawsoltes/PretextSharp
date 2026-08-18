@@ -2,7 +2,7 @@ using SkiaSharp;
 
 namespace Pretext.SkiaSharp;
 
-public sealed class SkiaSharpTextMeasurerFactory : IPretextTextMeasurerFactory
+public sealed class SkiaSharpTextMeasurerFactory : IPretextTextMeasurerFactory, IPretextTextShaperFactory
 {
     public string Name => "SkiaSharp";
 
@@ -21,18 +21,32 @@ public sealed class SkiaSharpTextMeasurerFactory : IPretextTextMeasurerFactory
         return new SkiaSharpTextMeasurer(spec);
     }
 
-    private sealed class SkiaSharpTextMeasurer : IPretextTextMeasurer
+    public IPretextTextShaper CreateShaper(string font)
+    {
+        if (font is null)
+        {
+            throw new ArgumentNullException(nameof(font));
+        }
+
+        var spec = FontSpec.FromDescriptor(PretextFontParser.Parse(font));
+        return new SkiaSharpTextMeasurer(spec);
+    }
+
+    private sealed class SkiaSharpTextMeasurer : IPretextTextMeasurer, IPretextTextShaper
     {
         private readonly SKFont _font;
+        private readonly string _fontIdentity;
 
         public SkiaSharpTextMeasurer(FontSpec spec)
         {
+            var typeface = SKTypeface.FromFamilyName(spec.PrimaryFamily, spec.FontStyle) ?? SKTypeface.Default;
             _font = new SKFont
             {
                 Size = spec.Size,
-                Typeface = SKTypeface.FromFamilyName(spec.PrimaryFamily, spec.FontStyle) ?? SKTypeface.Default,
+                Typeface = typeface,
                 Subpixel = true,
             };
+            _fontIdentity = typeface.FamilyName ?? spec.PrimaryFamily;
         }
 
         public double MeasureText(string text)
@@ -40,9 +54,93 @@ public sealed class SkiaSharpTextMeasurerFactory : IPretextTextMeasurerFactory
             return string.IsNullOrEmpty(text) ? 0 : _font.MeasureText(text);
         }
 
+        public PretextShapedRun ShapeText(string text, PretextShapeOptions? options = null)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return new PretextShapedRun(
+                    PretextGlyphRunKind.Mapped,
+                    Array.Empty<PretextShapedGlyph>(),
+                    new[] { new PretextShapedFontRun(0, _fontIdentity, 0, 0) },
+                    0,
+                    0);
+            }
+
+            var glyphIds = _font.Typeface.GetGlyphs(text);
+            if (glyphIds.Length == 0)
+            {
+                return new PretextShapedRun(
+                    PretextGlyphRunKind.Mapped,
+                    Array.Empty<PretextShapedGlyph>(),
+                    new[] { new PretextShapedFontRun(0, _fontIdentity, 0, 0) },
+                    0,
+                    0);
+            }
+
+            var positions = new SKPoint[glyphIds.Length];
+            _font.GetGlyphPositions(glyphIds, positions, SKPoint.Empty);
+            var totalWidth = _font.MeasureText(text);
+            var clusters = GetClusters(text, glyphIds.Length);
+            var glyphs = new PretextShapedGlyph[glyphIds.Length];
+            for (var index = 0; index < glyphIds.Length; index++)
+            {
+                var x = positions[index].X;
+                var nextX = index + 1 < positions.Length ? positions[index + 1].X : totalWidth;
+                glyphs[index] = new PretextShapedGlyph(
+                    glyphIds[index],
+                    clusters is null ? index : clusters[index],
+                    x,
+                    positions[index].Y,
+                    nextX - x,
+                    0,
+                    0,
+                    0,
+                    0);
+            }
+
+            return new PretextShapedRun(
+                PretextGlyphRunKind.Mapped,
+                glyphs,
+                new[] { new PretextShapedFontRun(0, _fontIdentity, 0, glyphs.Length) },
+                totalWidth,
+                0);
+        }
+
         public void Dispose()
         {
             _font.Dispose();
+        }
+
+        private static int[]? GetClusters(string text, int glyphCount)
+        {
+            if (glyphCount == text.Length)
+            {
+                return null;
+            }
+
+            var clusters = new int[glyphCount];
+            var textIndex = 0;
+            for (var glyphIndex = 0; glyphIndex < glyphCount; glyphIndex++)
+            {
+                clusters[glyphIndex] = Math.Min(textIndex, text.Length - 1);
+                textIndex += GetScalarLength(text, textIndex);
+            }
+
+            return clusters;
+        }
+
+        private static int GetScalarLength(string text, int textIndex)
+        {
+            if (textIndex >= text.Length)
+            {
+                return 1;
+            }
+
+            return textIndex + 1 < text.Length &&
+                   char.IsHighSurrogate(text[textIndex]) &&
+                   char.IsLowSurrogate(text[textIndex + 1])
+                ? 2
+                : 1;
         }
     }
 
